@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chm.mapper.ManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.chm.domain.Manager" >
+    <id column="Account" property="account" jdbcType="VARCHAR" />
+    <result column="Password" property="password" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Account, Password
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_manager
+    where Account = #{account,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tbl_manager
+    where Account = #{account,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.chm.domain.Manager" >
+    insert into tbl_manager (Account, Password)
+    values (#{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chm.domain.Manager" >
+    insert into tbl_manager
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="account != null" >
+        Account,
+      </if>
+      <if test="password != null" >
+        Password,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chm.domain.Manager" >
+    update tbl_manager
+    <set >
+      <if test="password != null" >
+        Password = #{password,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Account = #{account,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chm.domain.Manager" >
+    update tbl_manager
+    set Password = #{password,jdbcType=VARCHAR}
+    where Account = #{account,jdbcType=VARCHAR}
+  </update>
+</mapper>

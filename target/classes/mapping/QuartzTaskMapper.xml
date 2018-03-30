@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chm.mapper.QuartzTaskMapper">
+    <resultMap id="BaseResultMap" type="com.chm.domain.QuartzTask">
+        <id column="Id" property="id" jdbcType="INTEGER"/>
+        <result column="Cron" property="cron" jdbcType="VARCHAR"/>
+        <result column="Status" property="status" jdbcType="CHAR"/>
+        <result column="JobName" property="jobname" jdbcType="VARCHAR"/>
+        <result column="JobGroup" property="jobgroup" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        Id, Cron, Status, JobName, JobGroup
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_quartz_task
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="findAll" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_quartz_task
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from tbl_quartz_task
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.chm.domain.QuartzTask">
+        insert into tbl_quartz_task (Cron, Status, JobName, JobGroup)
+        values (#{cron,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},
+        #{jobname,jdbcType=VARCHAR}, #{jobgroup,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.chm.domain.QuartzTask">
+        insert into tbl_quartz_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cron != null">
+                Cron,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="jobname != null">
+                JobName,
+            </if>
+            <if test="jobgroup != null">
+                JobGroup,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cron != null">
+                #{cron,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="jobname != null">
+                #{jobname,jdbcType=VARCHAR},
+            </if>
+            <if test="jobgroup != null">
+                #{jobgroup,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.chm.domain.QuartzTask">
+        update tbl_quartz_task
+        <set>
+            <if test="cron != null">
+                Cron = #{cron,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="jobname != null">
+                JobName = #{jobname,jdbcType=VARCHAR},
+            </if>
+            <if test="jobgroup != null">
+                JobGroup = #{jobgroup,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where Id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.chm.domain.QuartzTask">
+        update tbl_quartz_task
+        set Cron = #{cron,jdbcType=VARCHAR},
+         Status = #{status,jdbcType=VARCHAR},
+         JobName = #{jobname,jdbcType=VARCHAR},
+         JobGroup = #{jobgroup,jdbcType=VARCHAR}
+        where Id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

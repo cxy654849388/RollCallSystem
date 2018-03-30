@@ -1,0 +1,55 @@
+projectName: RollCallSystem
+server:
+  port: 8080
+  session:
+    timeout: 60
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+  servlet:
+    context-path: /${projectName}
+  context-path: /${projectName}
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/rollcall
+    username: RollCall
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+     # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/ # 页面默认前缀目录
+      suffix: .jsp # 响应页面默认后缀
+  devtools:
+    restart:
+      exclude: static/**,public/**
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: com.chm.domain
+
+#日志配置
+logging:
+  file: MyLog.log
+
+
+#签到时间配置
+NORMAL: 5 #正常(上课前至上课后5分钟)
+
+LATE: 20 #迟到(上课后5分钟至上课后20分钟)
+
+
+
