@@ -10,7 +10,7 @@ public class FaceDataTrainStatus {
     }
 
     public void setStuid(String stuid) {
-        this.stuid = stuid;
+        this.stuid = stuid == null ? null : stuid.trim();
     }
 
     public String getStatus() {
@@ -18,6 +18,6 @@ public class FaceDataTrainStatus {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.status = status == null ? null : status.trim();
     }
 }

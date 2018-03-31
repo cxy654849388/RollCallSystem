@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chm.mapper.FaceDataMapper">
+    <resultMap id="BaseResultMap" type="com.chm.domain.FaceData">
+        <id column="FaceID" property="faceid" jdbcType="INTEGER"/>
+        <result column="StuID" property="stuid" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.chm.domain.FaceData" extends="BaseResultMap">
+        <result column="FaceDate" property="facedate" jdbcType="LONGVARBINARY"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        FaceID, StuID
+    </sql>
+    <sql id="Blob_Column_List">
+        FaceDate
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from tbl_facedata
+        where FaceID = #{faceid,jdbcType=INTEGER}
+    </select>
+    <select id="getFaceData" resultType="java.util.List" parameterType="java.lang.String">
+        SELECT FaceDate
+        FROM tbl_facedata
+        WHERE StuID = #{stuid,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM tbl_facedata
+        WHERE FaceID = #{faceid,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.chm.domain.FaceData">
+        INSERT INTO tbl_facedata (StuID, FaceDate
+        )
+        VALUES (#{stuid,jdbcType=VARCHAR}, #{facedate,jdbcType=LONGVARBINARY}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.chm.domain.FaceData">
+        insert into tbl_facedata
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuid != null">
+                StuID,
+            </if>
+            <if test="facedate != null">
+                FaceDate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuid != null">
+                #{stuid,jdbcType=VARCHAR},
+            </if>
+            <if test="facedate != null">
+                #{facedate,jdbcType=LONGVARBINARY},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.chm.domain.FaceData">
+        update tbl_facedata
+        <set>
+            <if test="stuid != null">
+                StuID = #{stuid,jdbcType=VARCHAR},
+            </if>
+            <if test="facedate != null">
+                FaceDate = #{facedate,jdbcType=LONGVARBINARY},
+            </if>
+        </set>
+        where FaceID = #{faceid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.chm.domain.FaceData">
+        UPDATE tbl_facedata
+        SET StuID    = #{stuid,jdbcType=VARCHAR},
+            FaceDate = #{facedate,jdbcType=LONGVARBINARY}
+        WHERE FaceID = #{faceid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.chm.domain.FaceData">
+        UPDATE tbl_facedata
+        SET StuID = #{stuid,jdbcType=VARCHAR}
+        WHERE FaceID = #{faceid,jdbcType=INTEGER}
+    </update>
+</mapper>

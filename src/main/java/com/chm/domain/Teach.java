@@ -9,6 +9,8 @@ public class Teach {
 
     private Integer couid;
 
+    private Integer id;
+
     private Date starttime;
 
     private Date endtime;
@@ -35,6 +37,14 @@ public class Teach {
 
     public void setCouid(Integer couid) {
         this.couid = couid;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Date getStarttime() {

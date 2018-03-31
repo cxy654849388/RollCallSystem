@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chm.mapper.FaceDataTrainStatusMapper">
+    <resultMap id="BaseResultMap" type="com.chm.domain.FaceDataTrainStatus">
+        <id column="StuID" property="stuid" jdbcType="VARCHAR"/>
+        <result column="Status" property="status" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        StuID,Status
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_facedata_train_status
+        where StuID = #{stuid,jdbcType=VARCHAR}
+    </select>
+    <select id="findStatusNo">
+        select
+        StuID from tbl_facedata_train_status where Status = '0'
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from tbl_facedata_train_status
+        where StuID = #{stuid,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.chm.domain.Student">
+        insert into tbl_facedata_train_status (StuID, Status
+        )
+        values (#{stuid,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.chm.domain.Student">
+        insert into tbl_facedata_train_status
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuid != null">
+                StuID,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuid != null">
+                #{stuid,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.chm.domain.Student">
+        update tbl_facedata_train_status
+        <set>
+            <if test="status != null">
+                Status = #{status,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where StuID = #{stuid,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.chm.domain.Student">
+        update tbl_facedata_train_status
+        set Status = #{status,jdbcType=VARCHAR},
+        where StuID = #{stuid,jdbcType=VARCHAR}
+    </update>
+</mapper>

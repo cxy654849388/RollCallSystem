@@ -24,7 +24,7 @@ public class QuartzTask {
     }
 
     public void setCron(String cron) {
-        this.cron = cron;
+        this.cron = cron == null ? null : cron.trim();
     }
 
     public String getStatus() {
@@ -32,7 +32,7 @@ public class QuartzTask {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.status = status == null ? null : status.trim();
     }
 
     public String getJobname() {
@@ -40,7 +40,7 @@ public class QuartzTask {
     }
 
     public void setJobname(String jobname) {
-        this.jobname = jobname;
+        this.jobname = jobname == null ? null : jobname.trim();
     }
 
     public String getJobgroup() {
@@ -48,6 +48,6 @@ public class QuartzTask {
     }
 
     public void setJobgroup(String jobgroup) {
-        this.jobgroup = jobgroup;
+        this.jobgroup = jobgroup == null ? null : jobgroup.trim();
     }
 }

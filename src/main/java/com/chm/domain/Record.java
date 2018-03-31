@@ -40,14 +40,4 @@ public class Record {
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
     }
-
-    @Override
-    public String toString() {
-        return "Record{" +
-                "recid=" + recid +
-                ", teachid=" + teachid +
-                ", stuid='" + stuid + '\'' +
-                ", status='" + status + '\'' +
-                '}';
-    }
 }

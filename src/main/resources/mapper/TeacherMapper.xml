@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chm.mapper.TeacherMapper" >
+  <resultMap id="BaseResultMap" type="com.chm.domain.Teacher" >
+    <id column="TeaID" property="teaid" jdbcType="VARCHAR" />
+    <result column="TeaName" property="teaname" jdbcType="VARCHAR" />
+    <result column="StuSex" property="stusex" jdbcType="CHAR" />
+    <result column="Birthday" property="birthday" jdbcType="DATE" />
+    <result column="Title" property="title" jdbcType="VARCHAR" />
+    <result column="Password" property="password" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    TeaID, TeaName, StuSex, Birthday, Title, Password
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_teacher
+    where TeaID = #{teaid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tbl_teacher
+    where TeaID = #{teaid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.chm.domain.Teacher" >
+    insert into tbl_teacher (TeaID, TeaName, StuSex, 
+      Birthday, Title, Password
+      )
+    values (#{teaid,jdbcType=VARCHAR}, #{teaname,jdbcType=VARCHAR}, #{stusex,jdbcType=CHAR}, 
+      #{birthday,jdbcType=DATE}, #{title,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.chm.domain.Teacher" >
+    insert into tbl_teacher
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="teaid != null" >
+        TeaID,
+      </if>
+      <if test="teaname != null" >
+        TeaName,
+      </if>
+      <if test="stusex != null" >
+        StuSex,
+      </if>
+      <if test="birthday != null" >
+        Birthday,
+      </if>
+      <if test="title != null" >
+        Title,
+      </if>
+      <if test="password != null" >
+        Password,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="teaid != null" >
+        #{teaid,jdbcType=VARCHAR},
+      </if>
+      <if test="teaname != null" >
+        #{teaname,jdbcType=VARCHAR},
+      </if>
+      <if test="stusex != null" >
+        #{stusex,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chm.domain.Teacher" >
+    update tbl_teacher
+    <set >
+      <if test="teaname != null" >
+        TeaName = #{teaname,jdbcType=VARCHAR},
+      </if>
+      <if test="stusex != null" >
+        StuSex = #{stusex,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null" >
+        Birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="title != null" >
+        Title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        Password = #{password,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where TeaID = #{teaid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chm.domain.Teacher" >
+    update tbl_teacher
+    set TeaName = #{teaname,jdbcType=VARCHAR},
+      StuSex = #{stusex,jdbcType=CHAR},
+      Birthday = #{birthday,jdbcType=DATE},
+      Title = #{title,jdbcType=VARCHAR},
+      Password = #{password,jdbcType=VARCHAR}
+    where TeaID = #{teaid,jdbcType=VARCHAR}
+  </update>
+</mapper>
