@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.21, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.58, for Win64 (AMD64)
 --
 -- Host: 127.0.0.1    Database: rollcall
 -- ------------------------------------------------------
--- Server version	5.7.21
+-- Server version	5.5.58
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -356,6 +356,29 @@ LOCK TABLES `tbl_class` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tbl_class_room`
+--
+
+DROP TABLE IF EXISTS `tbl_class_room`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_class_room` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_class_room`
+--
+
+LOCK TABLES `tbl_class_room` WRITE;
+/*!40000 ALTER TABLE `tbl_class_room` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbl_class_room` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tbl_course`
 --
 
@@ -571,11 +594,14 @@ CREATE TABLE `tbl_teach` (
   `TeachID` int(11) NOT NULL AUTO_INCREMENT,
   `TeaID` varchar(10) DEFAULT NULL,
   `CouID` int(11) DEFAULT NULL,
+  `ID` int(11) DEFAULT NULL,
   `StartTime` time DEFAULT NULL,
   `EndTime` time DEFAULT NULL,
   PRIMARY KEY (`TeachID`),
   KEY `FK_Reference_2` (`TeaID`),
   KEY `FK_Reference_3` (`CouID`),
+  KEY `FK_Reference_6` (`ID`),
+  CONSTRAINT `FK_Reference_6` FOREIGN KEY (`ID`) REFERENCES `tbl_class_room` (`ID`),
   CONSTRAINT `FK_Reference_2` FOREIGN KEY (`TeaID`) REFERENCES `tbl_teacher` (`TeaID`),
   CONSTRAINT `FK_Reference_3` FOREIGN KEY (`CouID`) REFERENCES `tbl_course` (`CouID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -626,4 +652,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-30 19:38:52
+-- Dump completed on 2018-03-31 18:24:45
