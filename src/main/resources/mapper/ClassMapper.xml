@@ -16,9 +16,6 @@
         where ClassID = #{classid,jdbcType=VARCHAR}
     </select>
     <select id="getLabels" resultType="java.util.List">
-    select distinct ClassID
-    from tbl_class
-    where ClassID in(
       select distinct ClassId
       from tbl_student
       where StuID in(
@@ -30,7 +27,6 @@
           where TeachID = #{teachid,jdbcType=INTEGER}
         )
       )
-    )
   </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tbl_class

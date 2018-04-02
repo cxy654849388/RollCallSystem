@@ -71,16 +71,16 @@ public class StudentServiceImpl implements StudentService {
     /**
      * 学生签到方法
      *
-     * @param image   学生人脸图像
-     * @param teachid 任课实例id
+     * @param image 学生人脸图像
+     * @param schid 课表实例id
      * @return
      */
     @Override
-    public String signed(String image, Integer teachid) {
+    public String signed(String image, Integer schid) {
 
         Teach teach = teachMapper.selectByPrimaryKey(teachid);
         //根据任课实例获取课堂所有学生相应的标签
-        List<String> labels = classMapper.getLabels(teachid);
+        List<String> labels = classMapper.getLabels(schid);
         //识别，获取识别结果 label格式:groupId/userId
         String label = faceRecognition.recogntion(image, labels);
         if (label != null) {
