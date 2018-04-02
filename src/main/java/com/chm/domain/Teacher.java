@@ -7,7 +7,7 @@ public class Teacher {
 
     private String teaname;
 
-    private String stusex;
+    private String teasex;
 
     private Date birthday;
 
@@ -31,12 +31,12 @@ public class Teacher {
         this.teaname = teaname == null ? null : teaname.trim();
     }
 
-    public String getStusex() {
-        return stusex;
+    public String getTeasex() {
+        return teasex;
     }
 
-    public void setStusex(String stusex) {
-        this.stusex = stusex == null ? null : stusex.trim();
+    public void setTeasex(String teasex) {
+        this.teasex = teasex == null ? null : teasex.trim();
     }
 
     public Date getBirthday() {

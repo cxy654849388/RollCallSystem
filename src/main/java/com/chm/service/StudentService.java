@@ -19,8 +19,10 @@ public interface StudentService {
     /**
      * 学生签到方法
      *
+     * @param image 学生图像
+     * @param teachid 任课id
      * @return
      */
-    String signed(String stuId, Teach teach);
+    String signed(String image, Integer teachid);
 
 }

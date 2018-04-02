@@ -4,13 +4,13 @@
   <resultMap id="BaseResultMap" type="com.chm.domain.Teacher" >
     <id column="TeaID" property="teaid" jdbcType="VARCHAR" />
     <result column="TeaName" property="teaname" jdbcType="VARCHAR" />
-    <result column="StuSex" property="stusex" jdbcType="CHAR" />
+    <result column="TeaSex" property="teasex" jdbcType="CHAR" />
     <result column="Birthday" property="birthday" jdbcType="DATE" />
     <result column="Title" property="title" jdbcType="VARCHAR" />
     <result column="Password" property="password" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    TeaID, TeaName, StuSex, Birthday, Title, Password
+    TeaID, TeaName, TeaSex, Birthday, Title, Password
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -23,10 +23,10 @@
     where TeaID = #{teaid,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.chm.domain.Teacher" >
-    insert into tbl_teacher (TeaID, TeaName, StuSex, 
+    insert into tbl_teacher (TeaID, TeaName, TeaSex,
       Birthday, Title, Password
       )
-    values (#{teaid,jdbcType=VARCHAR}, #{teaname,jdbcType=VARCHAR}, #{stusex,jdbcType=CHAR}, 
+    values (#{teaid,jdbcType=VARCHAR}, #{teaname,jdbcType=VARCHAR}, #{teasex,jdbcType=CHAR},
       #{birthday,jdbcType=DATE}, #{title,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
       )
   </insert>
@@ -39,8 +39,8 @@
       <if test="teaname != null" >
         TeaName,
       </if>
-      <if test="stusex != null" >
-        StuSex,
+      <if test="teasex != null" >
+        TeaSex,
       </if>
       <if test="birthday != null" >
         Birthday,
@@ -59,8 +59,8 @@
       <if test="teaname != null" >
         #{teaname,jdbcType=VARCHAR},
       </if>
-      <if test="stusex != null" >
-        #{stusex,jdbcType=CHAR},
+      <if test="teasex != null" >
+        #{teasex,jdbcType=CHAR},
       </if>
       <if test="birthday != null" >
         #{birthday,jdbcType=DATE},
@@ -79,8 +79,8 @@
       <if test="teaname != null" >
         TeaName = #{teaname,jdbcType=VARCHAR},
       </if>
-      <if test="stusex != null" >
-        StuSex = #{stusex,jdbcType=CHAR},
+      <if test="teasex != null" >
+        TeaSex = #{teasex,jdbcType=CHAR},
       </if>
       <if test="birthday != null" >
         Birthday = #{birthday,jdbcType=DATE},
@@ -97,7 +97,7 @@
   <update id="updateByPrimaryKey" parameterType="com.chm.domain.Teacher" >
     update tbl_teacher
     set TeaName = #{teaname,jdbcType=VARCHAR},
-      StuSex = #{stusex,jdbcType=CHAR},
+      TeaSex = #{teasex,jdbcType=CHAR},
       Birthday = #{birthday,jdbcType=DATE},
       Title = #{title,jdbcType=VARCHAR},
       Password = #{password,jdbcType=VARCHAR}
