@@ -36,7 +36,7 @@ public class StudentServiceTest {
         Record record = new Record();
 
         record.setRecid(1);
-        record.setTeachid(1);
+        record.setSchid(1);
         record.setStuid("2");
         record.setStatus("迟到");
         records.add(record);

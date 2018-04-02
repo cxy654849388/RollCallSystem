@@ -3357,11 +3357,11 @@ TableComment 0 新宋体,8,N</a:FontList>
 </o:Column>
 <o:Column Id="o62">
 <a:ObjectID>B2F56893-FA57-4043-A25A-6E831F5FB541</a:ObjectID>
-<a:Name>任课编号</a:Name>
-<a:Code>TeachID</a:Code>
+<a:Name>课表编号</a:Name>
+<a:Code>SchID</a:Code>
 <a:CreationDate>1522119625</a:CreationDate>
 <a:Creator>MTC</a:Creator>
-<a:ModificationDate>1522317267</a:ModificationDate>
+<a:ModificationDate>1522662112</a:ModificationDate>
 <a:Modifier>caihongming</a:Modifier>
 <a:DataType>int</a:DataType>
 </o:Column>

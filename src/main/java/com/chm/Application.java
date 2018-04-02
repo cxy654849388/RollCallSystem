@@ -30,7 +30,7 @@ public class Application {
 
         System.out.println(Arrays.toString(list.toArray()));
 
-        System.out.println(recordMapper.selectStatusByStuidAndTeachid("2", 1));
+        System.out.println(recordMapper.selectStatusByStuidAndSchid("2", 1));
 
         System.out.println(((StudentServiceImpl) studentService).getNORMAL());
 

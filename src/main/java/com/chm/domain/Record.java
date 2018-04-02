@@ -3,7 +3,7 @@ package com.chm.domain;
 public class Record {
     private Integer recid;
 
-    private Integer teachid;
+    private Integer schid;
 
     private String stuid;
 
@@ -17,12 +17,12 @@ public class Record {
         this.recid = recid;
     }
 
-    public Integer getTeachid() {
-        return teachid;
+    public Integer getSchid() {
+        return schid;
     }
 
-    public void setTeachid(Integer teachid) {
-        this.teachid = teachid;
+    public void setSchid(Integer schid) {
+        this.schid = schid;
     }
 
     public String getStuid() {
@@ -39,5 +39,15 @@ public class Record {
 
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "Record{" +
+                "recid=" + recid +
+                ", schid=" + schid +
+                ", stuid='" + stuid + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

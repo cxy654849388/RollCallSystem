@@ -1,20 +1,19 @@
 package com.chm.service.impl;
 
 import com.chm.consist.FaceRecognition;
-import com.chm.domain.FaceDataTrainStatus;
-import com.chm.domain.Record;
-import com.chm.domain.Student;
-import com.chm.domain.Teach;
+import com.chm.domain.*;
 import com.chm.mapper.*;
 import com.chm.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
 @Service("studentService")
+@Transactional(rollbackFor = { RuntimeException.class, Exception.class })
 public class StudentServiceImpl implements StudentService {
 
     @Autowired
@@ -31,6 +30,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private StudentMapper studentMapper;
+
+    @Autowired
+    private ScheduleMapper scheduleMapper;
 
     @Autowired
     private FaceRecognition faceRecognition;
@@ -77,8 +79,8 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public String signed(String image, Integer schid) {
-
-        Teach teach = teachMapper.selectByPrimaryKey(teachid);
+        //获取课表实例
+        Schedule schedule = scheduleMapper.selectByPrimaryKey(schid);
         //根据任课实例获取课堂所有学生相应的标签
         List<String> labels = classMapper.getLabels(schid);
         //识别，获取识别结果 label格式:groupId/userId
@@ -88,13 +90,13 @@ public class StudentServiceImpl implements StudentService {
             String stuId = label.split("/")[1];
             //插入签到结果
             //查询是否已签到
-            if (recordMapper.selectStatusByStuidAndTeachid(stuId, teach.getTeachid()) == null) {
+            if (recordMapper.selectStatusByStuidAndSchid(stuId, schid) == null) {
                 //进行签到
                 //比较签到时间
-                long time = teach.getStarttime().getTime() - System.currentTimeMillis();
+                long time = schedule.getStarttime().getTime() - System.currentTimeMillis();
                 Record record = new Record();
                 record.setStuid(stuId);
-                record.setTeachid(teach.getTeachid());
+                record.setSchid(schid);
                 if (time > NORMAL) {
                     //正常签到
                     record.setStatus("正常");
@@ -119,7 +121,5 @@ public class StudentServiceImpl implements StudentService {
         } else {
             return null;
         }
-
-
     }
 }

@@ -8,7 +8,7 @@
         <result column="Status" property="status" jdbcType="CHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        RecID, TeachID, StuID, Status
+        RecID, SchID, StuID, Status
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -24,10 +24,10 @@
             where StuID = #{stuid,jdbcType=VARCHAR}
         </if>
     </select>
-    <select id="selectStatusByStuidAndTeachid" resultType="java.lang.String">
+    <select id="selectStatusByStuidAndSchid" resultType="java.lang.String">
         select Status
         from tbl_record
-        where StuID = #{stuid,jdbcType=VARCHAR} and TeachID = #{teachid,jdbcType=INTEGER}
+        where StuID = #{stuid,jdbcType=VARCHAR} and SchID = #{schid,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from tbl_record

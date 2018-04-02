@@ -511,7 +511,7 @@ DROP TABLE IF EXISTS `tbl_record`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tbl_record` (
   `RecID` int(11) NOT NULL AUTO_INCREMENT,
-  `TeachID` int(11) DEFAULT NULL,
+  `SchID` int(11) DEFAULT NULL,
   `StuID` varchar(10) DEFAULT NULL,
   `Status` enum('正常','迟到','缺课','请假') DEFAULT NULL,
   PRIMARY KEY (`RecID`)
@@ -568,14 +568,14 @@ DROP TABLE IF EXISTS `tbl_select_course`;
 CREATE TABLE `tbl_select_course` (
   `SelectID` int(11) NOT NULL AUTO_INCREMENT,
   `StuID` varchar(10) DEFAULT NULL,
-  `CouID` int(11) DEFAULT NULL,
+  `TeachID` int(11) DEFAULT NULL,
   `Result` double DEFAULT NULL,
   PRIMARY KEY (`SelectID`),
   KEY `FK_Reference_4` (`StuID`),
-  KEY `FK_Reference_5` (`CouID`),
+  KEY `FK_Reference_8` (`TeachID`),
   CONSTRAINT `FK_Reference_4` FOREIGN KEY (`StuID`) REFERENCES `tbl_student` (`StuID`),
-  CONSTRAINT `FK_Reference_5` FOREIGN KEY (`CouID`) REFERENCES `tbl_course` (`CouID`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+  CONSTRAINT `FK_Reference_8` FOREIGN KEY (`TeachID`) REFERENCES `tbl_teach` (`TeachID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -633,7 +633,7 @@ CREATE TABLE `tbl_teach` (
   KEY `FK_Reference_3` (`CouID`),
   CONSTRAINT `FK_Reference_2` FOREIGN KEY (`TeaID`) REFERENCES `tbl_teacher` (`TeaID`),
   CONSTRAINT `FK_Reference_3` FOREIGN KEY (`CouID`) REFERENCES `tbl_course` (`CouID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -642,6 +642,7 @@ CREATE TABLE `tbl_teach` (
 
 LOCK TABLES `tbl_teach` WRITE;
 /*!40000 ALTER TABLE `tbl_teach` DISABLE KEYS */;
+INSERT INTO `tbl_teach` VALUES (1,'0007',1),(2,'0008',2),(3,'0009',3),(4,'0010',4),(5,'0011',5),(6,'0006',6),(7,'0009',7),(8,'0012',8),(9,'0001',9),(10,'0002',10),(11,'0001',11),(12,'0003',12),(13,'0004',13),(14,'0005',14),(15,'0013',15),(16,'0014',16),(17,'0015',17),(18,'0013',18),(19,'0016',19),(20,'0017',20);
 /*!40000 ALTER TABLE `tbl_teach` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -682,4 +683,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-02 16:42:08
+-- Dump completed on 2018-04-02 20:17:22

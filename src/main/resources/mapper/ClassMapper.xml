@@ -24,7 +24,11 @@
         where CouID in(
           select CouID
           from tbl_teach
-          where TeachID = #{teachid,jdbcType=INTEGER}
+          where TeachID = (
+              select TeachID
+              from tbl_schedule
+              where SchID = #{schid,jdbcType=INTEGER}
+          )
         )
       )
   </select>

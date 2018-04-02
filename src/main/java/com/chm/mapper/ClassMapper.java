@@ -19,10 +19,10 @@ public interface ClassMapper {
     int updateByPrimaryKey(Class record);
 
     /**
-     * 根据任课id获取学生所在班级标签集合
+     * 根据课表id获取学生所在班级标签集合
      *
-     * @param teachid
+     * @param schid
      * @return
      */
-    List<String> getLabels(@Param("teachid") Integer teachid);
+    List<String> getLabels(@Param("schid") Integer schid);
 }

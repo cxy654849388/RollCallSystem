@@ -29,9 +29,9 @@ public interface RecordMapper {
     /**
      * 根据学号和任课编码查询签到状态
      *
-     * @param stuId   学生学号
-     * @param teachId 任课编码
+     * @param stuId 学生学号
+     * @param schId 课表编号
      * @return
      */
-    String selectStatusByStuidAndTeachid(@Param("stuid") String stuId, @Param("teachid") Integer teachId);
+    String selectStatusByStuidAndSchid(@Param("stuid") String stuId, @Param("schid") Integer schId);
 }
