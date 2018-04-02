@@ -1,19 +1,11 @@
 package com.chm.domain;
 
-import java.util.Date;
-
 public class Teach {
     private Integer teachid;
 
     private String teaid;
 
     private Integer couid;
-
-    private Integer id;
-
-    private Date starttime;
-
-    private Date endtime;
 
     public Integer getTeachid() {
         return teachid;
@@ -37,29 +29,5 @@ public class Teach {
 
     public void setCouid(Integer couid) {
         this.couid = couid;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Date getStarttime() {
-        return starttime;
-    }
-
-    public void setStarttime(Date starttime) {
-        this.starttime = starttime;
-    }
-
-    public Date getEndtime() {
-        return endtime;
-    }
-
-    public void setEndtime(Date endtime) {
-        this.endtime = endtime;
     }
 }

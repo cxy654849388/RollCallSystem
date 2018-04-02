@@ -68,7 +68,7 @@ public class FaceRecognitionImpl implements FaceRecognition {
     /**
      * @param image  人脸数据
      * @param groups 用户组
-     * @return  返回字符串格式:groupId/userId
+     * @return 返回字符串格式:groupId/userId
      */
     @Override
     public String recogntion(String image, List groups) {

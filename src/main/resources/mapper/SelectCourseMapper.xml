@@ -4,12 +4,12 @@
     <resultMap id="BaseResultMap" type="com.chm.domain.SelectCourse">
         <id column="SelectID" property="selectid" jdbcType="INTEGER"/>
         <result column="StuID" property="stuid" jdbcType="VARCHAR"/>
-        <result column="CouID" property="couid" jdbcType="INTEGER"/>
+        <result column="TeachID" property="teachid" jdbcType="INTEGER"/>
         <result column="Result" property="result" jdbcType="DOUBLE"/>
     </resultMap>
     <sql id="Base_Column_List">
-        SelectID, StuID, CouID, Result
-    </sql>
+    SelectID, StuID, TeachID, Result
+  </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
@@ -21,9 +21,9 @@
         where SelectID = #{selectid,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.chm.domain.SelectCourse">
-        insert into tbl_select_course ( StuID, CouID,
+        insert into tbl_select_course (StuID, TeachID,
         Result)
-        values ( #{stuid,jdbcType=VARCHAR}, #{couid,jdbcType=INTEGER},
+        values (#{stuid,jdbcType=VARCHAR}, #{teachid,jdbcType=INTEGER},
         #{result,jdbcType=DOUBLE})
     </insert>
     <insert id="insertSelective" parameterType="com.chm.domain.SelectCourse">
@@ -32,8 +32,8 @@
             <if test="stuid != null">
                 StuID,
             </if>
-            <if test="couid != null">
-                CouID,
+            <if test="teachid != null">
+                TeachID,
             </if>
             <if test="result != null">
                 Result,
@@ -43,8 +43,8 @@
             <if test="stuid != null">
                 #{stuid,jdbcType=VARCHAR},
             </if>
-            <if test="couid != null">
-                #{couid,jdbcType=INTEGER},
+            <if test="teachid != null">
+                #{teachid,jdbcType=INTEGER},
             </if>
             <if test="result != null">
                 #{result,jdbcType=DOUBLE},
@@ -57,8 +57,8 @@
             <if test="stuid != null">
                 StuID = #{stuid,jdbcType=VARCHAR},
             </if>
-            <if test="couid != null">
-                CouID = #{couid,jdbcType=INTEGER},
+            <if test="teachid != null">
+                TeachID = #{teachid,jdbcType=INTEGER},
             </if>
             <if test="result != null">
                 Result = #{result,jdbcType=DOUBLE},
@@ -67,10 +67,10 @@
         where SelectID = #{selectid,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.chm.domain.SelectCourse">
-        update tbl_select_course
-        set StuID = #{stuid,jdbcType=VARCHAR},
-        CouID = #{couid,jdbcType=INTEGER},
-        Result = #{result,jdbcType=DOUBLE}
-        where SelectID = #{selectid,jdbcType=INTEGER}
-    </update>
+    update tbl_select_course
+    set StuID = #{stuid,jdbcType=VARCHAR},
+      TeachID = #{teachid,jdbcType=INTEGER},
+      Result = #{result,jdbcType=DOUBLE}
+    where SelectID = #{selectid,jdbcType=INTEGER}
+  </update>
 </mapper>

@@ -5,7 +5,7 @@ public class SelectCourse {
 
     private String stuid;
 
-    private Integer couid;
+    private Integer teachid;
 
     private Double result;
 
@@ -25,12 +25,12 @@ public class SelectCourse {
         this.stuid = stuid == null ? null : stuid.trim();
     }
 
-    public Integer getCouid() {
-        return couid;
+    public Integer getTeachid() {
+        return teachid;
     }
 
-    public void setCouid(Integer couid) {
-        this.couid = couid;
+    public void setTeachid(Integer teachid) {
+        this.teachid = teachid;
     }
 
     public Double getResult() {
