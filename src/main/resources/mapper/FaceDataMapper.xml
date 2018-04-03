@@ -31,6 +31,15 @@
         DELETE FROM tbl_facedata
         WHERE FaceID = #{faceid,jdbcType=INTEGER}
     </delete>
+    <delete id="updateFaceDataCountFacedate" parameterType="java.lang.String">
+        DELETE FROM tbl_facedata
+        WHERE FaceID = (
+          select min(FaceID) from tbl_facedata
+        ) and 10 > (
+          select count(*) from tbl_facedata
+          where StuID = #{stuid,jdbcType=VARCHAR}
+        )
+    </delete>
     <insert id="insert" parameterType="com.chm.domain.FaceData">
         INSERT INTO tbl_facedata (StuID, FaceDate
         )

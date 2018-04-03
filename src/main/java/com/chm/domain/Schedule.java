@@ -1,6 +1,9 @@
 package com.chm.domain;
 
-import java.util.Date;
+import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Schedule {
     private Integer schid;
@@ -9,9 +12,13 @@ public class Schedule {
 
     private Integer teachid;
 
-    private Date starttime;
+    private LocalTime starttime;
 
-    private Date endtime;
+    private LocalTime endtime;
+
+    private String weekofsemester;
+
+    private Integer dayofweek;
 
     public Integer getSchid() {
         return schid;
@@ -37,19 +44,48 @@ public class Schedule {
         this.teachid = teachid;
     }
 
-    public Date getStarttime() {
+    public LocalTime getStarttime() {
         return starttime;
     }
 
-    public void setStarttime(Date starttime) {
+    public void setStarttime(LocalTime starttime) {
         this.starttime = starttime;
     }
 
-    public Date getEndtime() {
+    public LocalTime getEndtime() {
         return endtime;
     }
 
-    public void setEndtime(Date endtime) {
+    public void setEndtime(LocalTime endtime) {
         this.endtime = endtime;
+    }
+
+    public String getWeekofsemester() {
+        return weekofsemester;
+    }
+
+    public void setWeekofsemester(String weekofsemester) {
+        this.weekofsemester = weekofsemester;
+    }
+
+    public Integer getDayofweek() {
+        return dayofweek;
+    }
+
+    public void setDayofweek(Integer dayofweek) {
+        this.dayofweek = dayofweek;
+    }
+
+    @Override
+    public String toString() {
+        return "Schedule{" +
+                "schid=" + schid +
+                ", roomid=" + roomid +
+                ", teachid=" + teachid +
+                ", starttime=" + starttime +
+                ", endtime=" + endtime +
+                ", weekofsemester=" + weekofsemester +
+                ", dayofweek=" + dayofweek +
+                '}';
     }
 }

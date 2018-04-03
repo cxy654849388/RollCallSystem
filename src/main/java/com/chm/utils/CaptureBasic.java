@@ -16,6 +16,13 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.DoubleBuffer;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.TemporalField;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static javax.swing.UIManager.get;
 import static org.bytedeco.javacpp.opencv_core.cvLoad;
@@ -51,6 +58,7 @@ public class CaptureBasic extends JPanel {
         return image;
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         if (mImg != null) {
             g.drawImage(mImg, 0, 0, mImg.getWidth(), mImg.getHeight(), this);
@@ -59,46 +67,15 @@ public class CaptureBasic extends JPanel {
 
     public static void main(String[] args) throws FrameGrabber.Exception {
 
-        //FrameGrabber grabber = FrameGrabber.createDefault(0);
-        try {
-            // System.loadLibrary(opencv_core.NATIVE_LIBRARY_NAME);
-            Mat capImg = new Mat();
-            VideoCapture capture = new VideoCapture(0);
-            int height = (int) capture.get(opencv_videoio.CV_CAP_PROP_FRAME_HEIGHT);
-            int width = (int) capture.get(opencv_videoio.CAP_PROP_FRAME_WIDTH);
-            if (height == 0 || width == 0) {
-                throw new Exception("camera not found!");
-            }
-
-
-            JFrame frame = new JFrame("camera");
-            frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-            CaptureBasic panel = new CaptureBasic();
-            frame.setContentPane(panel);
-            frame.setVisible(true);
-            frame.setSize(width + frame.getInsets().left + frame.getInsets().right,
-                    height + frame.getInsets().top + frame.getInsets().bottom);
-            int n = 0;
-            Mat temp = new Mat();
-            while (frame.isShowing() && n < 500) {
-                //capture.grab();
-                //System.out.println("第"+n+"张");
-                capture.read(capImg);
-                opencv_imgproc.cvtColor(capImg, temp, opencv_imgproc.COLOR_RGB2GRAY);
-                //Imgcodecs.imwrite("G:/opencv/lw/neg/back"+n+".png", temp);
-                panel.mImg = panel.mat2BI(detectFace(capImg));
-                panel.repaint();
-                //n++;
-                //break;
-            }
-            capture.release();
-            frame.dispose();
-        } catch (Exception e) {
-            System.out.println("例外：" + e);
-        } finally {
-            System.out.println("--done--");
-        }
-
+        LocalTime time = LocalTime.now();
+        System.out.println(time.toSecondOfDay());
+        System.out.println(System.currentTimeMillis());
+        String str = "1,2,3,4,5,6,7,8,9,10";
+        java.util.List list1 = new ArrayList<String>();
+        Set<String> stringSet = new HashSet<>();
+        stringSet.addAll(Arrays.asList(str.split(",")));
+        System.out.println(stringSet);
+        System.out.println(stringSet.contains("12"));
     }
 
     /**
@@ -120,10 +97,10 @@ public class CaptureBasic extends JPanel {
         // 在图片中检测人脸
         RectVector faceDetections = new RectVector();
 
-         CvMemStorage storage = new CvMemStorage();
+        CvMemStorage storage = new CvMemStorage();
         IplImage grayImage;
         CvSeq faces;
-       // faces = cvHaarDetectObjects(, faceDetector, storage, 1.1, 3, CV_HAAR_DO_CANNY_PRUNING);
+        // faces = cvHaarDetectObjects(, faceDetector, storage, 1.1, 3, CV_HAAR_DO_CANNY_PRUNING);
 
         //faceDetector.detectMultiScale(img, faceDetections);
 

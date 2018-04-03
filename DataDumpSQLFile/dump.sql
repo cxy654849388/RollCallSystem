@@ -541,6 +541,8 @@ CREATE TABLE `tbl_schedule` (
   `TeachID` int(11) DEFAULT NULL,
   `StartTime` time DEFAULT NULL,
   `EndTime` time DEFAULT NULL,
+  `WeekOfSemester` set('1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22') DEFAULT NULL,
+  `DayOfWeek` int(11) DEFAULT NULL,
   PRIMARY KEY (`SchID`),
   KEY `FK_Reference_6` (`RoomID`),
   KEY `FK_Reference_7` (`TeachID`),
@@ -555,7 +557,7 @@ CREATE TABLE `tbl_schedule` (
 
 LOCK TABLES `tbl_schedule` WRITE;
 /*!40000 ALTER TABLE `tbl_schedule` DISABLE KEYS */;
-INSERT INTO `tbl_schedule` VALUES (1,1,1,'16:20:00','18:20:00'),(2,2,10,'16:20:00','16:20:00');
+INSERT INTO `tbl_schedule` VALUES (1,1,1,'16:20:00','18:20:00','1,2,3,4,5',3),(2,2,10,'16:20:00','16:20:00','2',3);
 /*!40000 ALTER TABLE `tbl_schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -685,4 +687,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-03  9:52:03
+-- Dump completed on 2018-04-03 13:59:58

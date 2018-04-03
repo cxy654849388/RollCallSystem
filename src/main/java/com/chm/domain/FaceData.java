@@ -5,7 +5,7 @@ public class FaceData {
 
     private String stuid;
 
-    private byte[] facedate;
+    private String facedate;
 
     public Integer getFaceid() {
         return faceid;
@@ -23,11 +23,11 @@ public class FaceData {
         this.stuid = stuid == null ? null : stuid.trim();
     }
 
-    public byte[] getFacedate() {
+    public String getFacedate() {
         return facedate;
     }
 
-    public void setFacedate(byte[] facedate) {
+    public void setFacedate(String facedate) {
         this.facedate = facedate;
     }
 }

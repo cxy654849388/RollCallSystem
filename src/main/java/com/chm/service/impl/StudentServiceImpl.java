@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +20,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private RecordMapper recordMapper;
+
+    @Autowired
+    private FaceDataMapper faceDataMapper;
 
     @Autowired
     private FaceDataTrainStatusMapper faceDataTrainStatusMapper;
@@ -41,14 +46,14 @@ public class StudentServiceImpl implements StudentService {
     /**
      * 正常签到
      */
-    @Value("#{${NORMAL:5} * -60000}")
+    @Value("#{${NORMAL:5} * -60}")
     private int NORMAL;
 
 
     /**
      * 迟到
      */
-    @Value("#{${NORMAL:20} * -60000}")
+    @Value("#{${NORMAL:20} * -60}")
     private int LATE;
 
     public int getNORMAL() {
@@ -93,7 +98,7 @@ public class StudentServiceImpl implements StudentService {
             if (recordMapper.selectStatusByStuidAndSchid(stuId, schid) == null) {
                 //进行签到
                 //比较签到时间
-                long time = schedule.getStarttime().getTime() - System.currentTimeMillis();
+                long time = schedule.getStarttime().toSecondOfDay() - LocalTime.now().toSecondOfDay();
                 Record record = new Record();
                 record.setStuid(stuId);
                 record.setSchid(schid);
@@ -115,6 +120,13 @@ public class StudentServiceImpl implements StudentService {
                 faceDataTrainStatus.setStatus("0");
                 //插入人脸数据训练状态记录
                 faceDataTrainStatusMapper.updateByPrimaryKey(faceDataTrainStatus);
+                //插入人脸数据
+                FaceData faceData = new FaceData();
+                faceData.setFacedate(image);
+                faceData.setStuid(stuId);
+                faceDataMapper.insertSelective(faceData);
+                //更新人脸数据库的数量
+                faceDataMapper.updateFaceDataCountFacedate(stuId);
             }
             //返回学生学号
             return stuId;

@@ -1,7 +1,9 @@
 package com.chm;
 
+import com.chm.domain.Schedule;
 import com.chm.mapper.ClassMapper;
 import com.chm.mapper.RecordMapper;
+import com.chm.mapper.ScheduleMapper;
 import com.chm.service.StudentService;
 import com.chm.service.impl.StudentServiceImpl;
 import org.mybatis.spring.annotation.MapperScan;
@@ -12,8 +14,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-import java.util.Arrays;
-import java.util.List;
+import java.sql.Time;
+import java.time.LocalTime;
+import java.util.*;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "com.chm")
@@ -29,6 +32,9 @@ public class Application {
 
         ClassMapper classMapper = (ClassMapper) context.getBean("classMapper");
 
+        ScheduleMapper scheduleMapper = (ScheduleMapper) context.getBean("scheduleMapper");
+
+
         List list = studentService.selectRecord(null);
 
         System.out.println(Arrays.toString(list.toArray()));
@@ -39,8 +45,17 @@ public class Application {
 
         //根据任课实例获取课堂所有学生相应的标签
         List<String> labels = classMapper.getLabels(2);
-
         System.out.println(labels);
+
+        //获取课表实例
+        Schedule schedule = scheduleMapper.selectByPrimaryKey(1);
+        System.out.println(schedule);
+
+        Set<String> stringSet = new HashSet<>();
+        String str = "1,2,3,4,5,6,7,8,9,10";
+        stringSet.addAll(Arrays.asList(str.split(",")));
+        System.out.println(stringSet);
+
 
     }
 }
