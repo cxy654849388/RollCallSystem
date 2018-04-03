@@ -34,11 +34,23 @@
     <delete id="updateFaceDataCountFacedate" parameterType="java.lang.String">
         DELETE FROM tbl_facedata
         WHERE FaceID = (
-          select min(FaceID) from tbl_facedata
-        ) and 10 > (
-          select count(*) from tbl_facedata
-          where StuID = #{stuid,jdbcType=VARCHAR}
-        )
+        select min(f1.FaceID) from (
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from tbl_facedata
+        ) f1
+        ) and (
+        select count(*) from (
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from tbl_facedata
+        ) f2
+        where f2.StuID = #{stuid,jdbcType=VARCHAR}
+        ) > 10
     </delete>
     <insert id="insert" parameterType="com.chm.domain.FaceData">
         INSERT INTO tbl_facedata (StuID, FaceDate

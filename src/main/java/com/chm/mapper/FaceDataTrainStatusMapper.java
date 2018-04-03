@@ -18,5 +18,18 @@ public interface FaceDataTrainStatusMapper {
 
     int updateByPrimaryKey(FaceDataTrainStatus record);
 
+    /**
+     * 插入更新训练状态实例
+     *
+     * @param record
+     * @return
+     */
+    int insertOrUpdate(FaceDataTrainStatus record);
+
+    /**
+     * 返回需要训练的学生学号集合
+     *
+     * @return
+     */
     List<String> findStatusNo();
 }

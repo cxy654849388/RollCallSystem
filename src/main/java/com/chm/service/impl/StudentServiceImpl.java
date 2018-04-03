@@ -119,7 +119,7 @@ public class StudentServiceImpl implements StudentService {
                 faceDataTrainStatus.setStuid(stuId);
                 faceDataTrainStatus.setStatus("0");
                 //插入人脸数据训练状态记录
-                faceDataTrainStatusMapper.updateByPrimaryKey(faceDataTrainStatus);
+                faceDataTrainStatusMapper.insertOrUpdate(faceDataTrainStatus);
                 //插入人脸数据
                 FaceData faceData = new FaceData();
                 faceData.setFacedate(image);

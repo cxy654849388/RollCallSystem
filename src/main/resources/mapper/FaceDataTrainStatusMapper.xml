@@ -22,13 +22,13 @@
         delete from tbl_facedata_train_status
         where StuID = #{stuid,jdbcType=VARCHAR}
     </delete>
-    <insert id="insert" parameterType="com.chm.domain.Student">
+    <insert id="insert" parameterType="com.chm.domain.FaceDataTrainStatus">
         insert into tbl_facedata_train_status (StuID, Status
         )
         values (#{stuid,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.chm.domain.Student">
+    <insert id="insertSelective" parameterType="com.chm.domain.FaceDataTrainStatus">
         insert into tbl_facedata_train_status
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="stuid != null">
@@ -37,7 +37,6 @@
             <if test="status != null">
                 Status,
             </if>
-
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="stuid != null">
@@ -48,7 +47,12 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.chm.domain.Student">
+    <insert id="insertOrUpdate">
+      insert into tbl_facedata_train_status(StuID,Status)
+      values(#{stuid,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
+      on duplicate key update Status = #{status,jdbcType=VARCHAR}
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.chm.domain.FaceDataTrainStatus">
         update tbl_facedata_train_status
         <set>
             <if test="status != null">
@@ -57,7 +61,7 @@
         </set>
         where StuID = #{stuid,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.chm.domain.Student">
+    <update id="updateByPrimaryKey" parameterType="com.chm.domain.FaceDataTrainStatus">
         update tbl_facedata_train_status
         set Status = #{status,jdbcType=VARCHAR},
         where StuID = #{stuid,jdbcType=VARCHAR}

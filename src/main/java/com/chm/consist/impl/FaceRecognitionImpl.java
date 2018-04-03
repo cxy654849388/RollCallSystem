@@ -71,28 +71,32 @@ public class FaceRecognitionImpl implements FaceRecognition {
      * @return 返回字符串格式:groupId/userId
      */
     @Override
-    public String recogntion(String image, List groups) {
+    public synchronized String recogntion(String image, List groups) {
 
         JSONObject object = client.identifyUser(groups, base64ToBytes(image), null);
 
-        String groupid = object.getJSONArray("result").getJSONObject(0).getString("group_id");
+        if (object.keySet().contains("result")) {
 
-        String uid = object.getJSONArray("result").getJSONObject(0).getString("uid");
+            String groupid = object.getJSONArray("result").getJSONObject(0).getString("group_id");
 
-        JSONArray scores = object.getJSONArray("result").getJSONObject(0).getJSONArray("scores");
+            String uid = object.getJSONArray("result").getJSONObject(0).getString("uid");
 
-        System.out.println(groupid);
+            JSONArray scores = object.getJSONArray("result").getJSONObject(0).getJSONArray("scores");
 
-        System.out.println(uid);
+            System.out.println(groupid);
 
-        System.out.println(scores.getDouble(0));
+            System.out.println(uid);
 
-        if (scores.getDouble(0) > THRESHOLD) {
-            return new StringBuffer().append(groupid).append("/").append(uid).toString();
+            System.out.println(scores.getDouble(0));
+
+            if (scores.getDouble(0) > THRESHOLD) {
+                return new StringBuffer().append(groupid).append("/").append(uid).toString();
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
-
     }
 
     @Override
@@ -104,10 +108,14 @@ public class FaceRecognitionImpl implements FaceRecognition {
     }
 
     public static void main(String[] args) throws IOException {
+        /**
+         * 测试人脸识别接口示例
+         */
+
         FaceRecognition faceRecognition = new FaceRecognitionImpl();
 
 
-        InputStream in = new FileInputStream("C:\\Users\\caihongming\\Desktop\\img\\s8\\6.jpg");
+        InputStream in = new FileInputStream("C:\\Users\\caihongming\\Desktop\\img\\s1\\1.jpg");
         byte[] data = new byte[in.available()];
         in.read(data);
         in.close();
@@ -115,10 +123,9 @@ public class FaceRecognitionImpl implements FaceRecognition {
         BASE64Encoder encoder = new BASE64Encoder();
 
         List<String> groups = new ArrayList<>();
-        groups.add("s1");
-        groups.add("s2");
-        groups.add("s3");
-        groups.add("s4");
+        groups.add("14070101");
+        groups.add("14070102");
+        groups.add("14070103");
 
         System.out.println(faceRecognition.recogntion(encoder.encode(data), groups));
     }

@@ -44,11 +44,11 @@ public class Application {
         System.out.println(((StudentServiceImpl) studentService).getNORMAL());
 
         //根据任课实例获取课堂所有学生相应的标签
-        List<String> labels = classMapper.getLabels(2);
+        List<String> labels = classMapper.getLabels(31);
         System.out.println(labels);
 
         //获取课表实例
-        Schedule schedule = scheduleMapper.selectByPrimaryKey(1);
+        Schedule schedule = scheduleMapper.selectByPrimaryKey(31);
         System.out.println(schedule);
 
         Set<String> stringSet = new HashSet<>();

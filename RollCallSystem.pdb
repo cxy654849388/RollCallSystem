@@ -2681,14 +2681,15 @@ Shadow=0</a:DisplayPreferences>
 <o:RectangleSymbol Id="o5">
 <a:Text>教务系统</a:Text>
 <a:CreationDate>1522657835</a:CreationDate>
-<a:ModificationDate>1522657837</a:ModificationDate>
-<a:Rect>((-42188,15600), (2137,-15600))</a:Rect>
+<a:ModificationDate>1522724678</a:ModificationDate>
+<a:Rect>((-46574,15600), (2137,-15600))</a:Rect>
 <a:TextStyle>4130</a:TextStyle>
 <a:AutoAdjustToText>0</a:AutoAdjustToText>
 <a:LineColor>16711680</a:LineColor>
 <a:FillColor>16777215</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
 <a:FontName>新宋体,8,N</a:FontName>
+<a:ManuallyResized>1</a:ManuallyResized>
 </o:RectangleSymbol>
 <o:ReferenceSymbol Id="o6">
 <a:CreationDate>1522657832</a:CreationDate>
@@ -2712,9 +2713,9 @@ CARD 0 新宋体,8,N</a:FontList>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o10">
 <a:CreationDate>1522656972</a:CreationDate>
-<a:ModificationDate>1522657839</a:ModificationDate>
-<a:Rect>((-36674,-5164), (-24899,-75))</a:Rect>
-<a:ListOfPoints>((-36674,-5164),(-24899,-75))</a:ListOfPoints>
+<a:ModificationDate>1522725072</a:ModificationDate>
+<a:Rect>((-38238,-5914), (-24899,-75))</a:Rect>
+<a:ListOfPoints>((-38238,-5914),(-24899,-75))</a:ListOfPoints>
 <a:ArrowStyle>1</a:ArrowStyle>
 <a:LineColor>12615680</a:LineColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -2732,9 +2733,9 @@ CARD 0 新宋体,8,N</a:FontList>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o13">
 <a:CreationDate>1522656893</a:CreationDate>
-<a:ModificationDate>1522657839</a:ModificationDate>
-<a:Rect>((-38582,-4542), (-32958,6000))</a:Rect>
-<a:ListOfPoints>((-35497,-4542),(-35999,6000))</a:ListOfPoints>
+<a:ModificationDate>1522725072</a:ModificationDate>
+<a:Rect>((-39042,-5292), (-33418,6000))</a:Rect>
+<a:ListOfPoints>((-36509,-5292),(-35999,6000))</a:ListOfPoints>
 <a:ArrowStyle>1</a:ArrowStyle>
 <a:LineColor>12615680</a:LineColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -3120,8 +3121,9 @@ TableComment 0 新宋体,8,N</a:FontList>
 </o:TableSymbol>
 <o:TableSymbol Id="o11">
 <a:CreationDate>1522656781</a:CreationDate>
-<a:ModificationDate>1522657839</a:ModificationDate>
-<a:Rect>((-40707,-8647), (-32493,-1099))</a:Rect>
+<a:ModificationDate>1522725281</a:ModificationDate>
+<a:Rect>((-44159,-9397), (-32099,-1849))</a:Rect>
+<a:AutoAdjustToText>0</a:AutoAdjustToText>
 <a:LineColor>12615680</a:LineColor>
 <a:FillColor>16570034</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -3137,6 +3139,7 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:BrushStyle>6</a:BrushStyle>
 <a:GradientFillMode>65</a:GradientFillMode>
 <a:GradientEndColor>16777215</a:GradientEndColor>
+<a:ManuallyResized>1</a:ManuallyResized>
 <c:Object>
 <o:Table Ref="o46"/>
 </c:Object>
@@ -4024,9 +4027,9 @@ TableComment 0 新宋体,8,N</a:FontList>
 <a:Code>WeekOfSemester</a:Code>
 <a:CreationDate>1522723760</a:CreationDate>
 <a:Creator>caihongming</a:Creator>
-<a:ModificationDate>1522723760</a:ModificationDate>
+<a:ModificationDate>1522725063</a:ModificationDate>
 <a:Modifier>caihongming</a:Modifier>
-<a:DataType>int</a:DataType>
+<a:DataType>set(&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;4&#39;,&#39;5&#39;,&#39;6&#39;,&#39;7&#39;,&#39;8&#39;,&#39;9&#39;,&#39;10&#39;,&#39;11&#39;,&#39;12&#39;,&#39;13&#39;,&#39;14&#39;,&#39;15&#39;,&#39;16&#39;,&#39;17&#39;,&#39;18&#39;,&#39;19&#39;,&#39;20&#39;,&#39;21&#39;,&#39;22&#39;)</a:DataType>
 </o:Column>
 <o:Column Id="o108">
 <a:ObjectID>00E4C3D2-54DE-48D4-9BAC-8FC96430ED87</a:ObjectID>

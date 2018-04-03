@@ -20,16 +20,13 @@ import java.util.List;
 public class SignedController {
 
 
-
     @Autowired
     private StudentService studentService;
 
 
-
-
     @RequestMapping(value = "/signed", method = RequestMethod.POST)
     @ResponseBody
-    public String signed(@PathVariable("image") String image, @PathVariable("schid") Integer schid) {
+    public String signed(String image, Integer schid) {
         return studentService.signed(image, schid);
     }
 }

@@ -3,7 +3,7 @@
 <mapper namespace="com.chm.mapper.RecordMapper">
     <resultMap id="BaseResultMap" type="com.chm.domain.Record">
         <id column="RecID" property="recid" jdbcType="INTEGER"/>
-        <result column="TeachID" property="teachid" jdbcType="INTEGER"/>
+        <result column="SchID" property="schid" jdbcType="INTEGER"/>
         <result column="StuID" property="stuid" jdbcType="VARCHAR"/>
         <result column="Status" property="status" jdbcType="CHAR"/>
     </resultMap>
@@ -34,16 +34,16 @@
         where RecID = #{recid,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.chm.domain.Record">
-        insert into tbl_record ( TeachID, StuID,
+        insert into tbl_record ( SchID, StuID,
         Status)
-        values ( #{teachid,jdbcType=INTEGER}, #{stuid,jdbcType=VARCHAR},
+        values ( #{schid,jdbcType=INTEGER}, #{stuid,jdbcType=VARCHAR},
         #{status,jdbcType=CHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.chm.domain.Record">
         insert into tbl_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="teachid != null">
-                TeachID,
+            <if test="schid != null">
+                SchID,
             </if>
             <if test="stuid != null">
                 StuID,
@@ -53,8 +53,8 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="teachid != null">
-                #{teachid,jdbcType=INTEGER},
+            <if test="schid != null">
+                #{schid,jdbcType=INTEGER},
             </if>
             <if test="stuid != null">
                 #{stuid,jdbcType=VARCHAR},
@@ -67,8 +67,8 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.chm.domain.Record">
         update tbl_record
         <set>
-            <if test="teachid != null">
-                TeachID = #{teachid,jdbcType=INTEGER},
+            <if test="schid != null">
+                SchID = #{schid,jdbcType=INTEGER},
             </if>
             <if test="stuid != null">
                 StuID = #{stuid,jdbcType=VARCHAR},
@@ -81,7 +81,7 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.chm.domain.Record">
         update tbl_record
-        set TeachID = #{teachid,jdbcType=INTEGER},
+        set SchID = #{schid,jdbcType=INTEGER},
         StuID = #{stuid,jdbcType=VARCHAR},
         Status = #{status,jdbcType=CHAR}
         where RecID = #{recid,jdbcType=INTEGER}
