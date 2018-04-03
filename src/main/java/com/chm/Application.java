@@ -1,5 +1,6 @@
 package com.chm;
 
+import com.chm.mapper.ClassMapper;
 import com.chm.mapper.RecordMapper;
 import com.chm.service.StudentService;
 import com.chm.service.impl.StudentServiceImpl;
@@ -26,6 +27,8 @@ public class Application {
 
         RecordMapper recordMapper = (RecordMapper) context.getBean("recordMapper");
 
+        ClassMapper classMapper = (ClassMapper) context.getBean("classMapper");
+
         List list = studentService.selectRecord(null);
 
         System.out.println(Arrays.toString(list.toArray()));
@@ -33,6 +36,11 @@ public class Application {
         System.out.println(recordMapper.selectStatusByStuidAndSchid("2", 1));
 
         System.out.println(((StudentServiceImpl) studentService).getNORMAL());
+
+        //根据任课实例获取课堂所有学生相应的标签
+        List<String> labels = classMapper.getLabels(2);
+
+        System.out.println(labels);
 
     }
 }

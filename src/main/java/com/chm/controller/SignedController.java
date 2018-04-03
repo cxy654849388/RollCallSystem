@@ -29,7 +29,7 @@ public class SignedController {
 
     @RequestMapping(value = "/signed", method = RequestMethod.POST)
     @ResponseBody
-    public String signed(@PathVariable("image") String image, @PathVariable("teachid") Integer teachid) {
-        return studentService.signed(image, teachid);
+    public String signed(@PathVariable("image") String image, @PathVariable("schid") Integer schid) {
+        return studentService.signed(image, schid);
     }
 }

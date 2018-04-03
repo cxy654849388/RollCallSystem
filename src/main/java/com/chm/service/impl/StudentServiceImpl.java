@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service("studentService")
-@Transactional(rollbackFor = { RuntimeException.class, Exception.class })
+@Transactional(rollbackFor = {RuntimeException.class, Exception.class})
 public class StudentServiceImpl implements StudentService {
 
     @Autowired
@@ -62,7 +62,7 @@ public class StudentServiceImpl implements StudentService {
     /**
      * 查询签到记录方法
      *
-     * @param stuId
+     * @param stuId 学生学号
      * @return
      */
     @Override
@@ -75,7 +75,7 @@ public class StudentServiceImpl implements StudentService {
      *
      * @param image 学生人脸图像
      * @param schid 课表实例id
-     * @return
+     * @return 学生学号
      */
     @Override
     public String signed(String image, Integer schid) {

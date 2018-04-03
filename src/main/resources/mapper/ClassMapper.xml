@@ -15,20 +15,16 @@
         from tbl_class
         where ClassID = #{classid,jdbcType=VARCHAR}
     </select>
-    <select id="getLabels" resultType="java.util.List">
+    <select id="getLabels" resultType="java.lang.String">
       select distinct ClassId
       from tbl_student
       where StuID in(
         select StuID
         from tbl_select_course
-        where CouID in(
-          select CouID
-          from tbl_teach
-          where TeachID = (
-              select TeachID
-              from tbl_schedule
-              where SchID = #{schid,jdbcType=INTEGER}
-          )
+        where TeachID in(
+            select TeachID
+            from tbl_schedule
+            where SchID = #{schid,jdbcType=INTEGER}
         )
       )
   </select>
