@@ -6,7 +6,11 @@
     <groupId>com.chm</groupId>
     <artifactId>rollcallsystem</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <modules>
+        <module>rollcallsystem-web</module>
+        <module>rollcallsystem-window</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <name>RollCallSystem</name>
     <description>Demo project for Spring Boot</description>
