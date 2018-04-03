@@ -4,21 +4,14 @@ package com.chm.utils;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.opencv_core.*;
 import org.bytedeco.javacpp.opencv_objdetect.*;
-import org.bytedeco.javacpp.opencv_videoio.*;
 import org.bytedeco.javacv.FrameGrabber;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.InputStream;
 import java.net.URL;
-import java.nio.DoubleBuffer;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -26,7 +19,6 @@ import java.util.Set;
 
 import static javax.swing.UIManager.get;
 import static org.bytedeco.javacpp.opencv_core.cvLoad;
-import static org.bytedeco.javacpp.opencv_objdetect.CV_HAAR_DO_CANNY_PRUNING;
 import static org.bytedeco.javacpp.opencv_objdetect.cvHaarDetectObjects;
 
 /**
@@ -87,7 +79,7 @@ public class CaptureBasic extends JPanel {
 
         System.out.println("Running DetectFace ... ");
         ClassLoader classLoader = CaptureBasic.class.getClassLoader();
-        URL resource = classLoader.getResource("classifier/haarcascade_frontalface_alt2.xml");
+        URL resource = classLoader.getResource("src/main/resources/classifier/haarcascade_frontalface_alt2.xml");
         File file = new File(resource.getFile());
         System.out.println(file.getAbsolutePath());
         // 从配置文件lbpcascade_frontalface.xml中创建一个人脸识别器，该文件位于opencv安装目录中
