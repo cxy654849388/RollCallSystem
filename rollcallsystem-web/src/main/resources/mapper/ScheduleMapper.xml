@@ -19,6 +19,22 @@
         from tbl_schedule
         where SchID = #{schid,jdbcType=INTEGER}
     </select>
+    <select id="selectByRoomidAndWeek" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from (
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_schedule
+        where EndTime > curtime()
+        and find_in_set(#{weekofsemester,jdbcType=VARCHAR},WeekOfSemester)
+        and RoomID = #{roomid,jdbcType=INTEGER}
+        and DayOfWeek = WEEKDAY(now()) + 2
+        ) s1
+        where abs(curtime() - (s1.StartTime + s1.EndTime) / 2)
+        = (select min(abs(curtime() - (s1.StartTime + s1.EndTime) / 2))
+        )
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tbl_schedule
     where SchID = #{schid,jdbcType=INTEGER}

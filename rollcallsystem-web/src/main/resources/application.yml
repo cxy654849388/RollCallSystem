@@ -41,6 +41,16 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.chm.domain
 
+#配置分页插件pagehelper
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+
+#Logback config
+logging:
+  config: classpath:logback-spring.xml
 
 
 #日志配置
@@ -53,5 +63,25 @@ NORMAL: 5 #正常(上课前至上课后5分钟)
 
 LATE: 20 #迟到(上课后5分钟至上课后20分钟)
 
+#学期开始时间配置
+STARTWEEK: 10
+
+
+#课表时间配置
+#第一节课
+ONESTART: 8:00:00
+ONEEND: 9:40:00
+#第二节课
+TWOSTART: 10:00:00
+TWOEND: 11:40:00
+#第三节课
+THREESTART: 14:00:00
+THREETART: 15:40:00
+#第四节课
+FOURSTART: 16:00:00
+FOUREND: 17:40:00
+#第五节课
+FIVESTART: 19:00:00
+FIVEEND: 20:40:00
 
 

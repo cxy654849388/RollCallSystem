@@ -3,7 +3,6 @@ package com.chm.utils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import sun.misc.BASE64Encoder;
 
 import java.io.FileInputStream;
@@ -34,8 +33,6 @@ public class HttpUtils {
         con.header("Cookie", cookie);
         //解析请求结果
         Document doc = con.get();
-        //获取标题
-        System.out.println(doc.title());
         //返回内容
         return doc.toString();
     }
@@ -62,8 +59,7 @@ public class HttpUtils {
         //插入cookie（头文件形式）
         con.header("Cookie", cookie);
         Document doc = con.post();
-        Element body = doc.body();
-        return body.text();
+        return doc.body().text();
     }
 
     public static void main(String[] args) throws IOException {
@@ -78,7 +74,7 @@ public class HttpUtils {
         BASE64Encoder encoder = new BASE64Encoder();
         Map map = new HashMap();
         map.put("image", encoder.encode(data));
-        map.put("schid", "12");
+        map.put("schid", "3");
 
         System.out.println(httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null));
     }

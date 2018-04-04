@@ -28,4 +28,6 @@ public interface FaceDataMapper {
      * @return
      */
     int updateFaceDataCountFacedate(String stuid);
+
+
 }

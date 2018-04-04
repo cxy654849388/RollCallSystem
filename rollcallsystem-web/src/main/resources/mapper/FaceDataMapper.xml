@@ -26,6 +26,7 @@
         SELECT FaceDate
         FROM tbl_facedata
         WHERE StuID = #{stuid,jdbcType=VARCHAR}
+        ORDER BY FaceID DESC
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         DELETE FROM tbl_facedata

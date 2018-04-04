@@ -4,11 +4,12 @@ import com.chm.domain.Schedule;
 import com.chm.mapper.ClassMapper;
 import com.chm.mapper.RecordMapper;
 import com.chm.mapper.ScheduleMapper;
+import com.chm.mapper.StudentMapper;
+import com.chm.service.ScheduleService;
 import com.chm.service.StudentService;
 import com.chm.service.impl.StudentServiceImpl;
+import com.github.pagehelper.PageHelper;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -34,6 +35,10 @@ public class Application {
 
         ScheduleMapper scheduleMapper = (ScheduleMapper) context.getBean("scheduleMapper");
 
+        StudentMapper studentMapper = (StudentMapper) context.getBean("studentMapper");
+
+        ScheduleService scheduleService = (ScheduleService) context.getBean("scheduleService");
+
 
         List list = studentService.selectRecord(null);
 
@@ -47,6 +52,8 @@ public class Application {
         List<String> labels = classMapper.getLabels(31);
         System.out.println(labels);
 
+        PageHelper.startPage(1, 10);
+        //System.out.println(studentMapper.findAll().size());
         //获取课表实例
         Schedule schedule = scheduleMapper.selectByPrimaryKey(31);
         System.out.println(schedule);
@@ -56,6 +63,7 @@ public class Application {
         stringSet.addAll(Arrays.asList(str.split(",")));
         System.out.println(stringSet);
 
+        System.out.println(scheduleService.getSchedule(17));
 
     }
 }

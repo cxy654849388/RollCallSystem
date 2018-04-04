@@ -6,6 +6,8 @@ import com.chm.mapper.*;
 import com.chm.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,7 +82,7 @@ public class StudentServiceImpl implements StudentService {
      *
      * @param image 学生人脸图像
      * @param schid 课表实例id
-     * @return 学生学号
+     * @return 学生学号/学生姓名
      */
     @Override
     public String signed(String image, Integer schid) {
@@ -128,8 +130,10 @@ public class StudentServiceImpl implements StudentService {
                 //更新人脸数据库的数量
                 faceDataMapper.updateFaceDataCountFacedate(stuId);
             }
+            Student student = studentMapper.selectByPrimaryKey(stuId);
+
             //返回学生学号
-            return stuId;
+            return stuId + "/" + student.getStuname();
         } else {
             return null;
         }
