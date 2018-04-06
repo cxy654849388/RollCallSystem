@@ -1,7 +1,7 @@
 package com.chm.service;
 
 import com.chm.domain.Record;
-import com.chm.domain.Teach;
+import com.chm.domain.Student;
 
 import java.util.List;
 
@@ -21,8 +21,8 @@ public interface StudentService {
      *
      * @param image 学生图像
      * @param teachid 任课id
-     * @return
+     * @return 签到学生的实例
      */
-    String signed(String image, Integer teachid);
+    Student signed(String image, Integer teachid);
 
 }

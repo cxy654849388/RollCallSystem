@@ -8,9 +8,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import sun.misc.BASE64Encoder;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +72,7 @@ public class FaceRecognitionImpl implements FaceRecognition {
     public synchronized String recogntion(String image, List groups) {
 
         JSONObject object = client.identifyUser(groups, Base64.decodeBase64(image), null);
+
 
         if (object.keySet().contains("result")) {
 

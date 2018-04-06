@@ -1,5 +1,6 @@
 package com.chm.controller;
 
+import com.chm.domain.Student;
 import com.chm.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ public class SignedController {
      * @return
      */
     @PostMapping(value = "/signed")
-    public String signed(String image, Integer schid) {
+    public Student signed(String image, Integer schid) {
         return studentService.signed(image, schid);
     }
 }

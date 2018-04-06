@@ -44,27 +44,29 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private FaceRecognition faceRecognition;
 
+    /**
+     * 正常签到开始
+     * 默认上课前二十分钟
+     */
+    @Value("#{${NORMALSTART:20} * 60}")
+    private int NORMALSTART;
+
 
     /**
-     * 正常签到
+     * 正常签到结束
+     * 默认上课后五分钟
      */
-    @Value("#{${NORMAL:5} * -60}")
-    private int NORMAL;
+    @Value("#{${NORMALEND:5} * -60}")
+    private int NORMALEND;
 
 
     /**
      * 迟到
+     * 默认上课后五分钟至上课后二十分钟
      */
     @Value("#{${NORMAL:20} * -60}")
     private int LATE;
 
-    public int getNORMAL() {
-        return NORMAL;
-    }
-
-    public int getLATE() {
-        return LATE;
-    }
 
     /**
      * 查询签到记录方法
@@ -82,10 +84,10 @@ public class StudentServiceImpl implements StudentService {
      *
      * @param image 学生人脸图像
      * @param schid 课表实例id
-     * @return 学生学号/学生姓名
+     * @return 签到学生的实例
      */
     @Override
-    public String signed(String image, Integer schid) {
+    public Student signed(String image, Integer schid) {
         //获取课表实例
         Schedule schedule = scheduleMapper.selectByPrimaryKey(schid);
         //根据任课实例获取课堂所有学生相应的标签
@@ -101,16 +103,23 @@ public class StudentServiceImpl implements StudentService {
                 //进行签到
                 //比较签到时间
                 long time = schedule.getStarttime().toSecondOfDay() - LocalTime.now().toSecondOfDay();
+                //新建签到实例
                 Record record = new Record();
+                //学生学号
                 record.setStuid(stuId);
+                //课表编号
                 record.setSchid(schid);
-                if (time > NORMAL) {
+                if (time > NORMALSTART) {
+                    //没到签到时间
+                    return null;
+                }
+                if (time > NORMALEND && time < NORMALSTART) {
                     //正常签到
                     record.setStatus("正常");
                 } else if (time > LATE) {
                     //迟到
                     record.setStatus("迟到");
-                } else {
+                } else if (time < LATE) {
                     //缺课
                     record.setStatus("缺课");
                 }
@@ -131,9 +140,8 @@ public class StudentServiceImpl implements StudentService {
                 faceDataMapper.updateFaceDataCountFacedate(stuId);
             }
             Student student = studentMapper.selectByPrimaryKey(stuId);
-
             //返回学生学号
-            return stuId + "/" + student.getStuname();
+            return student;
         } else {
             return null;
         }
