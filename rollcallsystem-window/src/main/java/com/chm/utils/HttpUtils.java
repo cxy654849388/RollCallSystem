@@ -1,5 +1,6 @@
 package com.chm.utils;
 
+import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -48,7 +49,12 @@ public class HttpUtils {
      */
     public static String httpPost(String url, Map<String, String> map, String cookie) throws IOException {
         //获取请求连接
-        Connection con = Jsoup.connect(url);
+        Connection con = Jsoup.connect(url).ignoreContentType(true);
+        //请求头设置，特别是cookie设置
+        con.header("Accept", "text/html, application/xhtml+xml, */*");
+        con.header("Content-Type", "application/x-www-form-urlencoded");
+        con.header("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0))");
+        con.header("Cookie", cookie);
         //遍历生成参数
         if (map != null) {
             for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -56,8 +62,7 @@ public class HttpUtils {
                 con.data(entry.getKey(), entry.getValue());
             }
         }
-        //插入cookie（头文件形式）
-        con.header("Cookie", cookie);
+
         Document doc = con.post();
         return doc.body().text();
     }
@@ -66,7 +71,7 @@ public class HttpUtils {
         /**
          * 模拟发送Post示例
          */
-        InputStream in = new FileInputStream("C:\\Users\\caihongming\\Desktop\\img\\s1\\1.jpg");
+        InputStream in = new FileInputStream("D:\\img\\1.jpg");
         byte[] data = new byte[in.available()];
         in.read(data);
         in.close();
@@ -74,7 +79,7 @@ public class HttpUtils {
         BASE64Encoder encoder = new BASE64Encoder();
         Map map = new HashMap();
         map.put("image", encoder.encode(data));
-        map.put("schid", "3");
+        map.put("schid", "35");
 
         System.out.println(httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null));
     }

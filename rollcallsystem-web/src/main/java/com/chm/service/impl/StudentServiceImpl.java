@@ -136,8 +136,6 @@ public class StudentServiceImpl implements StudentService {
                 faceData.setFacedate(image);
                 faceData.setStuid(stuId);
                 faceDataMapper.insertSelective(faceData);
-                //更新人脸数据库的数量
-                faceDataMapper.updateFaceDataCountFacedate(stuId);
             }
             Student student = studentMapper.selectByPrimaryKey(stuId);
             //返回学生学号

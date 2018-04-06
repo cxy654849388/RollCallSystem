@@ -14,7 +14,7 @@
         from tbl_facedata_train_status
         where StuID = #{stuid,jdbcType=VARCHAR}
     </select>
-    <select id="findStatusNo">
+    <select id="findStatusNo" resultType="java.lang.String">
         select
         StuID from tbl_facedata_train_status where Status = '0'
     </select>

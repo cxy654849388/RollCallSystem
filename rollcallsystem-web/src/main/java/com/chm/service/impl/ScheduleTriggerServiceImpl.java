@@ -18,6 +18,7 @@ import org.quartz.TriggerKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service("scheduleTriggerService")
 @Transactional(rollbackFor = { RuntimeException.class, Exception.class })
+@EnableScheduling
 public class ScheduleTriggerServiceImpl implements ScheduleTriggerService {
 
     private static final Logger logger = LoggerFactory.getLogger(ScheduleTriggerServiceImpl.class);
@@ -38,7 +40,7 @@ public class ScheduleTriggerServiceImpl implements ScheduleTriggerService {
      * 每天晚上11点调用这个方法来更新quartz中的任务
      */
     @Override
-    @Scheduled(cron = "0 0 23:00 * * ?")
+    @Scheduled(cron = "0 0 23 * * ?")
     public void refreshTrigger() {
         try {
             //查询出数据库中所有的定时任务

@@ -4,10 +4,12 @@ import com.chm.utils.HttpUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacv.*;
+import org.bytedeco.javacv.Frame;
+import org.json.JSONObject;
+import org.springframework.core.io.ClassPathResource;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.net.URL;
 import java.util.HashMap;
@@ -15,7 +17,6 @@ import java.util.Map;
 
 import static org.bytedeco.javacpp.helper.opencv_objdetect.cvHaarDetectObjects;
 import static org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_core.cvPoint;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
 import static org.bytedeco.javacpp.opencv_objdetect.CV_HAAR_DO_ROUGH_SEARCH;
 import static org.bytedeco.javacpp.opencv_objdetect.CV_HAAR_FIND_BIGGEST_OBJECT;
@@ -115,6 +116,7 @@ public class Window {
                     1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT | CV_HAAR_DO_ROUGH_SEARCH);
             int total = faces.total();
             Mat mat = null;
+            String results = null;
             //框选检测到的人脸
             for (int i = 0; i < total; i++) {
                 //获取人脸坐标
@@ -133,7 +135,7 @@ public class Window {
                 //byte[] 转 String
                 map.put("image", Base64.encodeBase64String(out.toByteArray()));
                 map.put("schid", schid);
-                String results = null;
+
                 try {
                     results = HttpUtils.httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null);
                     System.out.println(results);
@@ -147,21 +149,22 @@ public class Window {
                 //绘制人脸
                 rectangle(mat, rect, scalar2);
                 //人脸对应的学号
-               /* putText(mat, !"".equals(results) ? results.split("/")[0] : "",
-                        point2, opencv_imgproc.CV_FONT_VECTOR0, 1, scalar2);*/
+                putText(mat, !"".equals(results) ? new JSONObject(results).getString("stuid") : "",
+                        point2, opencv_imgproc.CV_FONT_VECTOR0, 1, scalar2);
             }
             if (mat == null) {
                 continue;
             }
             Frame rotatedFrame = converter.convert(mat);
             frame.showImage(rotatedFrame);
+
         }
         frame.dispose();
         grabber.stop();
     }
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         Window window = new Window(9);
         window.setSchid("32");
         try {

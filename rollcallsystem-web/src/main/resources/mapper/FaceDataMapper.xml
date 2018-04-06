@@ -22,7 +22,7 @@
         from tbl_facedata
         where FaceID = #{faceid,jdbcType=INTEGER}
     </select>
-    <select id="getFaceData" resultType="java.util.List" parameterType="java.lang.String">
+    <select id="getFaceData" resultType="java.lang.String" parameterType="java.lang.String">
         SELECT FaceDate
         FROM tbl_facedata
         WHERE StuID = #{stuid,jdbcType=VARCHAR}
@@ -31,27 +31,6 @@
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         DELETE FROM tbl_facedata
         WHERE FaceID = #{faceid,jdbcType=INTEGER}
-    </delete>
-    <delete id="updateFaceDataCountFacedate" parameterType="java.lang.String">
-        DELETE FROM tbl_facedata
-        WHERE FaceID = (
-        select min(f1.FaceID) from (
-        select
-        <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
-        from tbl_facedata
-        ) f1
-        ) and (
-        select count(*) from (
-        select
-        <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
-        from tbl_facedata
-        ) f2
-        where f2.StuID = #{stuid,jdbcType=VARCHAR}
-        ) > 10
     </delete>
     <insert id="insert" parameterType="com.chm.domain.FaceData">
         INSERT INTO tbl_facedata (StuID, FaceDate

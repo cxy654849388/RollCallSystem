@@ -5,11 +5,13 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.opencv_core.*;
 import org.bytedeco.javacpp.opencv_objdetect.*;
 import org.bytedeco.javacv.FrameGrabber;
+import org.springframework.core.io.ClassPathResource;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -38,8 +40,7 @@ public class CaptureBasic extends JPanel {
         }
     }
 
-    public static void main(String[] args) throws FrameGrabber.Exception {
-
+    public static void main(String[] args) throws IOException {
         LocalTime time = LocalTime.now();
         System.out.println(time.toSecondOfDay());
         System.out.println(System.currentTimeMillis());

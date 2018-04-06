@@ -48,12 +48,13 @@ public class FaceRecognitionImpl implements FaceRecognition {
         String userId = lable.split("/")[1];
 
         //替换人脸图片
-        client.updateUser(userId, null, groupId, Base64.decodeBase64((String) images.get(0)), null);
+        client.updateUser(userId, userId, groupId, Base64.decodeBase64((String) images.get(0)), null);
+        //新增人脸所在组
+        List<String> list = new ArrayList<>();
+        list.add(groupId);
         //新增人脸图片
         for (int i = 1; i < images.size(); i++) {
-            List<String> list = new ArrayList<>();
-            list.add(groupId);
-            client.addUser(userId, null, list, Base64.decodeBase64((String) images.get(i)), null);
+            client.addUser(userId, userId, list, Base64.decodeBase64((String) images.get(i)), null);
             try {
                 //暂停1秒,QPS限制 (QPS：百度人脸识别api每秒允许访问量)
                 Thread.sleep(1000);
