@@ -3,6 +3,7 @@ package com.chm.service;
 import com.chm.domain.Record;
 import com.chm.domain.Student;
 
+import java.time.LocalTime;
 import java.util.List;
 
 public interface StudentService {
@@ -19,10 +20,11 @@ public interface StudentService {
     /**
      * 学生签到方法
      *
-     * @param image 学生图像
-     * @param teachid 任课id
+     * @param image      学生图像
+     * @param schid      课表id
+     * @param signedTime 签到时间
      * @return 签到学生的实例
      */
-    Student signed(String image, Integer teachid);
+    Student signed(String image, Integer schid, LocalTime signedTime);
 
 }

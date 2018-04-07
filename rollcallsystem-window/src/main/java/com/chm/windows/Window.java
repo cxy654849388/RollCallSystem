@@ -6,12 +6,12 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacv.*;
 import org.bytedeco.javacv.Frame;
 import org.json.JSONObject;
-import org.springframework.core.io.ClassPathResource;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -116,7 +116,7 @@ public class Window {
                     1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT | CV_HAAR_DO_ROUGH_SEARCH);
             int total = faces.total();
             Mat mat = null;
-            String results = null;
+            JSONObject results = null;
             //框选检测到的人脸
             for (int i = 0; i < total; i++) {
                 //获取人脸坐标
@@ -125,6 +125,9 @@ public class Window {
                 mat = converter.convertToMat(converter.convert(iplImage));
                 //保存图片
                 Rect rect = new Rect(r);
+                Scalar scalar2 = new Scalar(0, 0, 255, 0);
+                //绘制人脸
+                rectangle(mat, rect, scalar2);
                 //mat 转 byte[]
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 try {
@@ -135,9 +138,10 @@ public class Window {
                 //byte[] 转 String
                 map.put("image", Base64.encodeBase64String(out.toByteArray()));
                 map.put("schid", schid);
+                map.put("signedTime", LocalTime.now().toString());
 
                 try {
-                    results = HttpUtils.httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null);
+                    results = new JSONObject(HttpUtils.httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null));
                     System.out.println(results);
                 } catch (IOException e) {
                     System.out.println(1);
@@ -145,11 +149,9 @@ public class Window {
                 }
                 opencv_imgcodecs.imwrite("d:\\img\\1.png", mat);
                 Point point2 = new Point(rect.x(), rect.y() - 10);
-                Scalar scalar2 = new Scalar(0, 0, 255, 0);
-                //绘制人脸
-                rectangle(mat, rect, scalar2);
+
                 //人脸对应的学号
-                putText(mat, !"".equals(results) ? new JSONObject(results).getString("stuid") : "",
+                putText(mat, results.has("student") ? results.getJSONObject("student").getString("stuid") : "",
                         point2, opencv_imgproc.CV_FONT_VECTOR0, 1, scalar2);
             }
             if (mat == null) {
@@ -166,7 +168,7 @@ public class Window {
 
     public static void main(String[] args) throws InterruptedException, IOException {
         Window window = new Window(9);
-        window.setSchid("32");
+        window.setSchid("20");
         try {
             window.init();
             window.start();

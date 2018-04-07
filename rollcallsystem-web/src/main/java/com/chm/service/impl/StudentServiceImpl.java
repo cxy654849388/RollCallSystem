@@ -11,8 +11,10 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoField;
 import java.util.Date;
 import java.util.List;
 
@@ -67,6 +69,9 @@ public class StudentServiceImpl implements StudentService {
     @Value("#{${NORMAL:20} * -60}")
     private int LATE;
 
+    @Value("${STARTWEEK}")
+    Integer STARTWEEK;
+
 
     /**
      * 查询签到记录方法
@@ -82,33 +87,38 @@ public class StudentServiceImpl implements StudentService {
     /**
      * 学生签到方法
      *
-     * @param image 学生人脸图像
-     * @param schid 课表实例id
+     * @param image      学生图像
+     * @param schid      课表id
+     * @param signedTime 签到时间
      * @return 签到学生的实例
      */
     @Override
-    public Student signed(String image, Integer schid) {
+    public Student signed(String image, Integer schid, LocalTime signedTime) {
         //获取课表实例
         Schedule schedule = scheduleMapper.selectByPrimaryKey(schid);
         //根据任课实例获取课堂所有学生相应的标签
         List<String> labels = classMapper.getLabels(schid);
         //识别，获取识别结果 label格式:groupId/userId
         String label = faceRecognition.recogntion(image, labels);
+        //计算本周为第几周
+        String weekofsemester = String.valueOf(LocalDate.now().get(ChronoField.ALIGNED_WEEK_OF_YEAR) - STARTWEEK + 1);
         if (label != null) {
             //获取学生ID
             String stuId = label.split("/")[1];
             //插入签到结果
             //查询是否已签到
-            if (recordMapper.selectStatusByStuidAndSchid(stuId, schid) == null) {
+            if (recordMapper.selectStatusByStuidAndSchidAndWeekofsemester(stuId, schid, weekofsemester) == null) {
                 //进行签到
                 //比较签到时间
-                long time = schedule.getStarttime().toSecondOfDay() - LocalTime.now().toSecondOfDay();
+                long time = schedule.getStarttime().toSecondOfDay() - signedTime.toSecondOfDay();
                 //新建签到实例
                 Record record = new Record();
                 //学生学号
                 record.setStuid(stuId);
                 //课表编号
                 record.setSchid(schid);
+                //周数
+                record.setWeekofsemester(weekofsemester);
                 if (time > NORMALSTART) {
                     //没到签到时间
                     return null;
@@ -119,7 +129,7 @@ public class StudentServiceImpl implements StudentService {
                 } else if (time > LATE) {
                     //迟到
                     record.setStatus("迟到");
-                } else if (time < LATE) {
+                } else if (time < LATE && schedule.getEndtime().getSecond() < signedTime.getSecond()) {
                     //缺课
                     record.setStatus("缺课");
                 }

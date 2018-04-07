@@ -63,15 +63,4 @@ public class Student {
         this.password = password == null ? null : password.trim();
     }
 
-    @Override
-    public String toString() {
-        return "Student{" +
-                "stuid='" + stuid + '\'' +
-                ", classid='" + classid + '\'' +
-                ", stuname='" + stuname + '\'' +
-                ", stusex='" + stusex + '\'' +
-                ", birthday=" + birthday +
-                ", password='" + password + '\'' +
-                '}';
-    }
 }

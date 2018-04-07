@@ -9,6 +9,8 @@ public class Record {
 
     private String status;
 
+    private String weekofsemester;
+
     public Integer getRecid() {
         return recid;
     }
@@ -41,13 +43,12 @@ public class Record {
         this.status = status == null ? null : status.trim();
     }
 
-    @Override
-    public String toString() {
-        return "Record{" +
-                "recid=" + recid +
-                ", schid=" + schid +
-                ", stuid='" + stuid + '\'' +
-                ", status='" + status + '\'' +
-                '}';
+    public String getWeekofsemester() {
+        return weekofsemester;
     }
+
+    public void setWeekofsemester(String weekofsemester) {
+        this.weekofsemester = weekofsemester;
+    }
+
 }

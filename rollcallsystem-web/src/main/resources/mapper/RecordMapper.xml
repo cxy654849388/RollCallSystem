@@ -6,9 +6,10 @@
         <result column="SchID" property="schid" jdbcType="INTEGER"/>
         <result column="StuID" property="stuid" jdbcType="VARCHAR"/>
         <result column="Status" property="status" jdbcType="CHAR"/>
+        <result column="WeekOfSemester" property="weekofsemester" jdbcType="CHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        RecID, SchID, StuID, Status
+        RecID, SchID, StuID, Status, WeekOfSemester
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -24,10 +25,13 @@
             where StuID = #{stuid,jdbcType=VARCHAR}
         </if>
     </select>
-    <select id="selectStatusByStuidAndSchid" resultType="java.lang.String">
-        select Status
+    <select id="selectStatusByStuidAndSchidAndWeekofsemester" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
         from tbl_record
-        where StuID = #{stuid,jdbcType=VARCHAR} and SchID = #{schid,jdbcType=INTEGER}
+        where StuID = #{stuid,jdbcType=VARCHAR}
+        and SchID = #{schid,jdbcType=INTEGER}
+        and WeekOfSemester = #{weekofsemester,jdbcType=CHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from tbl_record
@@ -35,9 +39,9 @@
     </delete>
     <insert id="insert" parameterType="com.chm.domain.Record">
         insert into tbl_record ( SchID, StuID,
-        Status)
+        Status,WeekOfSemester)
         values ( #{schid,jdbcType=INTEGER}, #{stuid,jdbcType=VARCHAR},
-        #{status,jdbcType=CHAR})
+        #{status,jdbcType=CHAR}, #{weekofsemester,jdbcType=CHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.chm.domain.Record">
         insert into tbl_record
@@ -51,6 +55,9 @@
             <if test="status != null">
                 Status,
             </if>
+            <if test="weekofsemester != null">
+                WeekOfSemester,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="schid != null">
@@ -61,6 +68,9 @@
             </if>
             <if test="status != null">
                 #{status,jdbcType=CHAR},
+            </if>
+            <if test="weekofsemester != null">
+                #{weekofsemester,jdbcType=CHAR},
             </if>
         </trim>
     </insert>
@@ -76,6 +86,12 @@
             <if test="status != null">
                 Status = #{status,jdbcType=CHAR},
             </if>
+            <if test="weekofsemester != null">
+                #{weekofsemester,jdbcType=CHAR},
+            </if>
+            <if test="weekofsemester != null">
+                WeekOfSemester = #{weekofsemester,jdbcType=CHAR},
+            </if>
         </set>
         where RecID = #{recid,jdbcType=INTEGER}
     </update>
@@ -83,7 +99,8 @@
         update tbl_record
         set SchID = #{schid,jdbcType=INTEGER},
         StuID = #{stuid,jdbcType=VARCHAR},
-        Status = #{status,jdbcType=CHAR}
+        Status = #{status,jdbcType=CHAR},
+        WeekOfSemester = #{weekofsemester,jdbcType=CHAR}
         where RecID = #{recid,jdbcType=INTEGER}
     </update>
 </mapper>

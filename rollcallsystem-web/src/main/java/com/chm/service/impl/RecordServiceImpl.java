@@ -1,21 +1,24 @@
 package com.chm.service.impl;
 
-import com.chm.domain.Schedule;
-import com.chm.mapper.ScheduleMapper;
-import com.chm.service.ScheduleService;
+import com.chm.domain.Record;
+import com.chm.mapper.RecordMapper;
+import com.chm.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.temporal.ChronoField;
 
-@Service("scheduleService")
-public class ScheduleServiceImpl implements ScheduleService {
+/**
+ * @Author: Hongming Cai
+ * @Created: 2018/4/7 14:05
+ */
+@Service("recordService")
+public class RecordServiceImpl implements RecordService {
 
     @Autowired
-    ScheduleMapper scheduleMapper;
+    RecordMapper recordMapper;
 
     /**
      * 学期开始周数
@@ -23,14 +26,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Value("${STARTWEEK}")
     Integer STARTWEEK;
 
-
     @Override
-    public Schedule getSchedule(Integer roomid) {
+    public Record getRecord(String stuId, Integer schId) {
         //计算本周为第几周
         String weekofsemester = String.valueOf(LocalDate.now().get(ChronoField.ALIGNED_WEEK_OF_YEAR) - STARTWEEK + 1);
-        //返回课表
-        return scheduleMapper.selectByRoomidAndWeek(roomid, weekofsemester);
+        return recordMapper.selectStatusByStuidAndSchidAndWeekofsemester(stuId, schId, weekofsemester);
     }
-
-
 }

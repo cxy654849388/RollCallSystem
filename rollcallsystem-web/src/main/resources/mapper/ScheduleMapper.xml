@@ -7,7 +7,7 @@
         <result column="TeachID" property="teachid" jdbcType="INTEGER"/>
         <result column="StartTime" property="starttime" jdbcType="TIME"/>
         <result column="EndTime" property="endtime" jdbcType="TIME"/>
-        <result column="WeekOfSemester" property="weekofsemester" jdbcType="VARCHAR"/>
+        <result column="WeekOfSemester" property="weekofsemester" jdbcType="CHAR"/>
         <result column="DayOfWeek" property="dayofweek" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -27,7 +27,7 @@
         <include refid="Base_Column_List"/>
         from tbl_schedule
         where EndTime > curtime()
-        and find_in_set(#{weekofsemester,jdbcType=VARCHAR},WeekOfSemester)
+        and find_in_set(#{weekofsemester,jdbcType=CHAR},WeekOfSemester)
         and RoomID = #{roomid,jdbcType=INTEGER}
         and DayOfWeek = WEEKDAY(now()) + 2
         ) s1
@@ -43,7 +43,8 @@
     insert into tbl_schedule (RoomID, TeachID,
       StartTime, EndTime, WeekOfSemester, DayOfWeek)
     values (#{roomid,jdbcType=INTEGER}, #{teachid,jdbcType=INTEGER},
-      #{starttime,jdbcType=TIME}, #{endtime,jdbcType=TIME}, #{weekofsemester,jdbcType=VARCHAR}, #{dayofweek,jdbcType=INTEGER})
+      #{starttime,jdbcType=TIME}, #{endtime,jdbcType=TIME},
+      #{weekofsemester,jdbcType=CHAR}, #{dayofweek,jdbcType=INTEGER})
   </insert>
     <insert id="insertSelective" parameterType="com.chm.domain.Schedule">
         insert into tbl_schedule
@@ -81,7 +82,7 @@
                 #{endtime,jdbcType=TIME},
             </if>
             <if test="weekofsemester != null">
-                #{weekofsemester.toString(),jdbcType=VARCHAR},
+                #{weekofsemester,jdbcType=CHAR},
             </if>
             <if test="dayofweek != null">
                 #{dayofweek,jdbcType=INTEGER},
@@ -104,7 +105,7 @@
                 EndTime = #{endtime,jdbcType=TIME},
             </if>
             <if test="weekofsemester != null">
-                WeekOfSemester = #{weekofsemester,jdbcType=VARCHAR},
+                WeekOfSemester = #{weekofsemester,jdbcType=CHAR},
             </if>
             <if test="dayofweek != null">
                 DayOfWeek = #{dayofweek,jdbcType=INTEGER},
@@ -118,7 +119,7 @@
       TeachID = #{teachid,jdbcType=INTEGER},
       StartTime = #{starttime,jdbcType=TIME},
       EndTime = #{endtime,jdbcType=TIME},
-      WeekOfSemester = #{weekofsemester,jdbcType=VARCHAR},
+      WeekOfSemester = #{weekofsemester,jdbcType=CHAR},
       DayOfWeek = #{dayofweek,jdbcType=INTEGER}
     where SchID = #{schid,jdbcType=INTEGER}
   </update>

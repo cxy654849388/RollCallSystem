@@ -44,7 +44,7 @@ public class Application {
 
         System.out.println(Arrays.toString(list.toArray()));
 
-        System.out.println(recordMapper.selectStatusByStuidAndSchid("2", 1));
+        System.out.println(recordMapper.selectStatusByStuidAndSchidAndWeekofsemester("2", 1, String.valueOf(10)));
 
         //根据任课实例获取课堂所有学生相应的标签
         List<String> labels = classMapper.getLabels(31);
