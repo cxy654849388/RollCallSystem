@@ -73,16 +73,4 @@ public class Schedule {
         this.dayofweek = dayofweek;
     }
 
-    @Override
-    public String toString() {
-        return "Schedule{" +
-                "schid=" + schid +
-                ", roomid=" + roomid +
-                ", teachid=" + teachid +
-                ", starttime=" + starttime +
-                ", endtime=" + endtime +
-                ", weekofsemester=" + weekofsemester +
-                ", dayofweek=" + dayofweek +
-                '}';
-    }
 }

@@ -24,7 +24,7 @@ public class TrainTask implements Job {
     private FaceDataMapper faceDataMapper;
 
     @Override
-    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+    public void execute(JobExecutionContext context) throws JobExecutionException {
         //获取最新可训练学生学号
         List<String> stuIdList = faceDataTrainStatusMapper.findStatusNo();
 

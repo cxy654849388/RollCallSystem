@@ -1,18 +1,12 @@
 package com.chm.utils;
 
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import java.util.SimpleTimeZone;
 
-import org.quartz.CronScheduleBuilder;
-import org.quartz.CronTrigger;
-import org.quartz.Job;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerFactory;
-import org.quartz.TriggerBuilder;
-import org.quartz.TriggerKey;
+import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 
@@ -239,5 +233,25 @@ public class QuartzUtils {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static boolean hasJobName(String jobName) {
+        TriggerKey triggerKey = TriggerKey.triggerKey(jobName, TRIGGER_GROUP_NAME);
+        CronTrigger trigger = null;
+        try {
+            trigger = (CronTrigger) gSchedulerFactory.getScheduler().getTrigger(triggerKey);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+        return trigger != null;
+    }
+
+    public static String getCron(LocalTime time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ss mm HH * * ? *");
+        return formatter.format(time);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getCron(LocalTime.now().plusSeconds(10)));
     }
 }

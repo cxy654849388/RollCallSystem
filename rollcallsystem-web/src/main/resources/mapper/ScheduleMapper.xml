@@ -29,7 +29,7 @@
         where EndTime > curtime()
         and find_in_set(#{weekofsemester,jdbcType=CHAR},WeekOfSemester)
         and RoomID = #{roomid,jdbcType=INTEGER}
-        and DayOfWeek = WEEKDAY(now()) + 2
+        and DayOfWeek = WEEKDAY(now()) + 1
         ) s1
         where abs(curtime() - (s1.StartTime + s1.EndTime) / 2)
         = (select min(abs(curtime() - (s1.StartTime + s1.EndTime) / 2))

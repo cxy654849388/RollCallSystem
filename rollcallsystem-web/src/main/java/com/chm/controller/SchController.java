@@ -1,11 +1,14 @@
 package com.chm.controller;
 
 import com.chm.domain.Schedule;
-import com.chm.mapper.ScheduleMapper;
 import com.chm.service.ScheduleService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author: Hongming Cai
@@ -15,11 +18,13 @@ import org.springframework.web.bind.annotation.*;
 public class SchController {
 
     @Autowired
-    ScheduleService scheduleService;
+    private ScheduleService scheduleService;
 
 
     @PostMapping(value = "/getSchedule")
-    public Schedule getSchedule(Integer roomid) {
-        return scheduleService.getSchedule(roomid);
+    public String getSchedule(Integer roomid) {
+        Map map = new HashMap();
+        map.put("schedule", scheduleService.getSchedule(roomid));
+        return new JSONObject(map).toString();
     }
 }

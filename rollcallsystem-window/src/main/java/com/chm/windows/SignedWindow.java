@@ -1,11 +1,18 @@
 package com.chm.windows;
 
+import com.alibaba.druid.util.StringUtils;
+import com.chm.task.JSONTask;
+import com.chm.task.ScheduleTask;
+import com.chm.thread.HandlerThreadsPool;
+import com.chm.thread.SignedThread;
 import com.chm.utils.HttpUtils;
+import com.chm.utils.QuartzUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacv.*;
 import org.bytedeco.javacv.Frame;
 import org.json.JSONObject;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -14,6 +21,7 @@ import java.net.URL;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static org.bytedeco.javacpp.helper.opencv_objdetect.cvHaarDetectObjects;
 import static org.bytedeco.javacpp.opencv_core.*;
@@ -25,17 +33,19 @@ import static org.bytedeco.javacpp.opencv_objdetect.CV_HAAR_FIND_BIGGEST_OBJECT;
  * @Author: Hongming Cai
  * @Created: 2018/4/3 22:12
  */
-public class Window {
+public class SignedWindow {
+
+    private static SignedWindow signedWindow;
 
     /**
-     * 教师编号
+     * 教室编号
      */
-    private Integer roomid;
+    private static Integer roomid;
 
     /**
      * 课表编号
      */
-    private String schid;
+    private static String schid;
 
     /**
      * 人脸检测器
@@ -52,11 +62,31 @@ public class Window {
      */
     private OpenCVFrameGrabber grabber;
 
-    public Window() {
+    /**
+     * 线程池
+     */
+    private ThreadPoolExecutor threadPoolExecutor;
+
+    private SignedWindow() {
     }
 
-    public Window(Integer roomid) {
-        this.roomid = roomid;
+    public static SignedWindow getInstance(Integer roomid) {
+        if (signedWindow == null) {
+            signedWindow = new SignedWindow();
+        }
+        SignedWindow.roomid = roomid;
+        return signedWindow;
+    }
+
+    public static SignedWindow getInstance() {
+        if (signedWindow == null) {
+            signedWindow = new SignedWindow();
+        }
+        return signedWindow;
+    }
+
+    public Integer getRoomid() {
+        return roomid;
     }
 
     public String getSchid() {
@@ -69,7 +99,7 @@ public class Window {
 
     public void init() throws FrameGrabber.Exception {
         map = new HashMap();
-        ClassLoader classLoader = Window.class.getClassLoader();
+        ClassLoader classLoader = SignedWindow.class.getClassLoader();
         URL resource = classLoader.getResource("classifier/haarcascade_frontalface_alt.xml");
         //获取classifier路径
         String classifierName = resource.getFile().substring(1);
@@ -80,6 +110,7 @@ public class Window {
             System.exit(1);
         }
         grabber = new OpenCVFrameGrabber(0);
+
     }
 
     /**
@@ -116,7 +147,6 @@ public class Window {
                     1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT | CV_HAAR_DO_ROUGH_SEARCH);
             int total = faces.total();
             Mat mat = null;
-            JSONObject results = null;
             //框选检测到的人脸
             for (int i = 0; i < total; i++) {
                 //获取人脸坐标
@@ -125,9 +155,6 @@ public class Window {
                 mat = converter.convertToMat(converter.convert(iplImage));
                 //保存图片
                 Rect rect = new Rect(r);
-                Scalar scalar2 = new Scalar(0, 0, 255, 0);
-                //绘制人脸
-                rectangle(mat, rect, scalar2);
                 //mat 转 byte[]
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 try {
@@ -139,25 +166,26 @@ public class Window {
                 map.put("image", Base64.encodeBase64String(out.toByteArray()));
                 map.put("schid", schid);
                 map.put("signedTime", LocalTime.now().toString());
-
-                try {
-                    results = new JSONObject(HttpUtils.httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null));
-                    System.out.println(results);
-                } catch (IOException e) {
-                    System.out.println(1);
-                    continue;
+                if (!StringUtils.isEmpty(schid)) {
+                    HandlerThreadsPool.execute(new SignedThread(map));
                 }
-                opencv_imgcodecs.imwrite("d:\\img\\1.png", mat);
                 Point point2 = new Point(rect.x(), rect.y() - 10);
-
-                //人脸对应的学号
-                putText(mat, results.has("student") ? results.getJSONObject("student").getString("stuid") : "",
-                        point2, opencv_imgproc.CV_FONT_VECTOR0, 1, scalar2);
+                Scalar scalar2 = new Scalar(0, 0, 255, 0);
+                //绘制人脸
+                rectangle(mat, rect, scalar2);
+                if (SignedThread.getJson() != null) {
+                    //人脸对应的学号
+                    putText(mat, SignedThread.getJson().has("student") ?
+                                    SignedThread.getJson().getJSONObject("student").getString("stuid") : "",
+                            point2, opencv_imgproc.CV_FONT_VECTOR0, 1, scalar2);
+                }
             }
+            Frame rotatedFrame;
             if (mat == null) {
-                continue;
+                rotatedFrame = converter.convert(grabbedImage);
+            } else {
+                rotatedFrame = converter.convert(mat);
             }
-            Frame rotatedFrame = converter.convert(mat);
             frame.showImage(rotatedFrame);
 
         }
@@ -165,10 +193,18 @@ public class Window {
         grabber.stop();
     }
 
-
     public static void main(String[] args) throws InterruptedException, IOException {
-        Window window = new Window(9);
+        SignedWindow window = SignedWindow.getInstance(9);
         window.setSchid("20");
+        Map map = new HashMap();
+        map.put("window", window);
+        //开始任务
+        QuartzUtils.startJobs();
+        //添加每日0时获取课表
+        QuartzUtils.addJob("startTask", ScheduleTask.class, "0 0 0 * * ? *", map);
+        //立即获取课表
+        QuartzUtils.addJob("now", ScheduleTask.class, QuartzUtils.getCron(LocalTime.now().plusSeconds(5)), map);
+
         try {
             window.init();
             window.start();

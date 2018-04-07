@@ -62,7 +62,6 @@ public class HttpUtils {
                 con.data(entry.getKey(), entry.getValue());
             }
         }
-
         Document doc = con.post();
         return doc.body().text();
     }
