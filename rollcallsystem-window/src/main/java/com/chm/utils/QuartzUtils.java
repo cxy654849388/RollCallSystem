@@ -250,8 +250,4 @@ public class QuartzUtils {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ss mm HH * * ? *");
         return formatter.format(time);
     }
-
-    public static void main(String[] args) {
-        System.out.println(getCron(LocalTime.now().plusSeconds(10)));
-    }
 }

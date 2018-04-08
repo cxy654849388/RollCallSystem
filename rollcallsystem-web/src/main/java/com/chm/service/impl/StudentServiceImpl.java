@@ -93,9 +93,13 @@ public class StudentServiceImpl implements StudentService {
      * @return 签到学生的实例
      */
     @Override
-    public Student signed(String image, Integer schid, LocalTime signedTime) {
+    public synchronized Student signed(String image, Integer schid, LocalTime signedTime) {
         //获取课表实例
         Schedule schedule = scheduleMapper.selectByPrimaryKey(schid);
+        if (schedule.getStarttime().toSecondOfDay() - signedTime.toSecondOfDay() > NORMALSTART) {
+            //没到签到时间
+            return null;
+        }
         //根据任课实例获取课堂所有学生相应的标签
         List<String> labels = classMapper.getLabels(schid);
         //识别，获取识别结果 label格式:groupId/userId
@@ -119,10 +123,6 @@ public class StudentServiceImpl implements StudentService {
                 record.setSchid(schid);
                 //周数
                 record.setWeekofsemester(weekofsemester);
-                if (time > NORMALSTART) {
-                    //没到签到时间
-                    return null;
-                }
                 if (time > NORMALEND && time < NORMALSTART) {
                     //正常签到
                     record.setStatus("正常");

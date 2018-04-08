@@ -1,7 +1,6 @@
 package com.chm.thread;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * 线程池管理器
@@ -10,13 +9,16 @@ import java.util.concurrent.Executors;
  * @Created: 2018/4/7 22:09
  */
 public class HandlerThreadsPool {
-    private static ExecutorService executorService = Executors.newCachedThreadPool();
+    private static ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 200
+            , TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(5));
 
     /*
 　　　* 创建线程，对线程处理事件
     */
     public static void execute(Runnable runnable) {
-        executorService.execute(runnable);
+        if (threadPoolExecutor.getPoolSize() < threadPoolExecutor.getMaximumPoolSize()) {
+            threadPoolExecutor.execute(runnable);
+        }
     }
 
 
@@ -24,7 +26,7 @@ public class HandlerThreadsPool {
 　　 * 对象销毁时，销毁线程
 　　 */
     public static void stop() {
-        executorService.shutdown();
+        threadPoolExecutor.shutdown();
     }
 
 }

@@ -43,7 +43,6 @@ public class ScheduleTask implements Job {
             LocalTime localTime = LocalTime.parse(json.getJSONObject("schedule").getString("endtime"));
             QuartzUtils.addJob(localTime.toString(), ScheduleTask.class, QuartzUtils.getCron(localTime), (Map) dataMap.get("parameterList"));
         }
-
         //移除任务
         if (!"startTask".equals(jobName)) {
             QuartzUtils.removeJob(jobName);

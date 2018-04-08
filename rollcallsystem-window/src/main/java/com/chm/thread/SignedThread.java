@@ -21,8 +21,6 @@ public class SignedThread implements Runnable {
 
     private static JSONObject json = new JSONObject();
 
-    private static LocalTime aLong;
-
     private Map map;
 
     public static JSONObject getJson() {

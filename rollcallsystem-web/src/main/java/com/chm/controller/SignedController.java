@@ -37,13 +37,14 @@ public class SignedController {
     public String signed(String image, Integer schid, String signedTime) {
 
         Student student = studentService.signed(image, schid, LocalTime.parse(signedTime));
+
         Map map = new HashMap();
         if (student != null) {
             map.put("student", student);
             map.put("record", recordService.getRecord(student.getStuid(), schid));
         }
         JSONObject json = new JSONObject(map);
-        System.out.println(json.toString());
+        System.out.println("resu:"+json.toString());
         return json.toString();
     }
 }

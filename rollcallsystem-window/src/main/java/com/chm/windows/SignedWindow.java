@@ -195,7 +195,7 @@ public class SignedWindow {
 
     public static void main(String[] args) throws InterruptedException, IOException {
         SignedWindow window = SignedWindow.getInstance(9);
-        window.setSchid("20");
+        window.setSchid("19");
         Map map = new HashMap();
         map.put("window", window);
         //开始任务
