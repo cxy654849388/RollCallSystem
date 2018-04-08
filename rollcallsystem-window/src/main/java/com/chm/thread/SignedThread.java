@@ -30,16 +30,10 @@ public class SignedThread implements Runnable {
     }
 
     public static void setJson(JSONObject json) {
-        if (json != null && !"{}".equals(json.toString())
-                && !StringUtils.equals(SignedThread.json.toString(), json.toString())) {
-            SignedThread.json = json;
-            aLong = LocalTime.now();
-        }
+        SignedThread.json = json;
         if (json != null && !"{}".equals(json.toString())) {
             if (QuartzUtils.hasJobName("remove")) {
                 QuartzUtils.modifyJobTime("remove", QuartzUtils.getCron(LocalTime.now().plusSeconds(10)));
-                aLong = LocalTime.now();
-                System.out.println(QuartzUtils.getCron(LocalTime.now().plusSeconds(10)));
             } else {
                 QuartzUtils.addJob("remove", JSONTask.class, QuartzUtils.getCron(LocalTime.now().plusSeconds(10)));
             }
