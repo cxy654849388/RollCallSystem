@@ -1,6 +1,5 @@
 package com.chm.utils;
 
-import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

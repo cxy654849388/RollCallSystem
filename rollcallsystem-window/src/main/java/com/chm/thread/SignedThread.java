@@ -43,7 +43,7 @@ public class SignedThread implements Runnable {
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         try {
             setJson(new JSONObject(HttpUtils.httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null)));
         } catch (IOException e) {
