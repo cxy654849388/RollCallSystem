@@ -33,6 +33,24 @@
         and SchID = #{schid,jdbcType=INTEGER}
         and WeekOfSemester = #{weekofsemester,jdbcType=CHAR}
     </select>
+    <select id="countting" resultType="java.lang.String">
+        select s1.StuID
+        from (
+          select StuID
+          from tbl_select_course
+          where TeachID in(
+            select TeachID
+            from tbl_schedule
+            where SchID = #{schid,jdbcType=INTEGER}
+          )
+        ) s1
+        where s1.StuID not in (
+          select StuID
+          from tbl_record
+          where SchID = #{schid,jdbcType=INTEGER}
+          and WeekOfSemester = #{weekofsemester,jdbcType=CHAR}
+        )
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from tbl_record
         where RecID = #{recid,jdbcType=INTEGER}
@@ -73,6 +91,15 @@
                 #{weekofsemester,jdbcType=CHAR},
             </if>
         </trim>
+    </insert>
+    <insert id="insertNotSigned">
+        insert into tbl_record ( SchID, StuID,
+        Status,WeekOfSemester)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{schid,jdbcType=INTEGER}, #{item},
+            '缺课', #{weekofsemester,jdbcType=CHAR})
+        </foreach>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.chm.domain.Record">
         update tbl_record

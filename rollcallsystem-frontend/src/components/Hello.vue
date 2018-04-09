@@ -5,14 +5,14 @@
 </template>
 
 <script>
-export default {
-  name: 'hello',
-  data() {
-    return {
-      msg: '欢迎来到菜鸟教程！'
+  export default {
+    name: 'hello',
+    data() {
+      return {
+        msg: '欢迎来到菜鸟教程！'
+      }
     }
   }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

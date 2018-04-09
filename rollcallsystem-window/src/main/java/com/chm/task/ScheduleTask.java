@@ -39,9 +39,13 @@ public class ScheduleTask implements Job {
         //根据返回结果设置课表id
         if (json != null && json.has("schedule")) {
             window.setSchid(String.valueOf(json.getJSONObject("schedule").getInt("schid")));
-            //添加任务
+            //下课时间
             LocalTime localTime = LocalTime.parse(json.getJSONObject("schedule").getString("endtime"));
+            //添加任务
             QuartzUtils.addJob(localTime.toString(), ScheduleTask.class, QuartzUtils.getCron(localTime), (Map) dataMap.get("parameterList"));
+            Map m = new HashMap();
+            m.put("schid", String.valueOf(json.getJSONObject("schedule").getInt("schid")));
+            QuartzUtils.addJob("counting", CountTask.class, QuartzUtils.getCron(localTime), m);
         }
         //移除任务
         if (!"startTask".equals(jobName)) {

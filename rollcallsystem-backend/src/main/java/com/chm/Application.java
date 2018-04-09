@@ -24,7 +24,7 @@ import java.util.*;
 @SpringBootApplication
 @ComponentScan(basePackages = "com.chm")
 @MapperScan("com.chm.mapper")
-public class Application extends SpringBootServletInitializer {
+public class Application {
 
 
     public static void main(String[] args) {
@@ -65,10 +65,9 @@ public class Application extends SpringBootServletInitializer {
 
         System.out.println(scheduleService.getSchedule(17));
 
-    }
+        System.out.println(recordMapper.countting(20, "5"));
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(Application.class);
+        System.out.println(recordMapper.insertNotSigned(recordMapper.countting(20, "5"), 20, "5"));
+
     }
 }
