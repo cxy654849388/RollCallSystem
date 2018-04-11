@@ -1,9 +1,10 @@
 package com.chm.task;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.chm.utils.HttpUtils;
 import com.chm.utils.QuartzUtils;
 import com.chm.windows.SignedWindow;
-import org.json.JSONObject;
 import org.quartz.*;
 
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class ScheduleTask implements Job {
         //发送post请求并接收返回结果
         JSONObject json = null;
         try {
-            json = new JSONObject(HttpUtils.httpPost("http://127.0.0.1:8080/RollCallSystem/getSchedule", map, null));
+            json = JSON.parseObject(HttpUtils.httpPost("http://127.0.0.1:8080/RollCallSystem/getSchedule", map, null));
         } catch (IOException e) {
             if (!"startTask".equals(jobName)) {
                 QuartzUtils.removeJob(jobName);
@@ -37,14 +38,14 @@ public class ScheduleTask implements Job {
             return;
         }
         //根据返回结果设置课表id
-        if (json != null && json.has("schedule")) {
-            window.setSchid(String.valueOf(json.getJSONObject("schedule").getInt("schid")));
+        if (json != null && json.containsKey("schedule")) {
+            window.setSchid(String.valueOf(json.getJSONObject("schedule").getInteger("schid")));
             //下课时间
             LocalTime localTime = LocalTime.parse(json.getJSONObject("schedule").getString("endtime"));
             //添加任务
             QuartzUtils.addJob(localTime.toString(), ScheduleTask.class, QuartzUtils.getCron(localTime), (Map) dataMap.get("parameterList"));
             Map m = new HashMap();
-            m.put("schid", String.valueOf(json.getJSONObject("schedule").getInt("schid")));
+            m.put("schid", String.valueOf(json.getJSONObject("schedule").getInteger("schid")));
             QuartzUtils.addJob("counting", CountTask.class, QuartzUtils.getCron(localTime), m);
         }
         //移除任务

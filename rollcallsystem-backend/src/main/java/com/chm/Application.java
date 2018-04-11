@@ -8,18 +8,13 @@ import com.chm.mapper.ScheduleMapper;
 import com.chm.mapper.StudentMapper;
 import com.chm.service.ScheduleService;
 import com.chm.service.StudentService;
-import com.chm.service.impl.StudentServiceImpl;
 import com.github.pagehelper.PageHelper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
-import java.sql.Time;
-import java.time.LocalTime;
 import java.util.*;
 
 @SpringBootApplication
@@ -74,8 +69,6 @@ public class Application {
         System.out.println(scheduleService.getSchedule(17));
 
         System.out.println(recordMapper.countting(20, "5"));
-
-        //System.out.println(recordMapper.insertNotSigned(recordMapper.countting(20, "5"), 20, "5"));
 
     }
 }

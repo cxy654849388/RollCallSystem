@@ -30,6 +30,12 @@
     </properties>
 
     <dependencies>
+        <!-- fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.47</version>
+        </dependency>
         <!-- Apache Base64工具包 -->
         <dependency>
             <groupId>commons-codec</groupId>

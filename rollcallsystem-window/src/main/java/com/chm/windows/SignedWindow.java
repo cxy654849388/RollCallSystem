@@ -1,18 +1,14 @@
 package com.chm.windows;
 
 import com.alibaba.druid.util.StringUtils;
-import com.chm.task.JSONTask;
 import com.chm.task.ScheduleTask;
 import com.chm.thread.HandlerThreadsPool;
 import com.chm.thread.SignedThread;
-import com.chm.utils.HttpUtils;
 import com.chm.utils.QuartzUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacv.*;
 import org.bytedeco.javacv.Frame;
-import org.json.JSONObject;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -94,7 +90,7 @@ public class SignedWindow {
     }
 
     public void setSchid(String schid) {
-        this.schid = schid;
+        SignedWindow.schid = schid;
     }
 
     public void init() throws FrameGrabber.Exception {
@@ -144,7 +140,7 @@ public class SignedWindow {
             cvCvtColor(grabbedImage, grayImage, CV_BGR2GRAY);
             //检测人脸
             CvSeq faces = cvHaarDetectObjects(grayImage, classifier, storage,
-                    1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT | CV_HAAR_DO_ROUGH_SEARCH);
+                1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT | CV_HAAR_DO_ROUGH_SEARCH);
             int total = faces.total();
             Mat mat = null;
             //框选检测到的人脸
@@ -171,13 +167,13 @@ public class SignedWindow {
                 }
                 Point point2 = new Point(rect.x(), rect.y() - 10);
                 Scalar scalar2 = new Scalar(0, 0, 255, 0);
-                //绘制人脸
+                //绘制人脸s
                 rectangle(mat, rect, scalar2);
                 if (SignedThread.getJson() != null) {
                     //人脸对应的学号
-                    putText(mat, SignedThread.getJson().has("student") ?
-                                    SignedThread.getJson().getJSONObject("student").getString("stuid") : "",
-                            point2, opencv_imgproc.CV_FONT_VECTOR0, 1, scalar2);
+                    putText(mat, SignedThread.getJson().containsKey("student") ?
+                            SignedThread.getJson().getJSONObject("student").getString("stuid") : "",
+                        point2, opencv_imgproc.CV_FONT_VECTOR0, 1, scalar2);
                 }
             }
             Frame rotatedFrame;

@@ -1,5 +1,7 @@
 package com.chm.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -8,6 +10,7 @@ import sun.misc.BASE64Encoder;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,7 +72,7 @@ public class HttpUtils {
         /**
          * 模拟发送Post示例
          */
-        InputStream in = new FileInputStream("D:\\img\\1.jpg");
+        InputStream in = new FileInputStream("C:\\Users\\caihongming\\Desktop\\img\\s1\\1.jpg");
         byte[] data = new byte[in.available()];
         in.read(data);
         in.close();
@@ -78,7 +81,12 @@ public class HttpUtils {
         Map map = new HashMap();
         map.put("image", encoder.encode(data));
         map.put("schid", "35");
+        map.put("signedTime", LocalTime.now().toString());
+      /*  map.put("userId", "1407020401");
+        map.put("password", "123456");*/
 
-        System.out.println(httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null));
+        JSONObject json = JSON.parseObject(httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null));
+
+        System.out.println(json);
     }
 }

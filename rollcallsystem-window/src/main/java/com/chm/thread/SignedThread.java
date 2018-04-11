@@ -1,17 +1,14 @@
 package com.chm.thread;
 
-import ch.qos.logback.core.util.TimeUtil;
-import com.alibaba.druid.util.StringUtils;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.chm.task.JSONTask;
 import com.chm.utils.HttpUtils;
 import com.chm.utils.QuartzUtils;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalTime;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: Hongming Cai
@@ -45,7 +42,7 @@ public class SignedThread implements Runnable {
     @Override
     public synchronized void run() {
         try {
-            setJson(new JSONObject(HttpUtils.httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null)));
+            setJson(JSON.parseObject(HttpUtils.httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null)));
         } catch (IOException e) {
             System.out.println(1);
         }

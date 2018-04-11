@@ -133,7 +133,7 @@ public class StudentServiceImpl implements StudentService {
                 } else if (time > LATE) {
                     //迟到
                     record.setStatus("迟到");
-                } else if (time < LATE && schedule.getEndtime().getSecond() < signedTime.getSecond()) {
+                } else if (time < LATE && schedule.getEndtime().getSecond() > signedTime.getSecond()) {
                     //缺课
                     record.setStatus("缺课");
                 }
@@ -168,9 +168,9 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public String login(String stuid, String password) {
-        if (studentMapper.getPasswordByStuid(stuid).equals(password)){
-            return  redisRepository.add(stuid);
+        if (studentMapper.getPasswordByStuid(stuid).equals(password)) {
+            return redisRepository.add(stuid);
         }
-       return null;
+        return null;
     }
 }

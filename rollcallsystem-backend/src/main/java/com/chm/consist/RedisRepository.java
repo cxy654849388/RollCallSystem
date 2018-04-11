@@ -8,9 +8,9 @@ public interface RedisRepository {
 
     String add(String userId);
 
-    void update(String userId);
+    void update(String token);
 
-    String get(String userId);
+    Object get(String token);
 
-    void delete(String userId);
+    void delete(String token);
 }

@@ -1,9 +1,10 @@
 package com.chm.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.chm.domain.Student;
 import com.chm.service.RecordService;
 import com.chm.service.StudentService;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,17 +39,20 @@ public class SignedController {
      * @return
      */
     @PostMapping(value = "/signed")
-    public String signed(String image, Integer schid, String signedTime) {
-
+    public JSONObject signed(String image, Integer schid, String signedTime) {
+        //检测人脸为哪位学生并进行签到
         Student student = studentService.signed(image, schid, LocalTime.parse(signedTime));
 
+        JSONObject json = new JSONObject();
+
         Map map = new HashMap();
+        //组成返回格式
         if (student != null) {
-            map.put("student", student);
-            map.put("record", recordService.getRecord(student.getStuid(), schid));
+            json.put("student", student);
+            json.put("record", recordService.getRecord(student.getStuid(), schid));
         }
-        JSONObject json = new JSONObject(map);
         System.out.println("resu:" + json.toString());
-        return json.toString();
+        //返回结果
+        return json;
     }
 }

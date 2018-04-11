@@ -37,7 +37,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         //从header中得到token
-        String user_token = request.getParameter("user_token");
+        String user_token = request.getParameter("token");
         //查询token是否存在
         if (redisRepository.get(user_token) != null) {
             redisRepository.update(user_token);

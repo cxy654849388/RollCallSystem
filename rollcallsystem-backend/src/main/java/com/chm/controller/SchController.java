@@ -1,7 +1,8 @@
 package com.chm.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.chm.service.ScheduleService;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,9 +24,11 @@ public class SchController {
 
 
     @PostMapping(value = "/getSchedule")
-    public String getSchedule(Integer roomid) {
-        Map map = new HashMap();
-        map.put("schedule", scheduleService.getSchedule(roomid));
-        return new JSONObject(map).toString();
+    public JSONObject getSchedule(Integer roomid) {
+        //Map map = new HashMap();
+        JSONObject json = new JSONObject();
+        //返回课表
+        json.put("schedule", scheduleService.getSchedule(roomid));
+        return json;
     }
 }

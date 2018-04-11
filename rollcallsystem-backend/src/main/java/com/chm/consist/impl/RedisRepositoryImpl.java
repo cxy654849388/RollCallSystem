@@ -1,18 +1,17 @@
 package com.chm.consist.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.chm.consist.RedisRepository;
+import com.chm.domain.Student;
+import com.chm.domain.Teacher;
 import com.chm.mapper.StudentMapper;
 import com.chm.mapper.TeacherMapper;
 import com.chm.utils.TokenUtil;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.converter.json.GsonFactoryBean;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -39,14 +38,19 @@ public class RedisRepositoryImpl implements RedisRepository {
     @Override
     public String add(String userId) {
         String token = TokenUtil.createToken(userId);
-        Map map = new HashMap();
+        Object userInfo = null;
         if (userId.length() == 10) {
-            map.put("student", studentMapper.selectByPrimaryKey(userId));
+            Student student = studentMapper.selectByPrimaryKey(userId);
+            if (student != null) {
+                userInfo = student;
+            }
         } else {
-            map.put("teacher", teacherMapper.selectByPrimaryKey(userId));
+            Teacher teacher = teacherMapper.selectByPrimaryKey(userId);
+            if (teacher != null) {
+                userInfo = teacher;
+            }
         }
-        String userInfo = new JSONObject(map).toString();
-        redisTemplate.opsForValue().set(token, "{}".equals(userInfo) ? null : userInfo, time, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(token, userInfo, time, TimeUnit.SECONDS);
         return token;
     }
 
@@ -56,8 +60,8 @@ public class RedisRepositoryImpl implements RedisRepository {
     }
 
     @Override
-    public String get(String userId) {
-        return String.valueOf(redisTemplate.opsForValue().get(userId));
+    public Object get(String userId) {
+        return redisTemplate.opsForValue().get(userId);
     }
 
     @Override
