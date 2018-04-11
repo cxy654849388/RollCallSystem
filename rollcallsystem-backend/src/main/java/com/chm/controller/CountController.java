@@ -2,6 +2,8 @@ package com.chm.controller;
 
 import com.chm.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Created: 2018/4/9
  */
 @RestController
+@CrossOrigin
 public class CountController {
 
     @Autowired
@@ -27,5 +30,10 @@ public class CountController {
     @PostMapping(value = "/counting")
     public void signed(Integer schid) {
         recordService.counting(schid);
+    }
+
+    @GetMapping(value = "/login")
+    public String get() {
+        return "hello";
     }
 }

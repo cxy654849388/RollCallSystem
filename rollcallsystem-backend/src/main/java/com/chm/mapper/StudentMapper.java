@@ -15,4 +15,6 @@ public interface StudentMapper {
 
     int updateByPrimaryKey(Student record);
 
+    String getPasswordByStuid(String stuid);
+
 }

@@ -2,6 +2,7 @@ package com.chm.service;
 
 import com.chm.domain.Record;
 import com.chm.domain.Student;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -26,5 +27,7 @@ public interface StudentService {
      * @return 签到学生的实例
      */
     Student signed(String image, Integer schid, LocalTime signedTime);
+
+    String login(String stuid, String password);
 
 }

@@ -1,6 +1,7 @@
 package com.chm.service.impl;
 
 import com.chm.consist.FaceRecognition;
+import com.chm.consist.RedisRepository;
 import com.chm.domain.*;
 import com.chm.mapper.*;
 import com.chm.service.StudentService;
@@ -45,6 +46,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private FaceRecognition faceRecognition;
+
+    @Autowired
+    private RedisRepository redisRepository;
 
     /**
      * 正常签到开始
@@ -153,5 +157,20 @@ public class StudentServiceImpl implements StudentService {
         } else {
             return null;
         }
+    }
+
+    /**
+     * 学生登陆方法
+     *
+     * @param stuid    学生学号
+     * @param password 密码
+     * @return
+     */
+    @Override
+    public String login(String stuid, String password) {
+        if (studentMapper.getPasswordByStuid(stuid).equals(password)){
+            return  redisRepository.add(stuid);
+        }
+       return null;
     }
 }

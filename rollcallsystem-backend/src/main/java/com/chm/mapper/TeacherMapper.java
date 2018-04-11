@@ -14,4 +14,6 @@ public interface TeacherMapper {
     int updateByPrimaryKeySelective(Teacher record);
 
     int updateByPrimaryKey(Teacher record);
+
+    String getPasswordByTeaid(String teaid);
 }

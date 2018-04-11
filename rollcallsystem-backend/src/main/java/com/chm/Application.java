@@ -1,5 +1,6 @@
 package com.chm;
 
+import com.chm.consist.RedisRepository;
 import com.chm.domain.Schedule;
 import com.chm.mapper.ClassMapper;
 import com.chm.mapper.RecordMapper;
@@ -41,6 +42,13 @@ public class Application {
 
         ScheduleService scheduleService = (ScheduleService) context.getBean("scheduleService");
 
+        RedisRepository redisRepository = (RedisRepository) context.getBean("redisRepository");
+
+        String user_token = redisRepository.add("asdasdsa");
+
+        System.out.println("user_token:" + user_token);
+
+        System.out.println("get_user_token:" + redisRepository.get(user_token));
 
         List list = studentService.selectRecord(null);
 
@@ -67,7 +75,7 @@ public class Application {
 
         System.out.println(recordMapper.countting(20, "5"));
 
-        System.out.println(recordMapper.insertNotSigned(recordMapper.countting(20, "5"), 20, "5"));
+        //System.out.println(recordMapper.insertNotSigned(recordMapper.countting(20, "5"), 20, "5"));
 
     }
 }

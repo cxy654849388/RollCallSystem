@@ -166,6 +166,9 @@
     <logger name="com.baidu.disconf" additivity="false">
         <level>INFO</level>
     </logger>
+    <logger name="org.quartz" additivity="false">
+        <level>ERROR</level>
+    </logger>
 
     <!-- 未由logger指定的appender都在root中指定，level默认日志级别DEBUG -->
     <root level="DEBUG">

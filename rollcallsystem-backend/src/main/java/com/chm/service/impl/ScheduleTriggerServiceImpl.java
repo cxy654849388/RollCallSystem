@@ -68,6 +68,7 @@ public class ScheduleTriggerServiceImpl implements ScheduleTriggerService {
                                     .getCron());
                             //按新的cronExpression表达式构建一个新的trigger
                             trigger = TriggerBuilder.newTrigger().withIdentity(scheduleJob.getId().toString(), scheduleJob.getJobgroup()).withSchedule(scheduleBuilder).build();
+
                             //把trigger和jobDetail注入到调度器
                             scheduler.scheduleJob(jobDetail, trigger);
                         } catch (ClassNotFoundException e) {
