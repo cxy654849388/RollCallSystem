@@ -2,12 +2,10 @@ package com.chm.task;
 
 import com.chm.utils.HttpUtils;
 import com.chm.utils.QuartzUtils;
-import com.chm.windows.SignedWindow;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.scheduling.support.TaskUtils;
 
 import java.io.IOException;
 import java.util.HashMap;

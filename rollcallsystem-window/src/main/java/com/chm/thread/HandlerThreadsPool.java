@@ -11,7 +11,7 @@ import java.util.concurrent.*;
 
 public class HandlerThreadsPool {
     private static ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 200
-            , TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(5));
+        , TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(5));
 
     /**
      * 创建线程，对线程处理事件
