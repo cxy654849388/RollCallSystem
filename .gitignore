@@ -5,6 +5,7 @@
 # IntelliJ project files
 .idea
 *.iml
+
 .idea/dataSources.local.xml
 .idea/workspace.xml
 rollcallsystem-backend/src/main/resources/static/
@@ -20,3 +21,4 @@ rollcallsystem-window/target/
 /rollcallsystem-frontend/node_modules/
 !/logs/
 /.idea/
+!/.idea/
