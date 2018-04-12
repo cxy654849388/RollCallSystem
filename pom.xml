@@ -9,7 +9,7 @@
     <modules>
         <module>rollcallsystem-backend</module>
         <module>rollcallsystem-window</module>
-        <module>rollcallsystemfrontend</module>
+        <module>rollcallsystem-frontend</module>
     </modules>
     <packaging>pom</packaging>
 
