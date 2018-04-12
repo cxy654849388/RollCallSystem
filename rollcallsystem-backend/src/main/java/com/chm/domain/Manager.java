@@ -1,6 +1,9 @@
 package com.chm.domain;
 
-public class Manager {
+
+import java.io.Serializable;
+
+public class Manager implements Serializable {
     private String account;
 
     private String password;

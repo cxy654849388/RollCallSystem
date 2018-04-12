@@ -3,8 +3,10 @@ package com.chm.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.chm.consist.RedisRepository;
+import com.chm.service.ManagerService;
 import com.chm.service.StudentService;
 import com.chm.service.TeacherService;
+import com.chm.utils.RoleTypeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +33,9 @@ public class LoginController {
     TeacherService teacherService;
 
     @Autowired
+    ManagerService managerService;
+
+    @Autowired
     RedisRepository redisRepository;
 
 
@@ -40,12 +45,15 @@ public class LoginController {
         String token = null;
         String userType = null;
         //判别登陆类型
-        if (userId.length() == 10) {
+        if (RoleTypeUtils.discriminant(userId).equals(RoleTypeUtils.STUDENT)) {
             token = studentService.login(userId, password);
             userType = "student";
-        } else {
+        } else if (RoleTypeUtils.discriminant(userId).equals(RoleTypeUtils.TEACHER)) {
             token = teacherService.login(userId, password);
             userType = "teacher";
+        } else if (RoleTypeUtils.discriminant(userId).equals(RoleTypeUtils.MANAGER)) {
+            token = managerService.login(userId, password);
+            userType = "manager";
         }
         //登陆成功
         JSONObject json = new JSONObject();

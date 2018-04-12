@@ -27,6 +27,13 @@ public interface StudentService {
      */
     Student signed(String image, Integer schid, LocalTime signedTime);
 
+    /**
+     * 学生登录方法
+     *
+     * @param stuid    学生学号
+     * @param password 密码
+     * @return
+     */
     String login(String stuid, String password);
 
 }

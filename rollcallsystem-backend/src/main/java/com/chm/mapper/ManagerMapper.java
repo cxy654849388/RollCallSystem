@@ -14,4 +14,6 @@ public interface ManagerMapper {
     int updateByPrimaryKeySelective(Manager record);
 
     int updateByPrimaryKey(Manager record);
+
+    String getPasswordByAccount(String account);
 }
