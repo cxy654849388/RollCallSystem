@@ -6,19 +6,11 @@
 .idea
 *.iml
 
-.idea/dataSources.local.xml
+
 .idea/workspace.xml
 rollcallsystem-backend/src/main/resources/static/
-rollcallsystem-backend/target/
+
 rollcallsystem-window/src/test/
-rollcallsystem-window/target/
-/MyLog.log.2018-04-03.050280074871353.tmp
-/MyLog.log.2018-04-03.0530077324601178.tmp
-/MyLog.log.2018-04-03.0.gz
-/MyLog.log.2018-04-03.0525823488456399.tmp
-/MyLog.log
-/rollcallsystem-frontend/dist/
-/rollcallsystem-frontend/node_modules/
-!/logs/
+
 /.idea/
-!/.idea/
+
