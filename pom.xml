@@ -148,7 +148,9 @@
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
                 <version>1.3.2</version>
                 <configuration>
-                    <configurationFile>${basedir}/rollcallsystem-backend/src/main/resources/generator/generatorConfig.xml</configurationFile>
+                    <configurationFile>
+                        ${basedir}/rollcallsystem-backend/src/main/resources/generator/generatorConfig.xml
+                    </configurationFile>
                     <overwrite>true</overwrite>
                     <verbose>true</verbose>
                 </configuration>

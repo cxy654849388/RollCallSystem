@@ -2,6 +2,8 @@ package com.chm.mapper;
 
 import com.chm.domain.Teach;
 
+import java.util.Map;
+
 public interface TeachMapper {
     int deleteByPrimaryKey(Integer teachid);
 
@@ -14,4 +16,5 @@ public interface TeachMapper {
     int updateByPrimaryKeySelective(Teach record);
 
     int updateByPrimaryKey(Teach record);
+
 }

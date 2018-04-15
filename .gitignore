@@ -8,9 +8,11 @@
 
 
 .idea/workspace.xml
-rollcallsystem-backend/src/main/resources/static/
-
 rollcallsystem-window/src/test/
 
 /.idea/
 
+/rollcallsystem-frontend/package-lock.json
+/rollcallsystem-frontend/node_modules/
+/rollcallsystem-backend/src/test/
+/logs/

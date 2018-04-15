@@ -2,10 +2,7 @@ package com.chm;
 
 import com.chm.consist.RedisRepository;
 import com.chm.domain.Schedule;
-import com.chm.mapper.ClassMapper;
-import com.chm.mapper.RecordMapper;
-import com.chm.mapper.ScheduleMapper;
-import com.chm.mapper.StudentMapper;
+import com.chm.mapper.*;
 import com.chm.service.ScheduleService;
 import com.chm.service.StudentService;
 import com.github.pagehelper.PageHelper;
@@ -35,11 +32,13 @@ public class Application {
 
         StudentMapper studentMapper = (StudentMapper) context.getBean("studentMapper");
 
+        TeachMapper teachMapper = (TeachMapper) context.getBean("teachMapper");
+
         ScheduleService scheduleService = (ScheduleService) context.getBean("scheduleService");
 
         RedisRepository redisRepository = (RedisRepository) context.getBean("redisRepository");
 
-        String user_token = redisRepository.add("asdasdsa");
+        String user_token = redisRepository.add("1407020401");
 
         System.out.println("user_token:" + user_token);
 
@@ -69,6 +68,8 @@ public class Application {
         System.out.println(scheduleService.getSchedule(17));
 
         System.out.println(recordMapper.countting(20, "5"));
+
+
 
     }
 }
