@@ -19,6 +19,7 @@
       ])
     }
   }
+  console.log({name})
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
