@@ -1,11 +1,14 @@
 import {login, logout, getInfo} from '@/api/login'
-import {getToken, setToken, removeToken} from '@/utils/auth'
+import {
+  getToken, setToken, removeToken, getName, setName,
+  removeName, getRole, setRole, removeRole
+} from '@/utils/auth'
 
 const user = {
   state: {
     token: getToken(),
-    name: '',
-    role: ''
+    name: getName(),
+    role: getRole()
   },
 
   mutations: {
@@ -28,6 +31,8 @@ const user = {
         login(username, userInfo.password).then(response => {
           const data = response.data
           setToken(data.token)
+          setName(data.name)
+          setRole(data.userType)
           commit('SET_TOKEN', data.token)
           commit('SET_NAME', data.name)
           commit('SET_ROLE', data.userType)
@@ -60,6 +65,8 @@ const user = {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         removeToken()
+        removeName()
+        removeRole()
         resolve()
       })
     }

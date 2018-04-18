@@ -23,6 +23,7 @@ import java.util.Map;
  * @Created: 2018/4/11
  */
 @RestController
+@RequestMapping("/user")
 @CrossOrigin
 public class UserController {
 
@@ -38,7 +39,7 @@ public class UserController {
     @Autowired
     RedisRepository redisRepository;
 
-    @PostMapping("/user/login")
+    @PostMapping("/login")
     public JSONObject login(@RequestParam("userId") String userId,
                             @RequestParam("password") String password) {
         String token = null;
