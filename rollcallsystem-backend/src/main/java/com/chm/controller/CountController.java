@@ -32,8 +32,4 @@ public class CountController {
         recordService.counting(schid);
     }
 
-    @GetMapping(value = "/login")
-    public String get() {
-        return "hello";
-    }
 }

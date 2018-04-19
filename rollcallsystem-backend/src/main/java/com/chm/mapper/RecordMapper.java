@@ -24,7 +24,9 @@ public interface RecordMapper {
      * @param stuId 学生学号
      * @return
      */
-    List<Record> selectByStuId(@Param("stuid") String stuId);
+    List<Record> selectByStuId(@Param("stuid") String stuId,
+                               @Param("startWeek") String startWeek,
+                               @Param("endWeek") String endWeek);
 
     /**
      * 根据学号和任课编码查询签到状态

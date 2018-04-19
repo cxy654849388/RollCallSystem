@@ -21,9 +21,18 @@
         select
         <include refid="Base_Column_List"/>
         from tbl_record
-        <if test="stuid != null">
-            where StuID = #{stuid,jdbcType=VARCHAR}
-        </if>
+        <where>
+            <if test="stuid != null">
+                StuID = #{stuid,jdbcType=VARCHAR}
+            </if>
+            <if test="startWeek != null">
+                and WeekOfSemester > #{startWeek,jdbcType=VARCHAR} - 1
+            </if>
+            <if test="endWeek != null">
+                and #{endWeek,jdbcType=VARCHAR}+1 > WeekOfSemester
+            </if>
+        </where>
+
     </select>
     <select id="selectStatusByStuidAndSchidAndWeekofsemester" resultMap="BaseResultMap">
         select

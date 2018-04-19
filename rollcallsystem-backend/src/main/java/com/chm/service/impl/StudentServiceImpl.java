@@ -3,6 +3,7 @@ package com.chm.service.impl;
 import com.chm.consist.FaceRecognition;
 import com.chm.consist.RedisRepository;
 import com.chm.domain.*;
+import com.chm.exception.ParamExecptiom;
 import com.chm.mapper.*;
 import com.chm.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoField;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service("studentService")
 @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
@@ -80,12 +82,27 @@ public class StudentServiceImpl implements StudentService {
     /**
      * 查询签到记录方法
      *
-     * @param stuId 学生学号
+     * @param params 参数集
      * @return
      */
     @Override
-    public List<Record> selectRecord(String stuId) {
-        return recordMapper.selectByStuId(stuId);
+    public List<Record> selectRecord(Map params) {
+        try {
+            //校验参数
+            Validata.selectRecordVali(params);
+        } catch (ParamExecptiom paramExecptiom) {
+            return null;
+        }
+        //学生学号
+        String stuId = String.valueOf(params.get("stuId"));
+        //开始周数
+        String startWeek = params.containsKey("startWeek") ?
+            String.valueOf(params.get("startWeek")) : "1";
+        //结束周数
+        String endWeek = params.containsKey("endWeek") ?
+            String.valueOf(params.get("endWeek")) : null;
+        //返回查询结果
+        return recordMapper.selectByStuId(stuId, startWeek, endWeek);
     }
 
     /**
