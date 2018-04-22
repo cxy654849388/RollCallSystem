@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chm.mapper.ProfessionalMapper">
+    <resultMap id="BaseResultMap" type="com.chm.domain.Professional">
+        <id column="ProID" property="proid" jdbcType="VARCHAR"/>
+        <result column="AcaID" property="acaid" jdbcType="VARCHAR"/>
+        <result column="ProName" property="proname" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ProID, AcaID, ProName
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_professional
+        where ProID = #{proid,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_professional
+    where ProID = #{proid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.chm.domain.Professional">
+    insert into tbl_professional (ProID, AcaID, ProName
+      )
+    values (#{proid,jdbcType=VARCHAR}, #{acaid,jdbcType=VARCHAR}, #{proname,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.chm.domain.Professional">
+        insert into tbl_professional
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="proid != null">
+                ProID,
+            </if>
+            <if test="acaid != null">
+                AcaID,
+            </if>
+            <if test="proname != null">
+                ProName,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="proid != null">
+                #{proid,jdbcType=VARCHAR},
+            </if>
+            <if test="acaid != null">
+                #{acaid,jdbcType=VARCHAR},
+            </if>
+            <if test="proname != null">
+                #{proname,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.chm.domain.Professional">
+        update tbl_professional
+        <set>
+            <if test="acaid != null">
+                AcaID = #{acaid,jdbcType=VARCHAR},
+            </if>
+            <if test="proname != null">
+                ProName = #{proname,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ProID = #{proid,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.chm.domain.Professional">
+    update tbl_professional
+    set AcaID = #{acaid,jdbcType=VARCHAR},
+      ProName = #{proname,jdbcType=VARCHAR}
+    where ProID = #{proid,jdbcType=VARCHAR}
+  </update>
+</mapper>

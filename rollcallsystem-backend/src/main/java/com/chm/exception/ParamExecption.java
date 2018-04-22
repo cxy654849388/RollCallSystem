@@ -8,13 +8,14 @@ import com.alibaba.druid.wall.violation.ErrorCode;
  * @Author: Hongming Cai
  * @Created: 2018/4/19 23:03
  */
-public class ParamExecptiom extends Exception {
+public class ParamExecption extends RuntimeException {
     /**
      * 异常消息
      */
     private final String errorMsg;
 
-    public ParamExecptiom(String errorMsg) {
+    public ParamExecption(String errorMsg) {
+        super(errorMsg);
         this.errorMsg = errorMsg;
     }
 

@@ -23,6 +23,30 @@
         from tbl_student
         where StuID = #{stuid,jdbcType=VARCHAR}
     </select>
+    <select id="getStudentList" resultMap="BaseResultMap">
+        SELECT
+        StuID,
+        t_c.ClassID,
+        StuName,
+        StuSex,
+        Birthday,
+        Password
+        FROM tbl_student t_s
+        LEFT JOIN tbl_class t_c ON t_s.ClassID = t_c.ClassID
+        LEFT JOIN tbl_professional t_p ON t_c.ProID = t_p.ProID
+        LEFT JOIN tbl_academy t_a ON t_p.AcaID = t_a.AcaID
+        <where>
+            <if test="acaid != null">
+                t_a.AcaID = #{acaid}
+            </if>
+            <if test="proid != null">
+                AND t_p.ProID = #{proid}
+            </if>
+            <if test="classid != null">
+                AND t_c.ClassID = #{classid}
+            </if>
+        </where>
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tbl_student
     where StuID = #{stuid,jdbcType=VARCHAR}

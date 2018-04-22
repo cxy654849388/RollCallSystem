@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.58, for Win64 (AMD64)
+-- MySQL dump 10.13  Distrib 5.7.21, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: rollcall
 -- ------------------------------------------------------
--- Server version	5.5.58
+-- Server version	5.7.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -332,6 +332,30 @@ LOCK TABLES `qrtz0_triggers` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tbl_academy`
+--
+
+DROP TABLE IF EXISTS `tbl_academy`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_academy` (
+  `AcaID` varchar(10) NOT NULL COMMENT '学院编号',
+  `AcaName` varchar(20) DEFAULT NULL COMMENT '学院名称',
+  PRIMARY KEY (`AcaID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_academy`
+--
+
+LOCK TABLES `tbl_academy` WRITE;
+/*!40000 ALTER TABLE `tbl_academy` DISABLE KEYS */;
+INSERT INTO `tbl_academy` VALUES ('07','数学与计算科学学院');
+/*!40000 ALTER TABLE `tbl_academy` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tbl_class`
 --
 
@@ -340,9 +364,12 @@ DROP TABLE IF EXISTS `tbl_class`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tbl_class` (
   `ClassID` varchar(8) NOT NULL,
-  `professional` varchar(10) DEFAULT NULL,
-  `count` int(11) DEFAULT NULL,
-  PRIMARY KEY (`ClassID`)
+  `ClassName` varchar(20) DEFAULT NULL,
+  `ProID` varchar(10) DEFAULT NULL,
+  `Count` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ClassID`),
+  KEY `FK_Reference_10` (`ProID`),
+  CONSTRAINT `FK_Reference_10` FOREIGN KEY (`ProID`) REFERENCES `tbl_professional` (`ProID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -352,7 +379,7 @@ CREATE TABLE `tbl_class` (
 
 LOCK TABLES `tbl_class` WRITE;
 /*!40000 ALTER TABLE `tbl_class` DISABLE KEYS */;
-INSERT INTO `tbl_class` VALUES ('14070101','数学与应用数学',30),('14070102','数学与应用数学',29),('14070103','数学与应用数学',30),('14070201','信息与计算科学',28),('14070202','信息与计算科学',29),('14070203','信息与计算科学',25),('14070204','信息与计算科学',27),('14070301','应用统计学',28),('14070302','应用统计学',26);
+INSERT INTO `tbl_class` VALUES ('14070101','14数学一班','0701',30),('14070102','14数学二班','0701',29),('14070103','14数学三班','0701',30),('14070201','14信计一班','0701',28),('14070202','14信计二班','0702',29),('14070203','14信计三班','0702',25),('14070204','14信计四班','0702',27),('14070301','14统计一班','0703',28),('14070302','14统计二班','0703',26);
 /*!40000 ALTER TABLE `tbl_class` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -478,6 +505,33 @@ LOCK TABLES `tbl_manager` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tbl_professional`
+--
+
+DROP TABLE IF EXISTS `tbl_professional`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbl_professional` (
+  `ProID` varchar(10) NOT NULL COMMENT '专业编号',
+  `AcaID` varchar(10) DEFAULT NULL COMMENT '学院编号',
+  `ProName` varchar(20) DEFAULT NULL COMMENT '专业名称',
+  PRIMARY KEY (`ProID`),
+  KEY `FK_Reference_9` (`AcaID`),
+  CONSTRAINT `FK_Reference_9` FOREIGN KEY (`AcaID`) REFERENCES `tbl_academy` (`AcaID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_professional`
+--
+
+LOCK TABLES `tbl_professional` WRITE;
+/*!40000 ALTER TABLE `tbl_professional` DISABLE KEYS */;
+INSERT INTO `tbl_professional` VALUES ('0701','07','数学与应用数学'),('0702','07','信息与计算科学'),('0703','07','应用统计学');
+/*!40000 ALTER TABLE `tbl_professional` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tbl_quartz_task`
 --
 
@@ -517,6 +571,8 @@ CREATE TABLE `tbl_record` (
   `StuID` varchar(10) DEFAULT NULL,
   `Status` enum('正常','迟到','缺课','请假') DEFAULT NULL,
   `WeekOfSemester` enum('1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22') DEFAULT NULL,
+  `SignedTime` time DEFAULT NULL,
+  `Semester` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`RecID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -527,7 +583,7 @@ CREATE TABLE `tbl_record` (
 
 LOCK TABLES `tbl_record` WRITE;
 /*!40000 ALTER TABLE `tbl_record` DISABLE KEYS */;
-INSERT INTO `tbl_record` VALUES (1,3,'1407010102','正常',NULL),(2,32,'1407020401','缺课',NULL),(4,35,'1407020401','缺课',NULL),(6,20,'1407020401','正常','4'),(7,20,'1407020401','缺课','5'),(8,19,'1407020401','缺课','5'),(16,19,'1407020403','缺课','5');
+INSERT INTO `tbl_record` VALUES (1,3,'1407010102','正常','1','15:30:00','2016-2017-1'),(2,32,'1407020401','缺课','1','15:30:00','2016-2017-1'),(4,35,'1407020401','缺课','1','15:30:00','2016-2017-1'),(6,20,'1407020401','正常','4','15:30:00','2016-2017-1'),(7,20,'1407020401','缺课','5','15:30:00','2016-2017-1'),(8,19,'1407020401','缺课','5','15:30:00','2016-2017-1'),(16,19,'1407020403','缺课','5','15:30:00','2016-2017-1');
 /*!40000 ALTER TABLE `tbl_record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -690,4 +746,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-16 23:53:02
+-- Dump completed on 2018-04-22 19:08:45

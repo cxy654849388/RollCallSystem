@@ -9,6 +9,8 @@ import com.github.pagehelper.PageHelper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -17,7 +19,12 @@ import java.util.*;
 @SpringBootApplication
 @ComponentScan(basePackages = "com.chm")
 @MapperScan("com.chm.mapper")
-public class Application {
+public class Application extends SpringBootServletInitializer {
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(Application.class);
+    }
 
 
     public static void main(String[] args) {
@@ -44,14 +51,14 @@ public class Application {
 
         System.out.println("get_user_token:" + redisRepository.get(user_token));
 
-        List list = studentService.selectRecord(null);
+       // List list = studentService.selectRecord(null);
 
-        System.out.println(Arrays.toString(list.toArray()));
+        //System.out.println(Arrays.toString(list.toArray()));
 
-        System.out.println(recordMapper.selectStatusByStuidAndSchidAndWeekofsemester("2", 1, String.valueOf(10)));
+        //System.out.println(recordMapper.selectStatusByStuidAndSchidAndWeekofsemester("2", 1, String.valueOf(10)));
 
         //根据任课实例获取课堂所有学生相应的标签
-        List<String> labels = classMapper.getLabels(31);
+        List<String> labels = classMapper.getClasses(31);
         System.out.println(labels);
 
         PageHelper.startPage(1, 10);
@@ -67,7 +74,7 @@ public class Application {
 
         System.out.println(scheduleService.getSchedule(17));
 
-        System.out.println(recordMapper.countting(20, "5"));
+        System.out.println(recordMapper.counting(20, "5"));
 
 
 

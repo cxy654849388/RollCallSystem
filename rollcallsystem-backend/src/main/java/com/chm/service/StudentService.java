@@ -1,9 +1,7 @@
 package com.chm.service;
 
-import com.chm.domain.Record;
 import com.chm.domain.Student;
-import com.chm.exception.ParamExecptiom;
-import org.springframework.mail.MailParseException;
+import com.chm.vo.Result;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -13,12 +11,20 @@ public interface StudentService {
 
 
     /**
-     * 根据学生学号查询签到记录
+     * 根据查询签到记录
      *
      * @param params
      * @return
      */
-    List<Record> selectRecord(Map params);
+    Result selectRecord(Map params);
+
+    /**
+     * 统计学生学期签到情况
+     *
+     * @param params
+     * @return
+     */
+    Result countSignedRecord(Map params);
 
     /**
      * 学生签到方法

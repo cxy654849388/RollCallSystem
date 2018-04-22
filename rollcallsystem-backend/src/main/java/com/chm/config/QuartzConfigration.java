@@ -14,6 +14,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 
+/**
+ * @Author: Hongming Cai
+ * @Created: 2018/4/20
+ */
 @Configuration
 public class QuartzConfigration {
 

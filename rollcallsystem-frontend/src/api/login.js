@@ -1,5 +1,7 @@
 import request from '@/utils/request'
 import store from "../store";
+import user from "../store/modules/user";
+import {getToken} from "../utils/auth";
 
 export function login(username, password) {
   let data = [
@@ -18,7 +20,7 @@ export function login(username, password) {
 }
 
 export function logout() {
-  let data = {'token': store.token};
+  let data = {'token': store.getters.token};
   let url_params = new URLSearchParams(data);
   return request({
     url: '/user/logout',

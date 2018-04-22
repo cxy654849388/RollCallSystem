@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chm.mapper.AcademyMapper">
+    <resultMap id="BaseResultMap" type="com.chm.domain.Academy">
+        <id column="AcaID" property="acaid" jdbcType="VARCHAR"/>
+        <result column="AcaName" property="acaname" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="SchoolInfo" type="com.chm.domain.Academy">
+        <id column="AcaID" property="acaid" jdbcType="VARCHAR"/>
+        <result column="AcaName" property="acaname" jdbcType="VARCHAR"/>
+        <collection property="professionals" ofType="com.chm.domain.Professional">
+            <id column="ProID" property="proid" jdbcType="VARCHAR"/>
+            <result column="ProName" property="proname" jdbcType="VARCHAR"/>
+            <collection property="classes" ofType="com.chm.domain.Class">
+                <id column="ClassID" property="classid" jdbcType="VARCHAR"/>
+                <result column="ClassName" property="classname" jdbcType="INTEGER"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+    AcaID, AcaName
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_academy
+        where AcaID = #{acaid,jdbcType=VARCHAR}
+    </select>
+    <select id="getSchoolInfo" resultMap="SchoolInfo">
+        select
+        t_a.acaid,
+        acaname,
+        t_p.proid,
+        proname,
+        t_c.classid,
+        classname
+        from tbl_academy t_a
+          left join tbl_professional t_p on t_a.AcaID = t_p.AcaID
+          left join tbl_class t_c on t_p.ProID = t_c.ProID
+        where right(YEAR(sysdate()),2) + 1 > substring(classname,1,2)
+        and substring(classname,1,2) > right(YEAR(sysdate()),2) - 4 -1
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tbl_academy
+    where AcaID = #{acaid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.chm.domain.Academy">
+    insert into tbl_academy (AcaID, AcaName)
+    values (#{acaid,jdbcType=VARCHAR}, #{acaname,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.chm.domain.Academy">
+        insert into tbl_academy
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="acaid != null">
+                AcaID,
+            </if>
+            <if test="acaname != null">
+                AcaName,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="acaid != null">
+                #{acaid,jdbcType=VARCHAR},
+            </if>
+            <if test="acaname != null">
+                #{acaname,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.chm.domain.Academy">
+        update tbl_academy
+        <set>
+            <if test="acaname != null">
+                AcaName = #{acaname,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where AcaID = #{acaid,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.chm.domain.Academy">
+    update tbl_academy
+    set AcaName = #{acaname,jdbcType=VARCHAR}
+    where AcaID = #{acaid,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -3,7 +3,9 @@ package com.chm.domain;
 public class Class {
     private String classid;
 
-    private String professional;
+    private String classname;
+
+    private String proid;
 
     private Integer count;
 
@@ -15,12 +17,20 @@ public class Class {
         this.classid = classid == null ? null : classid.trim();
     }
 
-    public String getProfessional() {
-        return professional;
+    public String getClassname() {
+        return classname;
     }
 
-    public void setProfessional(String professional) {
-        this.professional = professional == null ? null : professional.trim();
+    public void setClassname(String classname) {
+        this.classname = classname == null ? null : classname.trim();
+    }
+
+    public String getProid() {
+        return proid;
+    }
+
+    public void setProid(String proid) {
+        this.proid = proid == null ? null : proid.trim();
     }
 
     public Integer getCount() {

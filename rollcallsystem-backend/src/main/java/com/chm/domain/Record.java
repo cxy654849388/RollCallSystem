@@ -1,5 +1,7 @@
 package com.chm.domain;
 
+import java.time.LocalTime;
+
 public class Record {
     private Integer recid;
 
@@ -10,6 +12,10 @@ public class Record {
     private String status;
 
     private String weekofsemester;
+
+    private LocalTime signedtime;
+
+    private String semester;
 
     public Integer getRecid() {
         return recid;
@@ -51,4 +57,19 @@ public class Record {
         this.weekofsemester = weekofsemester;
     }
 
+    public LocalTime getSignedtime() {
+        return signedtime;
+    }
+
+    public void setSignedtime(LocalTime signedtime) {
+        this.signedtime = signedtime;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester == null ? null : semester.trim();
+    }
 }

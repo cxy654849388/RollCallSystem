@@ -3,21 +3,22 @@ package com.chm.service.impl;
 import com.chm.consist.FaceRecognition;
 import com.chm.consist.RedisRepository;
 import com.chm.domain.*;
-import com.chm.exception.ParamExecptiom;
 import com.chm.mapper.*;
 import com.chm.service.StudentService;
+import com.chm.utils.ResultUtils;
+import com.chm.vo.Result;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoField;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -75,8 +76,17 @@ public class StudentServiceImpl implements StudentService {
     @Value("#{${NORMAL:20} * -60}")
     private int LATE;
 
+    /**
+     * 学期开始周数
+     */
     @Value("${STARTWEEK}")
     Integer STARTWEEK;
+
+    /**
+     * 当前学期
+     */
+    @Value("${SEMESTER}")
+    private String SEMESTER;
 
 
     /**
@@ -86,23 +96,55 @@ public class StudentServiceImpl implements StudentService {
      * @return
      */
     @Override
-    public List<Record> selectRecord(Map params) {
-        try {
-            //校验参数
-            Validata.selectRecordVali(params);
-        } catch (ParamExecptiom paramExecptiom) {
-            return null;
-        }
+    public Result selectRecord(Map params) {
+
+        //获取参数
+        //页码
+        Integer page = Integer.parseInt(params.get("page") == null ? "1" : params.get("page").toString());
+        //单页大小
+        Integer size = Integer.parseInt(params.get("size") == null ? "10" : params.get("size").toString());
+        //获取学生实例
+        Student stu = (Student) redisRepository.get(String.valueOf(params.get("token")));
         //学生学号
-        String stuId = String.valueOf(params.get("stuId"));
+        String stuId = stu.getStuid();
+        //课表编号
+        Integer schId = params.containsKey("schId") ?
+            Integer.parseInt(params.get("schId").toString()) : null;
         //开始周数
-        String startWeek = params.containsKey("startWeek") ?
-            String.valueOf(params.get("startWeek")) : "1";
+        Integer startWeek = params.containsKey("startWeek") ?
+            Integer.parseInt(String.valueOf(params.get("startWeek"))) : 1;
         //结束周数
-        String endWeek = params.containsKey("endWeek") ?
-            String.valueOf(params.get("endWeek")) : null;
+        Integer endWeek = params.containsKey("endWeek") ?
+            Integer.parseInt(String.valueOf(params.get("endWeek"))) : null;
+        Page<?> p = PageHelper.startPage(page, size);
         //返回查询结果
-        return recordMapper.selectByStuId(stuId, startWeek, endWeek);
+        List list = recordMapper.findSignedRecords(stuId, schId, startWeek, endWeek, SEMESTER);
+        Map m = Maps.newHashMap();
+        m.put("totalPages", p.getPages());
+        m.put("page", p.getPageNum());
+        m.put("totalElements", p.getTotal());
+        m.put("size", p.getPageSize());
+        m.put("data", list);
+        return ResultUtils.success(m);
+    }
+
+    /**
+     * 统计学生学期签到情况
+     *
+     * @param params
+     * @return
+     */
+    @Override
+    public Result countSignedRecord(Map params) {
+        //获取学生实例
+        Student stu = (Student) redisRepository.get(String.valueOf(params.get("token")));
+        //学生学号
+        String stuId = stu.getStuid();
+        //课表编号
+        Integer schId = params.containsKey("schId") ?
+            Integer.parseInt(params.get("schId").toString()) : null;
+        List list = recordMapper.countSignedRecord(stuId,schId,SEMESTER);
+        return ResultUtils.success(list);
     }
 
     /**
@@ -122,7 +164,7 @@ public class StudentServiceImpl implements StudentService {
             return null;
         }
         //根据任课实例获取课堂所有学生相应的标签
-        List<String> labels = classMapper.getLabels(schid);
+        List<String> labels = classMapper.getClasses(schid);
         //识别，获取识别结果 label格式:groupId/userId
         String label = faceRecognition.recogntion(image, labels);
         //计算本周为第几周
@@ -132,7 +174,7 @@ public class StudentServiceImpl implements StudentService {
             String stuId = label.split("/")[1];
             //插入签到结果
             //查询是否已签到
-            if (recordMapper.selectStatusByStuidAndSchidAndWeekofsemester(stuId, schid, weekofsemester) == null) {
+            if (recordMapper.selectStatusByStuidAndSchidAndWeekofsemester(stuId, schid, weekofsemester,SEMESTER) == null) {
                 //进行签到
                 //比较签到时间
                 long time = schedule.getStarttime().toSecondOfDay() - signedTime.toSecondOfDay();
@@ -154,6 +196,10 @@ public class StudentServiceImpl implements StudentService {
                     //缺课
                     record.setStatus("缺课");
                 }
+                //签到时间
+                record.setSignedtime(LocalTime.now());
+                //当前学期
+                record.setSemester(SEMESTER);
                 //插入签到记录
                 recordMapper.insert(record);
                 //构造人脸数据训练状态对象

@@ -73,7 +73,7 @@ public class UserController {
         return null;
     }
 
-    @PostMapping("/user/logout")
+    @PostMapping("/logout")
     public JSONObject logout(@RequestParam("token") String token) {
         redisRepository.delete(token);
         System.out.println(11111111);

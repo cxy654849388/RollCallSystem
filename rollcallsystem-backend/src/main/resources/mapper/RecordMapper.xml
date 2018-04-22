@@ -7,9 +7,11 @@
         <result column="StuID" property="stuid" jdbcType="VARCHAR"/>
         <result column="Status" property="status" jdbcType="CHAR"/>
         <result column="WeekOfSemester" property="weekofsemester" jdbcType="CHAR"/>
+        <result column="SignedTime" property="signedtime" jdbcType="TIME"/>
+        <result column="Semester" property="semester" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        RecID, SchID, StuID, Status, WeekOfSemester
+        RecID, SchID, StuID, Status, WeekOfSemester, SignedTime, Semester
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -17,22 +19,47 @@
         from tbl_record
         where RecID = #{recid,jdbcType=INTEGER}
     </select>
-    <select id="selectByStuId" resultMap="BaseResultMap" parameterType="java.lang.String">
-        select
-        <include refid="Base_Column_List"/>
-        from tbl_record
+    <select id="findSignedRecords" resultType="map">
+        SELECT
+        CouName,
+        record.WeekOfSemester AS WeekOfSemester,
+        DayOfWeek,
+        StartTime,
+        EndTime,
+        SignedTime,
+        Status
+        FROM tbl_course course LEFT JOIN tbl_teach teach ON course.CouID = teach.CouID
+        LEFT JOIN tbl_schedule schedule ON teach.TeachID = schedule.TeachID
+        LEFT JOIN tbl_record record ON record.SchID = schedule.SchID
         <where>
+            <if test="schid != null">
+                record.SchId = #{schid}
+            </if>
             <if test="stuid != null">
-                StuID = #{stuid,jdbcType=VARCHAR}
+                AND record.StuID = #{stuid}
             </if>
             <if test="startWeek != null">
-                and WeekOfSemester > #{startWeek,jdbcType=VARCHAR} - 1
+                AND record.WeekOfSemester > #{startWeek} - 1
             </if>
             <if test="endWeek != null">
-                and #{endWeek,jdbcType=VARCHAR}+1 > WeekOfSemester
+                AND #{endWeek} + 1 > record.WeekOfSemester
+            </if>
+            <if test="semester != null">
+                AND record.semester = #{semester}
             </if>
         </where>
-
+    </select>
+    <select id="countSignedRecord" resultType="map">
+        select
+        Status as status,
+        count(0) as number
+        from tbl_record
+        where StuID = #{stuid}
+        and Semester = #{semester}
+        <if test="schid != null">
+            and SchID = #{schid}
+        </if>
+        group by Status
     </select>
     <select id="selectStatusByStuidAndSchidAndWeekofsemester" resultMap="BaseResultMap">
         select
@@ -41,8 +68,9 @@
         where StuID = #{stuid,jdbcType=VARCHAR}
         and SchID = #{schid,jdbcType=INTEGER}
         and WeekOfSemester = #{weekofsemester,jdbcType=CHAR}
+        and Semester = #{semester,jdbcType=CHAR}
     </select>
-    <select id="countting" resultType="java.lang.String">
+    <select id="counting" resultType="java.lang.String">
         select s1.StuID
         from (
           select StuID
@@ -66,9 +94,10 @@
     </delete>
     <insert id="insert" parameterType="com.chm.domain.Record">
         insert into tbl_record ( SchID, StuID,
-        Status,WeekOfSemester)
+        Status,WeekOfSemester,SignedTime,Semester)
         values ( #{schid,jdbcType=INTEGER}, #{stuid,jdbcType=VARCHAR},
-        #{status,jdbcType=CHAR}, #{weekofsemester,jdbcType=CHAR})
+        #{status,jdbcType=CHAR}, #{weekofsemester,jdbcType=CHAR},
+        #{signedtime,jdbcType = TIME}, #{semester})
     </insert>
     <insert id="insertSelective" parameterType="com.chm.domain.Record">
         insert into tbl_record
@@ -85,6 +114,12 @@
             <if test="weekofsemester != null">
                 WeekOfSemester,
             </if>
+            <if test="signedtime != null">
+                SignedTime,
+            </if>
+            <if test="semester != null">
+                Semester,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="schid != null">
@@ -99,15 +134,21 @@
             <if test="weekofsemester != null">
                 #{weekofsemester,jdbcType=CHAR},
             </if>
+            <if test="signedtime != null">
+                #{signedtime,jdbcType=TIME},
+            </if>
+            <if test="semester != null">
+                #{semester,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <insert id="insertNotSigned">
         insert into tbl_record ( SchID, StuID,
-        Status,WeekOfSemester)
+        Status, WeekOfSemester, SignedTime, Semester)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             ( #{schid,jdbcType=INTEGER}, #{item},
-            '缺课', #{weekofsemester,jdbcType=CHAR})
+            '缺课', #{weekofsemester,jdbcType=CHAR}, sysdate(), #{semester,jdbcType=VARCHER})
         </foreach>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.chm.domain.Record">
@@ -123,10 +164,13 @@
                 Status = #{status,jdbcType=CHAR},
             </if>
             <if test="weekofsemester != null">
-                #{weekofsemester,jdbcType=CHAR},
-            </if>
-            <if test="weekofsemester != null">
                 WeekOfSemester = #{weekofsemester,jdbcType=CHAR},
+            </if>
+            <if test="signedtime != null">
+                SignedTime = #{signedtime,jdbcType=TIME},
+            </if>
+            <if test="semester != null">
+                Semester = #{semester,jdbcType=VARCHAR},
             </if>
         </set>
         where RecID = #{recid,jdbcType=INTEGER}
@@ -136,7 +180,9 @@
         set SchID = #{schid,jdbcType=INTEGER},
         StuID = #{stuid,jdbcType=VARCHAR},
         Status = #{status,jdbcType=CHAR},
-        WeekOfSemester = #{weekofsemester,jdbcType=CHAR}
+        WeekOfSemester = #{weekofsemester,jdbcType=CHAR},
+        SignedTime = #{signedtime,jdbcType=TIME},
+        Semester = #{semester,jdbcType=VARCHAR}
         where RecID = #{recid,jdbcType=INTEGER}
     </update>
 </mapper>

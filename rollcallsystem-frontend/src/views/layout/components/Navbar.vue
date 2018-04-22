@@ -4,17 +4,17 @@
     <breadcrumb></breadcrumb>
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-        <img class="user-avatar" v-bind:src="imgUrl">
+        <img class="user-avatar" :src="imgUrl"/>
         <i class="el-icon-caret-bottom"></i>
       </div>
       <el-dropdown-menu class="user-dropdown" slot="dropdown">
         <router-link class="inlineBlock" to="/">
           <el-dropdown-item>
-            Home
+            主页
           </el-dropdown-item>
         </router-link>
         <el-dropdown-item divided>
-          <span @click="logout" style="display:block;">LogOut</span>
+          <span @click="logout" style="display:block;">注销</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -26,7 +26,8 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 
-var imgUrl = require('../../../assets/avatar.gif')
+import imgUrl from '@/assets/default.png'
+console.log(imgUrl)
 
 export default {
 

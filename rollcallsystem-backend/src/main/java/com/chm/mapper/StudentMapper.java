@@ -1,6 +1,9 @@
 package com.chm.mapper;
 
 import com.chm.domain.Student;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface StudentMapper {
     int deleteByPrimaryKey(String stuid);
@@ -15,6 +18,10 @@ public interface StudentMapper {
 
     int updateByPrimaryKey(Student record);
 
-    String getPasswordByStuid(String stuid);
+    String getPasswordByStuid(@Param("stuid") String stuid);
+
+    List getStudentList(@Param("acaid") String acaid,
+                        @Param("proid") String proid,
+                        @Param("classid") String classid);
 
 }

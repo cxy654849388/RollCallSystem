@@ -20,10 +20,10 @@ import java.util.List;
 public class RecordServiceImpl implements RecordService {
 
     @Autowired
-    RecordMapper recordMapper;
+    private RecordMapper recordMapper;
 
     @Autowired
-    ClassMapper classMapper;
+    private ClassMapper classMapper;
 
     @Autowired
 
@@ -31,13 +31,19 @@ public class RecordServiceImpl implements RecordService {
      * 学期开始周数
      */
     @Value("${STARTWEEK}")
-    Integer STARTWEEK;
+    private Integer STARTWEEK;
+
+    /**
+     * 当前学期
+     */
+    @Value("${SEMESTER}")
+    private String SEMESTER;
 
     @Override
     public Record getRecord(String stuId, Integer schId) {
         //计算本周为第几周
         String weekofsemester = String.valueOf(LocalDate.now().get(ChronoField.ALIGNED_WEEK_OF_YEAR) - STARTWEEK + 1);
-        return recordMapper.selectStatusByStuidAndSchidAndWeekofsemester(stuId, schId, weekofsemester);
+        return recordMapper.selectStatusByStuidAndSchidAndWeekofsemester(stuId, schId, weekofsemester,SEMESTER);
     }
 
     @Override
@@ -45,9 +51,9 @@ public class RecordServiceImpl implements RecordService {
         //计算本周为第几周
         String weekofsemester = String.valueOf(LocalDate.now().get(ChronoField.ALIGNED_WEEK_OF_YEAR) - STARTWEEK + 1);
         //获取未签到学生学号
-        List<String> stuIds = recordMapper.countting(schId, weekofsemester);
+        List<String> stuIds = recordMapper.counting(schId, weekofsemester);
         //插入未签到学生记录
-        recordMapper.insertNotSigned(stuIds, schId, weekofsemester);
+        recordMapper.insertNotSigned(stuIds, schId, weekofsemester, SEMESTER);
     }
 
 

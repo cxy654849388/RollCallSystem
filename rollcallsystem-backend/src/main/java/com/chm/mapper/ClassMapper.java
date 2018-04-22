@@ -24,5 +24,5 @@ public interface ClassMapper {
      * @param schid
      * @return
      */
-    List<String> getLabels(@Param("schid") Integer schid);
+    List<String> getClasses(@Param("schid") Integer schid);
 }
