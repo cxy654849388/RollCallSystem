@@ -50,23 +50,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         if (method.getAnnotation(Authorization.class) == null) {
             return true;
         }
-        String user_token = null;
-        System.out.println("Method:"+request.getMethod());
-        if("POST".equals(request.getMethod())){
-            //获取token
-            BufferedReader reader = request.getReader();
-            StringBuffer buffer = new StringBuffer();
-            String str = null;
-            while ((str = reader.readLine())!=null){
-                buffer.append(str);
-            }
-            body = buffer.toString();
-            JSONObject json = JSON.parseObject(body);
-            user_token = json.getString("token");
-        }else if("GET".equals(request.getMethod())){
-            user_token = request.getParameter("token");
-        }
-
+        String user_token = request.getHeader("Authorization");
         if (redisRepository == null) {
             //解决service为null无法注入问题
             BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());

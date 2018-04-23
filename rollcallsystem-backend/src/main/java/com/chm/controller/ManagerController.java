@@ -26,18 +26,14 @@ public class ManagerController {
 
     @Authorization
     @PostMapping("/addFace")
-    public Result addFace() {
-        //获取参数
-        Map params = JSON.parseObject(AuthorizationInterceptor.getBody()).getInnerMap();
+    public Result addFace(@RequestBody Map params) {
         //查询结果
         return managerService.addFace(params);
     }
 
     @Authorization
     @PostMapping("/getFace")
-    public Result getFace() {
-        //获取参数
-        Map params = JSON.parseObject(AuthorizationInterceptor.getBody()).getInnerMap();
+    public Result getFace(@RequestBody Map params) {
         //查询结果
         return managerService.getFace(params);
     }
@@ -51,9 +47,7 @@ public class ManagerController {
 
     @Authorization
     @PostMapping("/getStudentList")
-    public Result getStudentList(){
-        //获取参数
-        Map params = JSON.parseObject(AuthorizationInterceptor.getBody()).getInnerMap();
+    public Result getStudentList(@RequestBody Map params){
         //查询结果
         return managerService.getStudentList(params);
     }

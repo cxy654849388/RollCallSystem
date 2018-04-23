@@ -10,15 +10,6 @@ import java.util.Map;
  */
 public interface ManagerService {
     /**
-     * 管理员登录方法
-     *
-     * @param account  管理员账号
-     * @param password 密码
-     * @return
-     */
-    String login(String account, String password);
-
-    /**
      * 添加学生人脸方法
      * @param params
      * @return

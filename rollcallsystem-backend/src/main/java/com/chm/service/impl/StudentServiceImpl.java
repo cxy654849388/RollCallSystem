@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoField;
@@ -96,7 +97,7 @@ public class StudentServiceImpl implements StudentService {
      * @return
      */
     @Override
-    public Result selectRecord(Map params) {
+    public Result selectRecord(Map params, HttpServletRequest request) {
 
         //获取参数
         //页码
@@ -104,7 +105,7 @@ public class StudentServiceImpl implements StudentService {
         //单页大小
         Integer size = Integer.parseInt(params.get("size") == null ? "10" : params.get("size").toString());
         //获取学生实例
-        Student stu = (Student) redisRepository.get(String.valueOf(params.get("token")));
+        Student stu = (Student) redisRepository.get(request.getHeader("token"));
         //学生学号
         String stuId = stu.getStuid();
         //课表编号
@@ -135,15 +136,16 @@ public class StudentServiceImpl implements StudentService {
      * @return
      */
     @Override
-    public Result countSignedRecord(Map params) {
+    public Result countSignedRecord(Map params, HttpServletRequest request) {
+        //校验参数 TODO
         //获取学生实例
-        Student stu = (Student) redisRepository.get(String.valueOf(params.get("token")));
+        Student stu = (Student) redisRepository.get(request.getHeader("token"));
         //学生学号
         String stuId = stu.getStuid();
         //课表编号
         Integer schId = params.containsKey("schId") ?
             Integer.parseInt(params.get("schId").toString()) : null;
-        List list = recordMapper.countSignedRecord(stuId,schId,SEMESTER);
+        List list = recordMapper.countSignedRecord(stuId, schId, SEMESTER);
         return ResultUtils.success(list);
     }
 
@@ -174,7 +176,7 @@ public class StudentServiceImpl implements StudentService {
             String stuId = label.split("/")[1];
             //插入签到结果
             //查询是否已签到
-            if (recordMapper.selectStatusByStuidAndSchidAndWeekofsemester(stuId, schid, weekofsemester,SEMESTER) == null) {
+            if (recordMapper.selectStatusByStuidAndSchidAndWeekofsemester(stuId, schid, weekofsemester, SEMESTER) == null) {
                 //进行签到
                 //比较签到时间
                 long time = schedule.getStarttime().toSecondOfDay() - signedTime.toSecondOfDay();
@@ -222,18 +224,4 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    /**
-     * 学生登陆方法
-     *
-     * @param stuid    学生学号
-     * @param password 密码
-     * @return
-     */
-    @Override
-    public String login(String stuid, String password) {
-        if (studentMapper.getPasswordByStuid(stuid).equals(password)) {
-            return redisRepository.add(stuid);
-        }
-        return null;
-    }
 }

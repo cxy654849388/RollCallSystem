@@ -27,7 +27,6 @@ import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 
 import imgUrl from '@/assets/default.png'
-console.log(imgUrl)
 
 export default {
 

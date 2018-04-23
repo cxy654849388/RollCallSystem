@@ -50,16 +50,25 @@
         </where>
     </select>
     <select id="countSignedRecord" resultType="map">
-        select
-        Status as status,
-        count(0) as number
-        from tbl_record
-        where StuID = #{stuid}
+        SELECT
+        count(CASE Status
+        WHEN '正常'
+        THEN '正常' END) AS normal,
+        count(CASE Status
+        WHEN '缺课'
+        THEN '缺课' END) AS absence,
+        count(CASE Status
+        WHEN '迟到'
+        THEN '迟到' END) AS late,
+        count(CASE Status
+        WHEN '请假'
+        THEN '请假' END) AS 'leave',
+        count(*)               AS count
+        FROM tbl_record
+        WHERE StuID = #{stuid}
         and Semester = #{semester}
-        <if test="schid != null">
-            and SchID = #{schid}
-        </if>
-        group by Status
+        and SchID = #{schid}
+        GROUP BY SchID
     </select>
     <select id="selectStatusByStuidAndSchidAndWeekofsemester" resultMap="BaseResultMap">
         select
@@ -87,6 +96,41 @@
           where SchID = #{schid,jdbcType=INTEGER}
           and WeekOfSemester = #{weekofsemester,jdbcType=CHAR}
         )
+    </select>
+    <select id="getSignedRecords" resultType="map">
+        SELECT
+          t_r.StuID  AS stuid,
+          StuName    AS stuname,
+          SignedTime AS signedtime,
+          Status     AS status
+        FROM tbl_record t_r
+          LEFT JOIN tbl_student t_s ON t_r.StuID = t_s.StuID
+        WHERE SchID = #{schid}
+              AND WeekOfSemester = #{week};
+    </select>
+    <select id="countSignedRecords" resultType="map">
+        SELECT
+          t_r.StuID              AS stuid,
+          StuName                AS stuname,
+          count(CASE Status
+                WHEN '正常'
+                  THEN '正常' END) AS normal,
+          count(CASE Status
+                WHEN '缺课'
+                  THEN '缺课' END) AS absence,
+          count(CASE Status
+                WHEN '迟到'
+                  THEN '迟到' END) AS late,
+          count(CASE Status
+                WHEN '请假'
+                  THEN '请假' END) AS 'leave',
+          count(*)               AS count
+        FROM tbl_record t_r
+          LEFT JOIN tbl_schedule t_s ON t_r.SchID = t_s.SchID
+          LEFT JOIN tbl_teach t_t ON t_t.TeachID = t_s.TeachID
+          LEFT JOIN tbl_student t_stu ON t_stu.StuID = t_r.StuID
+        WHERE t_t.TeachID = #{teachid}
+        GROUP BY t_r.StuID
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from tbl_record

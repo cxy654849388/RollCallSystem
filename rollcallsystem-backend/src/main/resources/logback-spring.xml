@@ -37,7 +37,7 @@
     <!-- 控制台输出，非开发环境不做输出 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <charset>UTF-8</charset>
+            <!--<charset>UTF-8</charset>-->
             <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
         </encoder>
     </appender>

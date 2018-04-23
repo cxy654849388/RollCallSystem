@@ -1,17 +1,22 @@
 package com.chm.service;
 
+import com.chm.vo.Result;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+
 /**
  * @Author: caihongming
  * @Created: 2018/4/11
  */
 public interface TeacherService {
 
-    /**
-     * 教师登录方法
-     *
-     * @param teaid    教师工号
-     * @param password 密码
-     * @return
-     */
-    String login(String teaid, String password);
+    Result getTeach(HttpServletRequest request);
+
+    Result getRecords(Map params,HttpServletRequest request);
+
+    Result getSignedRecords(Map params);
+
+    Result countSignedRecords(Map params);
+
 }

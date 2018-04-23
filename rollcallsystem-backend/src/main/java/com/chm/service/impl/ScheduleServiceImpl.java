@@ -15,13 +15,13 @@ import java.time.temporal.ChronoField;
 public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
-    ScheduleMapper scheduleMapper;
+    private ScheduleMapper scheduleMapper;
 
     /**
      * 学期开始周数
      */
     @Value("${STARTWEEK}")
-    Integer STARTWEEK;
+    private Integer STARTWEEK;
 
 
     @Override

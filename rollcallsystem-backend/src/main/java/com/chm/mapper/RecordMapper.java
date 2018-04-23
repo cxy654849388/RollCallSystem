@@ -32,8 +32,8 @@ public interface RecordMapper {
                            @Param("semester") String semester);
 
     List countSignedRecord(@Param("stuid") String stuId,
-                          @Param("schid") Integer schId,
-                          @Param("semester") String semester);
+                           @Param("schid") Integer schId,
+                           @Param("semester") String semester);
 
     /**
      * 根据学号和任课编码查询签到状态
@@ -71,4 +71,8 @@ public interface RecordMapper {
                         @Param("weekofsemester") String weekofsemester,
                         @Param("semester") String semester);
 
+    List getSignedRecords(@Param("schid") Integer schid,
+                          @Param("week") String weekofsemester);
+
+    List countSignedRecords(@Param("teachid") Integer teachid);
 }

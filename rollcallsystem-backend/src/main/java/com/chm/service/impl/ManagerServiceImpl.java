@@ -38,13 +38,6 @@ public class ManagerServiceImpl implements ManagerService {
     @Autowired
     private RedisRepository redisRepository;
 
-    @Override
-    public String login(String account, String password) {
-        if (managerMapper.getPasswordByAccount(account).equals(password)) {
-            return redisRepository.add(account);
-        }
-        return null;
-    }
 
     /**
      * 添加学生人脸

@@ -3,6 +3,7 @@ package com.chm.service;
 import com.chm.domain.Student;
 import com.chm.vo.Result;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ public interface StudentService {
      * @param params
      * @return
      */
-    Result selectRecord(Map params);
+    Result selectRecord(Map params,HttpServletRequest request);
 
     /**
      * 统计学生学期签到情况
@@ -24,7 +25,7 @@ public interface StudentService {
      * @param params
      * @return
      */
-    Result countSignedRecord(Map params);
+    Result countSignedRecord(Map params, HttpServletRequest request);
 
     /**
      * 学生签到方法
@@ -35,14 +36,5 @@ public interface StudentService {
      * @return 签到学生的实例
      */
     Student signed(String image, Integer schid, LocalTime signedTime);
-
-    /**
-     * 学生登录方法
-     *
-     * @param stuid    学生学号
-     * @param password 密码
-     * @return
-     */
-    String login(String stuid, String password);
 
 }

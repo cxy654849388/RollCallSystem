@@ -1,8 +1,13 @@
 package com.chm.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.chm.annotations.Authorization;
+import com.chm.service.TeacherService;
+import com.chm.vo.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * 教师控制器
@@ -14,4 +19,54 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/teacher")
 @CrossOrigin
 public class TeacherController {
+
+    @Autowired
+    private TeacherService teacherService;
+
+    /**
+     * 获取教师任课表
+     *
+     * @return
+     */
+    @Authorization
+    @PostMapping("/getTeach")
+    public Result getTeach(HttpServletRequest request) {
+        //获取课表
+        return teacherService.getTeach(request);
+    }
+
+    /**
+     * 获取课堂列表
+     *
+     * @return
+     */
+    @Authorization
+    @PostMapping("/getRecords")
+    public Result getRecords(@RequestBody Map params, HttpServletRequest request) {
+        //获取课堂列表
+        return teacherService.getRecords(params, request);
+    }
+
+    /**
+     * 查询课堂签到记录
+     * @return
+     */
+    @Authorization
+    @PostMapping("/getSignedRecords")
+    public Result getSignedRecords(@RequestBody Map params){
+        //获取签到记录
+        return teacherService.getSignedRecords(params);
+    }
+
+    /**
+     * 统计学生签到情况
+     * @return
+     */
+    @Authorization
+    @PostMapping("/countSignedRecords")
+    public Result countSignedRecords(@RequestBody Map params){
+        //统计学生签到情况
+        return teacherService.countSignedRecords(params);
+    }
+
 }

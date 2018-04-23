@@ -15,6 +15,7 @@ import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,9 +34,6 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @Autowired
-    RedisRepository redisRepository;
-
     /**
      * 获取学生签到记录
      *
@@ -43,11 +41,9 @@ public class StudentController {
      */
     @Authorization
     @PostMapping("/getSignedRecords")
-    public Result getSignedRecords() {
-        //获取参数
-        Map params = JSON.parseObject(AuthorizationInterceptor.getBody()).getInnerMap();
+    public Result getSignedRecords(@RequestBody Map params, HttpServletRequest request) {
         //查询结果
-        return studentService.selectRecord(params);
+        return studentService.selectRecord(params, request);
     }
 
     /**
@@ -57,11 +53,9 @@ public class StudentController {
      */
     @Authorization
     @PostMapping("/getCountSignedRecords")
-    public Result getCountSignedRecords() {
-        //获取参数
-        Map params = JSON.parseObject(AuthorizationInterceptor.getBody()).getInnerMap();
+    public Result getCountSignedRecords(@RequestBody Map params, HttpServletRequest request) {
         //查询结果
-        return studentService.countSignedRecord(params);
+        return studentService.countSignedRecord(params, request);
     }
 
 }

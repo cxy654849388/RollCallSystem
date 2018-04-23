@@ -3,6 +3,7 @@ import {
   getToken, setToken, removeToken, getName, setName,
   removeName, getRole, setRole, removeRole
 } from '@/utils/auth'
+import {Message, MessageBox} from 'element-ui'
 
 const user = {
   state: {
@@ -29,14 +30,16 @@ const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         login(username, userInfo.password).then(response => {
-          const data = response.data
-          setToken(data.token)
-          setName(data.name)
-          setRole(data.userType)
-          commit('SET_TOKEN', data.token)
-          commit('SET_NAME', data.name)
-          commit('SET_ROLE', data.userType)
-          resolve()
+          if(response.data.resultCode === 0){
+            const data = response.data.result
+            setToken(data.token)
+            setName(data.name)
+            setRole(data.userType)
+            commit('SET_TOKEN', data.token)
+            commit('SET_NAME', data.name)
+            commit('SET_ROLE', data.userType)
+            resolve()
+          }
         }).catch(error => {
           reject(error)
         })
