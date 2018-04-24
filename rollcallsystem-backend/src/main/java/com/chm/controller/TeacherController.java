@@ -49,24 +49,51 @@ public class TeacherController {
 
     /**
      * 查询课堂签到记录
+     *
      * @return
      */
     @Authorization
     @PostMapping("/getSignedRecords")
-    public Result getSignedRecords(@RequestBody Map params){
+    public Result getSignedRecords(@RequestBody Map params) {
         //获取签到记录
         return teacherService.getSignedRecords(params);
     }
 
     /**
      * 统计学生签到情况
+     *
      * @return
      */
     @Authorization
     @PostMapping("/countSignedRecords")
-    public Result countSignedRecords(@RequestBody Map params){
+    public Result countSignedRecords(@RequestBody Map params) {
         //统计学生签到情况
         return teacherService.countSignedRecords(params);
+    }
+
+    /**
+     * 获取学生签到详情
+     *
+     * @return
+     */
+    @Authorization
+    @PostMapping("/getStudentSignedDetails")
+    public Result getStudentSignedDetails(@RequestBody Map params) {
+        //统计学生签到情况
+        return teacherService.getStudentSignedDetails(params);
+    }
+
+    /**
+     * 签到状态修改
+     *
+     * @param params
+     * @return
+     */
+    @Authorization
+    @PostMapping("/signedStatusChange")
+    public Result signedStatusChange(@RequestBody Map params) {
+        //签到状态修改
+        return teacherService.signedStatusChange(params);
     }
 
 }

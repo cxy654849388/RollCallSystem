@@ -12,7 +12,7 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(config => {
   if (store.getters.token) {
-    config.headers.Authorization = store.getters.token
+    config.headers.token = store.getters.token
   }
   return config
 }, error => {

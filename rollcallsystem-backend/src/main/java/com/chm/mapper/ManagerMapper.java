@@ -15,5 +15,11 @@ public interface ManagerMapper {
 
     int updateByPrimaryKey(Manager record);
 
+    /**
+     * 获取管理员密码
+     *
+     * @param account 管理员账号
+     * @return
+     */
     String getPasswordByAccount(String account);
 }

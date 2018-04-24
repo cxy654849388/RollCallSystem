@@ -58,4 +58,16 @@ public class StudentController {
         return studentService.countSignedRecord(params, request);
     }
 
+    /**
+     * 获取学生选课
+     *
+     * @return
+     */
+    @Authorization
+    @PostMapping("/getSelectCourse")
+    public Result getSelectCourse(HttpServletRequest request) {
+        //查询结果
+        return studentService.getSelectCourse(request);
+    }
+
 }

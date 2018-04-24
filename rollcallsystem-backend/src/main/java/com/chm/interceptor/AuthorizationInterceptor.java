@@ -32,10 +32,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private RedisRepository redisRepository;
-    /**
-     * 拥有存储参数
-     */
-    private static String body;
+
 
     @Override
     public boolean preHandle(HttpServletRequest request,
@@ -50,15 +47,15 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         if (method.getAnnotation(Authorization.class) == null) {
             return true;
         }
-        String user_token = request.getHeader("Authorization");
+        String userToken = request.getHeader("token");
         if (redisRepository == null) {
             //解决service为null无法注入问题
             BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
             redisRepository = (RedisRepository) factory.getBean("redisRepository");
         }
         //查询token是否存在
-        if (redisRepository.get(user_token) != null) {
-            redisRepository.update(user_token);
+        if (redisRepository.get(userToken) != null) {
+            redisRepository.update(userToken);
             return true;
         }
         //验证token失败，并且方法注明了Authorization，返回401错误
@@ -66,7 +63,4 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         return false;
     }
 
-   public static String getBody(){
-        return body;
-   }
 }

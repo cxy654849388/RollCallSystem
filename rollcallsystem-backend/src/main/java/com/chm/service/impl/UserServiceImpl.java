@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result logout(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader("token");
         redisRepository.delete(token);
         return ResultUtils.success();
     }

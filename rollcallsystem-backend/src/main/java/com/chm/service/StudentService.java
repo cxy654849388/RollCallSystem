@@ -17,7 +17,7 @@ public interface StudentService {
      * @param params
      * @return
      */
-    Result selectRecord(Map params,HttpServletRequest request);
+    Result selectRecord(Map params, HttpServletRequest request);
 
     /**
      * 统计学生学期签到情况
@@ -26,6 +26,14 @@ public interface StudentService {
      * @return
      */
     Result countSignedRecord(Map params, HttpServletRequest request);
+
+    /**
+     * 获取学生选课
+     *
+     * @param request
+     * @return
+     */
+    Result getSelectCourse(HttpServletRequest request);
 
     /**
      * 学生签到方法

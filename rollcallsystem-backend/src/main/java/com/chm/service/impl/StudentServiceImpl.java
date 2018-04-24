@@ -37,9 +37,6 @@ public class StudentServiceImpl implements StudentService {
     private FaceDataTrainStatusMapper faceDataTrainStatusMapper;
 
     @Autowired
-    private TeachMapper teachMapper;
-
-    @Autowired
     private ClassMapper classMapper;
 
     @Autowired
@@ -47,6 +44,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private ScheduleMapper scheduleMapper;
+
+    @Autowired
+    private SelectCourseMapper selectCourseMapper;
 
     @Autowired
     private FaceRecognition faceRecognition;
@@ -109,8 +109,8 @@ public class StudentServiceImpl implements StudentService {
         //学生学号
         String stuId = stu.getStuid();
         //课表编号
-        Integer schId = params.containsKey("schId") ?
-            Integer.parseInt(params.get("schId").toString()) : null;
+        Integer teachId = params.containsKey("teachid") ?
+            Integer.parseInt(params.get("teachid").toString()) : null;
         //开始周数
         Integer startWeek = params.containsKey("startWeek") ?
             Integer.parseInt(String.valueOf(params.get("startWeek"))) : 1;
@@ -119,7 +119,7 @@ public class StudentServiceImpl implements StudentService {
             Integer.parseInt(String.valueOf(params.get("endWeek"))) : null;
         Page<?> p = PageHelper.startPage(page, size);
         //返回查询结果
-        List list = recordMapper.findSignedRecords(stuId, schId, startWeek, endWeek, SEMESTER);
+        List list = recordMapper.findSignedRecords(stuId, teachId, startWeek, endWeek, SEMESTER);
         Map m = Maps.newHashMap();
         m.put("totalPages", p.getPages());
         m.put("page", p.getPageNum());
@@ -137,7 +137,8 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public Result countSignedRecord(Map params, HttpServletRequest request) {
-        //校验参数 TODO
+        //校验参数
+        Validate.countSignedRecord(params);
         //获取学生实例
         Student stu = (Student) redisRepository.get(request.getHeader("token"));
         //学生学号
@@ -146,6 +147,24 @@ public class StudentServiceImpl implements StudentService {
         Integer schId = params.containsKey("schId") ?
             Integer.parseInt(params.get("schId").toString()) : null;
         List list = recordMapper.countSignedRecord(stuId, schId, SEMESTER);
+        return ResultUtils.success(list);
+    }
+
+    /**
+     * 获取学生选课
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    public Result getSelectCourse(HttpServletRequest request) {
+        //获取学生实例
+        Student stu = (Student) redisRepository.get(request.getHeader("token"));
+        //学生学号
+        String stuId = stu.getStuid();
+        //查询结果
+        List list = selectCourseMapper.getSelectCourse(stuId);
+        //返回结果
         return ResultUtils.success(list);
     }
 

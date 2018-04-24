@@ -36,7 +36,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Result getTeach(HttpServletRequest request) {
         //获取token
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader("token");
         //获取教师实例
         Teacher teacher = (Teacher) redisRepository.get(token);
         //查询结果
@@ -51,7 +51,7 @@ public class TeacherServiceImpl implements TeacherService {
         //任课id
         Integer teachid = params.containsKey("params") ? Integer.parseInt(String.valueOf(params.get("teachid"))) : null;
         //获取token
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader("token");
         //获取教师实例
         Teacher teacher = (Teacher) redisRepository.get(token);
         //教师id
@@ -88,5 +88,34 @@ public class TeacherServiceImpl implements TeacherService {
         return ResultUtils.success(list);
     }
 
+    @Override
+    public Result getStudentSignedDetails(Map params) {
+        //校验参数
+        Validate.getStudentSignedDetails(params);
+        //获取学生学号
+        String stuId = String.valueOf(params.get("stuid"));
+        //获取任课id
+        Integer teachId = Integer.parseInt(String.valueOf(params.get("teachid")));
+        //查询结果
+        List list = recordMapper.getStudentSignedDetails(teachId, stuId);
+        //返回结果
+        return ResultUtils.success(list);
+    }
+
+    @Override
+    public Result signedStatusChange(Map params) {
+        //校验参数
+        Validate.signedStatusChange(params);
+        //获取学生学号
+        String stuId = String.valueOf(params.get("stuid"));
+        //获取周数
+        String week = String.valueOf(params.get("weekofsemester"));
+        //获取状态
+        String status = String.valueOf(params.get("status"));
+        //修改签到状态
+        recordMapper.signedStatusChange(stuId, week,status);
+        //返回结果
+        return ResultUtils.success();
+    }
 
 }

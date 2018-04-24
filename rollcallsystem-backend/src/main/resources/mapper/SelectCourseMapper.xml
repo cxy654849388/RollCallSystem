@@ -16,6 +16,16 @@
         from tbl_select_course
         where SelectID = #{selectid,jdbcType=INTEGER}
     </select>
+    <select id="getSelectCourse" resultType="map">
+        SELECT
+          t_t.TeachID AS teachid,
+          CouName AS couname
+        FROM tbl_select_course t_s_c
+          LEFT JOIN tbl_student t_s ON t_s_c.StuID = t_s.StuID
+          LEFT JOIN tbl_teach t_t ON t_s_c.TeachID = t_t.TeachID
+          LEFT JOIN tbl_course t_c ON t_t.CouID = t_c.CouID
+        WHERE t_s.StuID = #{stuid}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from tbl_select_course
         where SelectID = #{selectid,jdbcType=INTEGER}

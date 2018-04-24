@@ -2,6 +2,7 @@ package com.chm.service.impl;
 
 
 import com.chm.exception.ParamExecption;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Map;
 
@@ -48,4 +49,23 @@ public class Validate {
             throw new ParamExecption("ERROR_PARAM_IS_NULL");
         }
     }
+
+    public static void countSignedRecord(Map params) {
+        if (!params.containsKey("stuid") || !params.containsKey("schid")) {
+            throw new ParamExecption("ERROR_PARAM_IS_NULL");
+        }
+    }
+
+    public static void getStudentSignedDetails(Map params) {
+        if (!params.containsKey("teachid") || !params.containsKey("stuid")) {
+            throw new ParamExecption("ERROR_PARAM_IS_NULL");
+        }
+    }
+
+    public static void signedStatusChange(Map params) {
+        if (!params.containsKey("schid") || !params.containsKey("weekofsemester") || !params.containsKey("status")) {
+            throw new ParamExecption("ERROR_PARAM_IS_NULL");
+        }
+    }
+
 }

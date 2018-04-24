@@ -32,8 +32,8 @@
         LEFT JOIN tbl_schedule schedule ON teach.TeachID = schedule.TeachID
         LEFT JOIN tbl_record record ON record.SchID = schedule.SchID
         <where>
-            <if test="schid != null">
-                record.SchId = #{schid}
+            <if test="teachid != null">
+                teach.TeachID = #{teachid}
             </if>
             <if test="stuid != null">
                 AND record.StuID = #{stuid}
@@ -51,24 +51,26 @@
     </select>
     <select id="countSignedRecord" resultType="map">
         SELECT
-        count(CASE Status
-        WHEN '正常'
-        THEN '正常' END) AS normal,
-        count(CASE Status
-        WHEN '缺课'
-        THEN '缺课' END) AS absence,
-        count(CASE Status
-        WHEN '迟到'
-        THEN '迟到' END) AS late,
-        count(CASE Status
-        WHEN '请假'
-        THEN '请假' END) AS 'leave',
-        count(*)               AS count
-        FROM tbl_record
+          count(CASE Status
+                WHEN '正常'
+                  THEN '正常' END) AS normal,
+          count(CASE Status
+                WHEN '缺课'
+                  THEN '缺课' END) AS absence,
+          count(CASE Status
+                WHEN '迟到'
+                  THEN '迟到' END) AS late,
+          count(CASE Status
+                WHEN '请假'
+                  THEN '请假' END) AS 'leave',
+          count(*)               AS count
+        FROM tbl_record t_r
+          LEFT JOIN tbl_schedule t_s ON t_r.SchID = t_s.SchID
+          LEFT JOIN tbl_teach t_t ON t_s.TeachID = t_t.TeachID
         WHERE StuID = #{stuid}
-        and Semester = #{semester}
-        and SchID = #{schid}
-        GROUP BY SchID
+              AND Semester = #{semester}
+              AND t_t.TeachID = #{teachid}
+        GROUP BY t_t.TeachID
     </select>
     <select id="selectStatusByStuidAndSchidAndWeekofsemester" resultMap="BaseResultMap">
         select
@@ -131,6 +133,18 @@
           LEFT JOIN tbl_student t_stu ON t_stu.StuID = t_r.StuID
         WHERE t_t.TeachID = #{teachid}
         GROUP BY t_r.StuID
+    </select>
+    <select id="getStudentSignedDetails" resultType="map">
+        SELECT
+          t_r.WeekOfSemester AS week,
+          DayOfWeek      AS day,
+          SignedTime     AS signedtime,
+          Status         AS status
+        FROM tbl_record t_r
+          LEFT JOIN tbl_schedule t_s ON t_s.SchID = t_r.SchID
+          LEFT JOIN tbl_teach t_t ON t_s.TeachID = t_t.TeachID
+        WHERE t_t.TeachID = #{teachid}
+              AND t_r.StuID = #{stuid}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from tbl_record
@@ -228,5 +242,11 @@
         SignedTime = #{signedtime,jdbcType=TIME},
         Semester = #{semester,jdbcType=VARCHAR}
         where RecID = #{recid,jdbcType=INTEGER}
+    </update>
+    <update id="signedStatusChange">
+        update tbl_record
+        set Status = #{status,jdbcType=CHAR},
+        where WeekOfSemester = #{week}
+        AND StuID = #{stuid}
     </update>
 </mapper>
