@@ -16,7 +16,7 @@ public class Index {
     private String hello = "Hello GODads";
 
 
-    @RequestMapping(value = {"/helloJsp","/"},method = RequestMethod.GET)
+    @RequestMapping(value = {"/login","/"},method = RequestMethod.GET)
     public String helloJsp(Map<String, Object> map) {
         System.out.println("HelloController.helloJsp().hello=" + hello);
         map.put("hello", hello);

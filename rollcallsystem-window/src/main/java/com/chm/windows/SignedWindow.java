@@ -189,26 +189,4 @@ public class SignedWindow {
         grabber.stop();
     }
 
-    public static void main(String[] args) throws InterruptedException, IOException {
-        SignedWindow window = SignedWindow.getInstance(9);
-        window.setSchid("19");
-        Map map = new HashMap();
-        map.put("window", window);
-        //开始任务
-        QuartzUtils.startJobs();
-        //添加每日0时获取课表
-        QuartzUtils.addJob("startTask", ScheduleTask.class, "0 0 0 * * ? *", map);
-        //立即获取课表
-        QuartzUtils.addJob("now", ScheduleTask.class, QuartzUtils.getCron(LocalTime.now().plusSeconds(5)), map);
-
-        try {
-            window.init();
-            window.start();
-        } catch (FrameGrabber.Exception e) {
-            System.exit(1);
-        }
-
-    }
-
-
 }

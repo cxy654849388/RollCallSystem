@@ -47,22 +47,23 @@ public class UserServiceImpl implements UserService {
         if (RoleTypeUtils.discriminant(userId).equals(RoleTypeUtils.STUDENT)) {
             if (studentMapper.getPasswordByStuid(userId).equals(password)) {
                 token = redisRepository.add(userId);
+                name = ((Student) redisRepository.get(token)).getStuname();
+                userType = "student";
             }
-            name = ((Student) redisRepository.get(token)).getStuname();
-            userType = "student";
+
 
         } else if (RoleTypeUtils.discriminant(userId).equals(RoleTypeUtils.TEACHER)) {
             if (teacherMapper.getPasswordByTeaid(userId).equals(password)) {
                 token = redisRepository.add(userId);
+                name = ((Teacher) redisRepository.get(token)).getTeaname();
+                userType = "teacher";
             }
-            name = ((Teacher) redisRepository.get(token)).getTeaname();
-            userType = "teacher";
         } else if (RoleTypeUtils.discriminant(userId).equals(RoleTypeUtils.MANAGER)) {
             if (managerMapper.getPasswordByAccount(userId).equals(password)) {
                 token = redisRepository.add(userId);
+                name = "管理员";
+                userType = "manager";
             }
-            name = "管理员";
-            userType = "manager";
         }
         //登陆成功
         Map map = Maps.newHashMap();
