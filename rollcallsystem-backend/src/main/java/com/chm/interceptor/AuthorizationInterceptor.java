@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.chm.annotations.Authorization;
 import com.chm.consist.RedisRepository;
 import com.chm.domain.Student;
+import com.chm.exception.ParamExecption;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -59,8 +60,8 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         //验证token失败，并且方法注明了Authorization，返回401错误
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return false;
+        throw new ParamExecption("token无效");
+
     }
 
 }

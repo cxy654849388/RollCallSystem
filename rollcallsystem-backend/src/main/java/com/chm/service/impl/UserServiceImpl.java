@@ -50,8 +50,6 @@ public class UserServiceImpl implements UserService {
                 name = ((Student) redisRepository.get(token)).getStuname();
                 userType = "student";
             }
-
-
         } else if (RoleTypeUtils.discriminant(userId).equals(RoleTypeUtils.TEACHER)) {
             if (teacherMapper.getPasswordByTeaid(userId).equals(password)) {
                 token = redisRepository.add(userId);

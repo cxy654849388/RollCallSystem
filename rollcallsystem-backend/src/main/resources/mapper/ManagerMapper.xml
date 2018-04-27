@@ -14,9 +14,9 @@
         from tbl_manager
         where Account = #{account,jdbcType=VARCHAR}
     </select>
-    <select id="getPasswordByAccount">
+    <select id="getPasswordByAccount" resultType="java.lang.String">
         select Password
-        from tbl_student
+        from tbl_manager
          where Account = #{account,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">

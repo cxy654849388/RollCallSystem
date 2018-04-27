@@ -20,6 +20,9 @@ public class ExceptionHandle {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public Result handle(Exception e) {
+        if ("token无效".equals(e.getMessage())) {
+            return ResultUtils.error("1A", e.getMessage());
+        }
         return ResultUtils.error("-1", e.getMessage());
     }
 }
