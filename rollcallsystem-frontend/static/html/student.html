@@ -9,19 +9,19 @@
     <script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../js/jquery.cookie.js"></script>
     <script src="../layui/layui.js" charset="utf-8" type="text/javascript"></script>
-    <script type="text/javascript" src="../utils/layui.js"></script>
     <script type="text/javascript" src="../layui/lay/modules/layer.js"></script>
-
+    <script type="text/javascript" src="../utils/layui.js"></script>
+    <script type="text/javascript" src="../layui/lay/modules/form.js"></script>
+    <script type="text/javascript" src="../layui/lay/modules/laypage.js"></script>
     <script type="text/javascript" src="../global/global.js"></script>
     <script type="text/javascript" src="../api/user.js"></script>
     <script type="text/javascript" src="../api/student.js"></script>
-
 </head>
 <body class="layui-layout-body">
 <div class="layui-container" id="student">
     <div class="layui-layout layui-layout-admin">
         <div class="layui-header">
-            <div class="layui-logo">layui 后台布局</div>
+            <div class="layui-logo">点名签到系统</div>
             <!-- 头部区域（可配合layui已有的水平导航） -->
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item">
@@ -40,9 +40,9 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">选课列表</label>
                     <div class="layui-input-block">
-                        <select v-model="teachid">
+                        <select lay-filter="teachid">
                             <option>--请选择--</option>
-                            <option v-for="selectCourse in selectCourseList" :value="selectCourse.teachid"
+                            <option v-for="selectCourse in selectCourseList" v-bind:value="selectCourse.teachid"
                                     v-text="selectCourse.couname"/>
                         </select>
                     </div>
@@ -51,23 +51,53 @@
                     <label class="layui-form-label">开始周数</label>
                     <div class="layui-input-block">
                         <input type="text" name="startWeek" autocomplete="off" class="layui-input"
-                               lay-verify="startWeek" placeholder="开始周数">
+                               lay-verify="startWeek" placeholder="开始周数" v-model="startWeek">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">结束周数</label>
                     <div class="layui-input-block">
                         <input type="text" name="endWeek" autocomplete="off" class="layui-input" lay-verify="endWeek"
-                               placeholder="结束周数">
+                               placeholder="结束周数" v-model="endWeek">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="find">查询</button>
+                        <button class="layui-btn" lay-submit lay-filter="find" v-on:click="getSignedRecords()">查询
+                        </button>
                     </div>
                 </div>
             </form>
-            <span>asjidaasddssjsdasddioajsi</span>
+            <table class="layui-table">
+                <colgroup>
+                    <col width="150">
+                    <col width="200">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>课程名称</th>
+                    <th>周数</th>
+                    <th>星期</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>签到时间</th>
+                    <th>状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="signedRecord in signedRecordList">
+                    <td>{{signedRecord.CouName}}</td>
+                    <td>{{signedRecord.WeekOfSemester}}</td>
+                    <td>{{signedRecord.DayOfWeek}}</td>
+                    <td>{{signedRecord.StartTime}}</td>
+                    <td>{{signedRecord.EndTime}}</td>
+                    <td>{{signedRecord.SignedTime}}</td>
+                    <td>{{signedRecord.Status}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div id="page" class="layui-elem-field layui-field-title"></div>
         </div>
         <div class="layui-footer layui-bg-black">
             © 2018 CHM Email:654849388@qq.com
@@ -79,6 +109,8 @@
         $('.layui-body').height($(window).width() - $('.layui-header').height() - $('.layui-footer').height())
         $('.layui-footer').width($('.layui-body').width() - 30)
         $('.layui-footer').css('left', $('.layui-header').offset().left)
+        $('#page').css('top', $(window).height() - $('.layui-footer').height())
+
     })
 
 
@@ -86,26 +118,80 @@
         el: '#student',
         data: {
             name: $.cookie('name'),
-            selectCourseList: [],
-            teachid: '',
-            startWeek: '',
-            endWeek: '',
-            page: '',
-            size: ''
+            selectCourseList: null,
+            signedRecordList: null,
+            teachid: null,
+            startWeek: null,
+            endWeek: null,
+            page: null,
+            size: null,
+            totalElements: 0,
+            totalPages: 0
         },
         methods: {
             logout: function () {
                 layer.confirm('确认要退出登录？', {icon: 3, title: '退出登录'}, function () {
                     logout();
                 });
-
             },
+            getSignedRecords: function () {
+                result = getSignedRecords(this.teachid, this.startWeek, this.endWeek, null, null);
+                this.signedRecordList = result.data
+                this.page = result.page
+                this.size = result.size
+                this.totalElements = result.totalElements
+                this.totalPages = result.totalPages
+                paged()
+            },
+
+
         },
         mounted() {
             this.selectCourseList = getSelectCourse()
-            console.log(this.selectCourseList)
         }
     });
+    layui.use(['form'], function () {
+        var form = layui.form;
+        form.on('submit(find)', function () {
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+        form.on('select(teachid)', function (data) {
+            student.$data.teachid = data.value
+        });
+        form.verify({
+            startWeek: [
+                /^\s*$|[\d]/
+                , '只能输入数字'
+            ], endWeek: [
+                /^\s*$|[\d]/
+                , '只能输入数字'
+            ]
+        });
+
+    });
+
+    function paged() {
+        layui.use(['laypage'], function () {
+            var laypage = layui.laypage
+            laypage({
+                elem: 'page'
+                , count: student.$data.totalElements//数据总数
+                , pages: student.$data.totalPages //总页数
+                , limit: student.$data.size //单页大小
+                , curr: student.$data.page
+                , jump: function (obj, first) {
+                    student.$data.totalElements = obj.count
+                    student.$data.totalPages = obj.pages
+                    student.$data.size = obj.limit
+                    student.$data.page = obj.curr
+                    if (!first) { //点击跳页触发函数自身，并传递当前页：obj.curr  ajax 再次请求
+                        student.$methods.getSignedRecords()
+                    }
+                }
+            });
+        });
+    }
+
 
 </script>
 </body>

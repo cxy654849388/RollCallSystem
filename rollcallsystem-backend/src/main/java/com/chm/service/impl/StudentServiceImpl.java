@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoField;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -98,25 +97,25 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public Result selectRecord(Map params, HttpServletRequest request) {
-
         //获取参数
         //页码
         Integer page = Integer.parseInt(params.get("page") == null ? "1" : params.get("page").toString());
         //单页大小
-        Integer size = Integer.parseInt(params.get("size") == null ? "10" : params.get("size").toString());
+        Integer size = Integer.parseInt(params.get("size") == null ? "20" : params.get("size").toString());
         //获取学生实例
         Student stu = (Student) redisRepository.get(request.getHeader("token"));
         //学生学号
         String stuId = stu.getStuid();
         //课表编号
-        Integer teachId = params.containsKey("teachid") ?
-            Integer.parseInt(params.get("teachid").toString()) : null;
+        Integer teachId = params.get("teachid") == null ? null :
+            Integer.parseInt(params.get("teachid").toString());
+
         //开始周数
-        Integer startWeek = params.containsKey("startWeek") ?
-            Integer.parseInt(String.valueOf(params.get("startWeek"))) : 1;
+        Integer startWeek = params.get("startWeek") == null ? null :
+            Integer.parseInt(params.get("startWeek").toString());
         //结束周数
-        Integer endWeek = params.containsKey("endWeek") ?
-            Integer.parseInt(String.valueOf(params.get("endWeek"))) : null;
+        Integer endWeek = params.get("endWeek") == null ? null :
+            Integer.parseInt(params.get("endWeek").toString());
         Page<?> p = PageHelper.startPage(page, size);
         //返回查询结果
         List list = recordMapper.findSignedRecords(stuId, teachId, startWeek, endWeek, SEMESTER);
