@@ -1,0 +1,7 @@
+var layer, element, form
+
+layui.use(['layer', 'element', 'form'], function () {
+    layer = layui.layer;
+    element = layui.element;
+    form = layui.form;
+});

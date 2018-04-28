@@ -2,22 +2,20 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="referrer" content="no-referrer-when-downgrade"/>
     <title>点名签到系统</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="../layui/css/layui.css" media="all">
     <script type="text/javascript" src="../js/vue.js"></script>
     <script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="../js/jquery.cookie.js"></script>
+    <script src="../layui/layui.js" charset="utf-8" type="text/javascript"></script>
+    <script type="text/javascript" src="../utils/layui.js"></script>
+    <script type="text/javascript" src="../layui/lay/modules/layer.js"></script>
+
     <script type="text/javascript" src="../global/global.js"></script>
     <script type="text/javascript" src="../api/user.js"></script>
-    <script src="../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../api/student.js"></script>
+
 </head>
 <body class="layui-layout-body">
 <div class="layui-container" id="student">
@@ -65,7 +63,7 @@
                 </div>
                 <div class="layui-inline">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="find" >查询</button>
+                        <button class="layui-btn" lay-submit lay-filter="find">查询</button>
                     </div>
                 </div>
             </form>
@@ -82,22 +80,7 @@
         $('.layui-footer').width($('.layui-body').width() - 30)
         $('.layui-footer').css('left', $('.layui-header').offset().left)
     })
-    var layer, element, form
-    layui.use(['layer', 'element', 'form'], function () {
-        layer = layui.layer
-            , element = layui.element
-            , form = layui.form;
-        form.verify({
-            startWeek: [
-                /^\s*$|[\d]/
-                , '只能输入数字'
-            ], endWeek: [
-                /^\s*$|[\d]/
-                , '只能输入数字'
-            ]
-        });
 
-    });
 
     var student = new Vue({
         el: '#student',
@@ -118,7 +101,7 @@
 
             },
         },
-        created: function () {
+        mounted() {
             this.selectCourseList = getSelectCourse()
             console.log(this.selectCourseList)
         }

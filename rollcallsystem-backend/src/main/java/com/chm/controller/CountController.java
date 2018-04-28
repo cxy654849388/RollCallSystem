@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @Author: caihongming
  * @Created: 2018/4/9
  */
-@RestController
 @CrossOrigin
+@RestController
 public class CountController {
 
     @Autowired

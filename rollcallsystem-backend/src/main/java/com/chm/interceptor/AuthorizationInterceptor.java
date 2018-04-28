@@ -60,8 +60,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         //验证token失败，并且方法注明了Authorization，返回401错误
-        throw new ParamExecption("token无效");
-
+        throw new ParamExecption("登录超时");
     }
 
 }

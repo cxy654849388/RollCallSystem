@@ -26,9 +26,9 @@ import java.util.Map;
  * @Author: Hongming Cai
  * @Created: 2018/4/18 23:38
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/student")
-@CrossOrigin
 public class StudentController {
 
     @Autowired

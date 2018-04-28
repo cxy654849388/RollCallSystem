@@ -10,9 +10,9 @@ function login(account, password) {
         }),
         success: function (data) {
             if (data.resultCode === 0) {
-                $.cookie('name', data.result.name);
-                $.cookie('token', data.result.token);
-                $.cookie('userType', data.result.userType);
+                $.cookie('name', data.result.name, {expires: 7, path: "/",});
+                $.cookie('token', data.result.token, {expires: 7, path: "/",});
+                $.cookie('userType', data.result.userType, {expires: 7, path: "/",});
                 window.location.href = 'static/html/' + data.result.userType + '.html'
             } else {
                 layer.msg(data.errorInfo)
@@ -41,9 +41,5 @@ function logout() {
         cache: false,
         async: false
     });
-    $.removeCookie('name');
-    $.removeCookie('token');
-    $.removeCookie('userType');
-
-
+    self.location = '../../index.html';//转跳其它网页
 }

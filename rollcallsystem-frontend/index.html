@@ -7,6 +7,8 @@
     <script type="text/javascript" src="static/js/vue.js"></script>
     <script type="text/javascript" src="static/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="static/js/jquery.cookie.js"></script>
+    <script src="static/layui/layui.js" charset="utf-8" type="text/javascript"></script>
+    <script type="text/javascript" src="static/utils/layui.js"></script>
     <script type="text/javascript" src="static/global/global.js"></script>
     <script type="text/javascript" src="static/api/user.js"></script>
     <script type="text/javascript" src="static/utils/validate.js"></script>
@@ -189,12 +191,7 @@
         </div>
     </div>
 </div>
-<script src="static/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript">
-    var layer
-    layui.use(['layer'], function () {
-        layer = layui.layer
-    });
     var app = new Vue({
             el: '#app',
             data() {
@@ -226,8 +223,7 @@
                     }
                 }
             }
-        })
-    ;
+        });
 
 </script>
 </body>
