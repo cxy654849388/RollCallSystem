@@ -50,12 +50,6 @@ public class Validate {
         }
     }
 
-    public static void countSignedRecord(Map params) {
-        if (!params.containsKey("stuid") || !params.containsKey("schid")) {
-            throw new ParamExecption("ERROR_PARAM_IS_NULL");
-        }
-    }
-
     public static void getStudentSignedDetails(Map params) {
         if (!params.containsKey("teachid") || !params.containsKey("stuid")) {
             throw new ParamExecption("ERROR_PARAM_IS_NULL");

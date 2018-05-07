@@ -2,6 +2,7 @@ package com.chm.consist.impl;
 
 import com.baidu.aip.face.AipFace;
 import com.chm.consist.FaceRecognition;
+import com.google.common.collect.Maps;
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Hongming Cai
@@ -49,13 +52,13 @@ public class FaceRecognitionImpl implements FaceRecognition {
         String userId = lable.split("/")[1];
 
         //替换人脸图片
-        client.updateUser(userId, userId, groupId, Base64.decodeBase64((String) images.get(0)), null);
+        client.updateUser((String) images.get(0), "BASE64", groupId, userId, null);
         //新增人脸所在组
         List<String> list = new ArrayList<>();
         list.add(groupId);
         //新增人脸图片
         for (int i = 1; i < images.size(); i++) {
-            client.addUser(userId, userId, list, Base64.decodeBase64((String) images.get(i)), null);
+            client.addUser((String) images.get(i), "BASE64", groupId, userId, null);
             try {
                 //暂停1秒,QPS限制 (QPS：百度人脸识别api每秒允许访问量)
                 Thread.sleep(1000);
@@ -72,8 +75,9 @@ public class FaceRecognitionImpl implements FaceRecognition {
      */
     @Override
     public synchronized String recogntion(String image, List groups) {
-
-        JSONObject object = client.identifyUser(groups, Base64.decodeBase64(image), null);
+        HashMap<String, String> options = Maps.newHashMap();
+        options.put("group_id_list", String.join(",", groups));
+        JSONObject object = client.search(image, "BASE64", options);
 
         try {
             Thread.sleep(500);
@@ -89,11 +93,11 @@ public class FaceRecognitionImpl implements FaceRecognition {
 
             JSONArray scores = object.getJSONArray("result").getJSONObject(0).getJSONArray("scores");
 
-            System.out.println(groupid);
+        /*    System.out.println(groupid);
 
             System.out.println(uid);
 
-            System.out.println(scores.getDouble(0));
+            System.out.println(scores.getDouble(0));*/
 
             if (scores.getDouble(0) > THRESHOLD) {
                 return new StringBuffer().append(groupid).append("/").append(uid).toString();
@@ -107,6 +111,17 @@ public class FaceRecognitionImpl implements FaceRecognition {
 
     @Override
     public void save(String filePath) {
+    }
+
+    @Override
+    public boolean faceDetect(String image) {
+        JSONObject object = client.detect(image, "BASE64", null);
+        if (object.keySet().contains("face_num")) {
+            return object.getInt("face_num") == 1;
+        } else {
+            return false;
+        }
+
     }
 
     public static void main(String[] args) throws IOException {

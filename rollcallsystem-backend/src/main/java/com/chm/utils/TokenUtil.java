@@ -53,8 +53,4 @@ public class TokenUtil {
         return false;
     }
 
-    public static void main(String[] args) {
-        System.out.println(createToken("1407020401"));
-    }
-
 }

@@ -40,7 +40,7 @@ public interface RecordMapper {
      * @param semester
      * @return
      */
-    List countSignedRecord(@Param("stuid") String stuId,
+    Map countSignedRecord(@Param("stuid") String stuId,
                            @Param("teachid") Integer teachId,
                            @Param("semester") String semester);
 

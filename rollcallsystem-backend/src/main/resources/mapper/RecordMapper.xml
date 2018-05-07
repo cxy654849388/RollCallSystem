@@ -48,29 +48,32 @@
                 AND record.semester = #{semester}
             </if>
         </where>
+        ORDER BY record.RecID DESC
     </select>
     <select id="countSignedRecord" resultType="map">
         SELECT
-          count(CASE Status
-                WHEN '正常'
-                  THEN '正常' END) AS normal,
-          count(CASE Status
-                WHEN '缺课'
-                  THEN '缺课' END) AS absence,
-          count(CASE Status
-                WHEN '迟到'
-                  THEN '迟到' END) AS late,
-          count(CASE Status
-                WHEN '请假'
-                  THEN '请假' END) AS 'leave',
-          count(*)               AS count
+        count(CASE Status
+        WHEN '正常'
+        THEN '正常' END) AS normal,
+        count(CASE Status
+        WHEN '缺课'
+        THEN '缺课' END) AS absence,
+        count(CASE Status
+        WHEN '迟到'
+        THEN '迟到' END) AS late,
+        count(CASE Status
+        WHEN '请假'
+        THEN '请假' END) AS 'leave',
+        count(*) AS count
         FROM tbl_record t_r
-          LEFT JOIN tbl_schedule t_s ON t_r.SchID = t_s.SchID
-          LEFT JOIN tbl_teach t_t ON t_s.TeachID = t_t.TeachID
+        LEFT JOIN tbl_schedule t_s ON t_r.SchID = t_s.SchID
+        LEFT JOIN tbl_teach t_t ON t_s.TeachID = t_t.TeachID
         WHERE StuID = #{stuid}
-              AND Semester = #{semester}
-              AND t_t.TeachID = #{teachid}
-        GROUP BY t_t.TeachID
+        AND Semester = #{semester}
+        <if test="teachid != null">
+            AND t_t.TeachID = #{teachid}
+            GROUP BY t_t.TeachID
+        </if>
     </select>
     <select id="selectStatusByStuidAndSchidAndWeekofsemester" resultMap="BaseResultMap">
         select

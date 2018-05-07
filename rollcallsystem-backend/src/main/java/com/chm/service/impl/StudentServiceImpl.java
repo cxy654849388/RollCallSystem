@@ -136,17 +136,15 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public Result countSignedRecord(Map params, HttpServletRequest request) {
-        //校验参数
-        Validate.countSignedRecord(params);
         //获取学生实例
         Student stu = (Student) redisRepository.get(request.getHeader("token"));
         //学生学号
         String stuId = stu.getStuid();
         //课表编号
-        Integer schId = params.containsKey("schId") ?
-            Integer.parseInt(params.get("schId").toString()) : null;
-        List list = recordMapper.countSignedRecord(stuId, schId, SEMESTER);
-        return ResultUtils.success(list);
+        Integer teachId = params.get("teachid") == null ? null :
+            Integer.parseInt(params.get("teachid").toString());
+        Map map = recordMapper.countSignedRecord(stuId, teachId, SEMESTER);
+        return ResultUtils.success(map);
     }
 
     /**

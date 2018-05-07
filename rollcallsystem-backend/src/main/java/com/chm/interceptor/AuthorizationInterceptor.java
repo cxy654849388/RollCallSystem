@@ -55,7 +55,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             redisRepository = (RedisRepository) factory.getBean("redisRepository");
         }
         //查询token是否存在
-        if (redisRepository.get(userToken) != null) {
+        if (userToken != null && redisRepository.get(userToken) != null) {
             redisRepository.update(userToken);
             return true;
         }
