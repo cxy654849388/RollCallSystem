@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 获取课表类
+ *
  * @Author: Hongming Cai
  * @Created: 2018/4/7 17:53
  */
@@ -38,7 +40,7 @@ public class ScheduleTask implements Job {
             return;
         }
         //根据返回结果设置课表id
-        if (json != null && json.containsKey("schedule")) {
+        if (json != null && json.get("schedule") != null) {
             window.setSchid(String.valueOf(json.getJSONObject("schedule").getInteger("schid")));
             //下课时间
             LocalTime localTime = LocalTime.parse(json.getJSONObject("schedule").getString("endtime"));

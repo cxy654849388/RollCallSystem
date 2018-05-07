@@ -44,7 +44,7 @@ public class SignedThread implements Runnable {
         try {
             setJson(JSON.parseObject(HttpUtils.httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null)));
         } catch (IOException e) {
-            System.out.println(1);
+            System.out.println(1)   ;
         }
     }
 }
