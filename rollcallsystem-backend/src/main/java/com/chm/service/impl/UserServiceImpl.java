@@ -45,19 +45,19 @@ public class UserServiceImpl implements UserService {
         String userType = null;
         //判别登陆类型
         if (RoleTypeUtils.discriminant(userId).equals(RoleTypeUtils.STUDENT)) {
-            if (studentMapper.getPasswordByStuid(userId).equals(password)) {
+            if (password.equals(studentMapper.getPasswordByStuid(userId))) {
                 token = redisRepository.add(userId);
                 name = ((Student) redisRepository.get(token)).getStuname();
                 userType = "student";
             }
         } else if (RoleTypeUtils.discriminant(userId).equals(RoleTypeUtils.TEACHER)) {
-            if (teacherMapper.getPasswordByTeaid(userId).equals(password)) {
+            if (password.equals(teacherMapper.getPasswordByTeaid(userId))) {
                 token = redisRepository.add(userId);
                 name = ((Teacher) redisRepository.get(token)).getTeaname();
                 userType = "teacher";
             }
         } else if (RoleTypeUtils.discriminant(userId).equals(RoleTypeUtils.MANAGER)) {
-            if (managerMapper.getPasswordByAccount(userId).equals(password)) {
+            if (password.equals(managerMapper.getPasswordByAccount(userId))) {
                 token = redisRepository.add(userId);
                 name = "管理员";
                 userType = "manager";

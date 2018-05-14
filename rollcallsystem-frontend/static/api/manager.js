@@ -1,8 +1,8 @@
-function getSelectCourse() {
+function getSchoolInfo() {
     var result = null;
     $.ajax({
-        url: projectName + "/student/getSelectCourse",
-        type: 'post',
+        url: projectName + "/manager/getSchoolInfo",
+        type: 'get',
         async: false,
         processData: false,
         cache: false,
@@ -19,18 +19,18 @@ function getSelectCourse() {
     return result;
 }
 
-function getSignedRecords(teachid, startWeek, endWeek, page, size) {
+function getStudentList(acaid, proid, classid, page, size) {
     var result = null;
     $.ajax({
-        url: projectName + "/student/getSignedRecords",
+        url: projectName + "/manager/getStudentList",
         type: 'post',
         async: false,
         processData: false,
         cache: false,
         data: JSON.stringify({
-            'teachid': teachid,
-            'startWeek': startWeek,
-            'endWeek': endWeek,
+            'acaid': acaid,
+            'proid': proid,
+            'classid': classid,
             'page': page,
             'size': size,
         }),
@@ -47,25 +47,47 @@ function getSignedRecords(teachid, startWeek, endWeek, page, size) {
     return result;
 }
 
-function getCountSignedRecord(teachid) {
+function getFace(stuId) {
     var result = null;
     $.ajax({
-        url: projectName + "/student/getCountSignedRecord",
+        url: projectName + "/manager/getFace",
         type: 'post',
         async: false,
         processData: false,
-        cache: false,
-        data: JSON.stringify({
-            'teachid': teachid
+        cache: false, data: JSON.stringify({
+            'stuId': stuId
         }),
         success: function (data) {
-            console.log(data)
             supSuccess(data, layer)
             if (data.resultCode === 0) {
                 result = data.result
             } else {
                 layer.msg(data.errorInfo)
                 return
+            }
+        }
+    });
+    return result;
+}
+
+function addFace(stuId, image) {
+    var result = null;
+    $.ajax({
+        url: projectName + "/manager/addFace",
+        type: 'post',
+        async: false,
+        processData: false,
+        cache: false, data: JSON.stringify({
+            'stuId': stuId,
+            'faceData': image
+        }),
+        success: function (data) {
+            supSuccess(data, layer)
+            if (data.resultCode === 0) {
+                result = true
+            } else {
+                layer.msg(data.errorInfo)
+                result = false
             }
         }
     });

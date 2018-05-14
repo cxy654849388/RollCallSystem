@@ -23,26 +23,39 @@
         from tbl_student
         where StuID = #{stuid,jdbcType=VARCHAR}
     </select>
-    <select id="getStudentList" resultType="map">
+    <select id="getStudentList" resultType="map" parameterType="map">
         SELECT
-        StuID,
+        DISTINCT
+        t_s.StuID,
         StuName,
         StuSex
-        FROM tbl_student t_s
-        LEFT JOIN tbl_class t_c ON t_s.ClassID = t_c.ClassID
-        LEFT JOIN tbl_professional t_p ON t_c.ProID = t_p.ProID
-        LEFT JOIN tbl_academy t_a ON t_p.AcaID = t_a.AcaID
-        <where>
-            <if test="acaid != null">
-                t_a.AcaID = #{acaid}
+        <if test="params.get('teaid') == null">
+            FROM tbl_student t_s
+            LEFT JOIN tbl_class t_c ON t_s.ClassID = t_c.ClassID
+            LEFT JOIN tbl_professional t_p ON t_c.ProID = t_p.ProID
+            LEFT JOIN tbl_academy t_a ON t_p.AcaID = t_a.AcaID
+            <where>
+                <if test="params.get('acaid') != null">
+                    t_a.AcaID = #{params.acaid}
+                </if>
+                <if test="params.get('proid') != null">
+                    AND t_p.ProID = #{params.proid}
+                </if>
+                <if test="params.get('classid') != null">
+                    AND t_c.ClassID = #{params.classid}
+                </if>
+            </where>
+        </if>
+        <if test="params.get('teaid') != null">
+            FROM tbl_teach t_t
+            LEFT JOIN tbl_select_course t_s_c ON t_t.TeachID = t_s_c.TeachID
+            LEFT JOIN tbl_student t_s ON t_s_c.StuID = t_s.StuID
+            where t_t.TeaID = #{params.teaid}
+            <if test="params.get('teachid') != null">
+                AND t_t.TeachID = #{params.teachid}
             </if>
-            <if test="proid != null">
-                AND t_p.ProID = #{proid}
-            </if>
-            <if test="classid != null">
-                AND t_c.ClassID = #{classid}
-            </if>
-        </where>
+        </if>
+        ORDER BY t_s.ClassID,t_s.StuID
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tbl_student

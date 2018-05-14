@@ -1,12 +1,341 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
+    <meta name="referrer" content="no-referrer-when-downgrade"/>
+    <title>点名签到系统</title>
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="../layui/css/modules/layer/default/layer.css" media="all"/>
+    <script type="text/javascript" src="../js/vue.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../js/jquery.cookie.js"></script>
+    <script src="../layui/layui.js" charset="utf-8" type="text/javascript"></script>
+    <script type="text/javascript" src="../utils/layui.js"></script>
+    <script type="text/javascript" src="../layui/lay/modules/layer.js"></script>
+    <script type="text/javascript" src="../layui/lay/modules/form.js"></script>
+    <script type="text/javascript" src="../layui/lay/modules/laypage.js"></script>
+    <script type="text/javascript" src="../layui/lay/modules/table.js"></script>
+    <script type="text/javascript" src="../global/global.js"></script>
+    <script type="text/javascript" src="../api/user.js"></script>
+    <script type="text/javascript" src="../api/manager.js"></script>
+    <script type="text/javascript" src="../js/jquery.base64.js"></script>
 </head>
-<body>
-<p>
-    管理员界面
-</p>
+<body class="layui-layout-body">
+<div class="layui-container" id="manager">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo">点名签到系统</div>
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+                    <a href="javascript:;">
+                        <img src="../imgs/manager.jpg" class="layui-nav-img">
+                        {{name}}
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a @click="logout">退出</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+        <div class="layui-body layui-bg-gray">
+            <form class="layui-form">
+                <div class="layui-inline">
+                    <label class="layui-form-label">学院：</label>
+                    <div class="layui-input-block">
+                        <select lay-filter="academyList">
+                            <option>--请选择--</option>
+                            <option v-for="academy in academyList" v-bind:value="academy.acaid"
+                                    v-text="academy.acaname"/>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">专业：</label>
+                    <div class="layui-input-block">
+                        <select lay-filter="professionalList">
+                            <option>--请选择--</option>
+                            <option v-for="professional in professionalList" v-bind:value="professional.proid"
+                                    v-text="professional.proname"/>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">班级：</label>
+                    <div class="layui-input-block">
+                        <select lay-filter="classList">
+                            <option>--请选择--</option>
+                            <option v-for="cla in classList" v-bind:value="cla.classid"
+                                    v-text="cla.classname"/>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <div>
+                <table class="layui-table" id="tableDiv">
+                    <thead>
+                    <tr>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="student in studentList">
+                        <td>{{student.StuID}}</td>
+                        <td>{{student.StuName}}</td>
+                        <td>{{student.StuSex}}</td>
+                        <td>
+                            <button class="layui-btn layui-btn-radius"
+                                    @click="getFaceDataList(student.StuID)">详情
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="page" class="layui-elem-field layui-field-title"></div>
+        </div>
+        <div class="layui-footer layui-bg-black">
+            © 2018 CHM Email:<a href="mailto:654849388@qq.com"
+                                style="color: white">654849388@qq.com</a>
+        </div>
+    </div>
+    <div id="layer-photos-demo" style="display: none">
+        <div class="layui-form-item" style="margin-left: 20px; margin-top: 20px">
+            <button class="layui-btn layui-btn-sm" @click="addFace">
+                <i class="layui-icon">&#xe654;添加人脸</i>
+            </button>
+        </div>
+        <div id="faceList" style="margin-left: 20px;display: flex;flex-wrap: wrap;">
+            <img v-for="faceData in faceDataList" v-bind:src="'data:image/jpg;base64,'+faceData"
+                 style="height: 100px;width: 100px;margin-right: 20px;margin-bottom: 18px;"/>
+        </div>
+    </div>
+    <div id="uploadImage" style="display: none;padding: 30px;width: 80%;height: 80%;
+        position: relative;top: 5%;left: 5%;">
+        <div class="upload-list" style="display: none;">
+            <input type="file" id="image" accept="image/*" multiple="multiple" onchange="filechange(event)">
+        </div>
+        <div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);"
+             id="centre">
+            <button class="layui-btn layui-btn-sm" style="width: 168px;height: 40px;
+            line-height: 40px;font-size: 14px;margin: 0 auto;margin-bottom: 8px;display: block;"
+                    id="faceButton">
+                <i class="layui-icon">&#xe654;添加人脸</i>
+            </button>
+            <br/>
+            <i style="color: #999;text-align: center;">请上传用户正面、无遮挡照片</i>
+        </div>
+
+        <div style="border-top-color: #999;padding: 15px 0;margin: 0 30px;
+            text-align: right;height: 30px;position: absolute; top: 80%;left: 60%">
+            <div>
+                <button class="layui-btn layui-btn-disabled" id="upload">上传图片</button>
+                <button class="layui-btn" id="cancel">取消</button>
+            </div>
+        </div>
+
+        <img src="" width="200px" height="200px" id="img-change" style="position: absolute;
+            display: none;top: 50%;left: 50%;transform: translate(-50%, -50%);
+            border:solid 2px black; padding:2px 2px 2px 2px;">
+
+    </div>
+</div>
+<script type="text/javascript">
+    var index;
+    $(function () {
+        $('.layui-body').height($(window).height() - $('.layui-header').height() - $('.layui-footer').height())
+        $('.layui-footer').width($('.layui-body').width() - 30)
+        $('.layui-footer').css('left', $('.layui-header').offset().left)
+        $('#faceButton').click(function () {
+            $('#image').click()
+        })
+        $('#cancel').click(function () {
+            layer.close(index)
+        })
+        $('#img-change').dblclick(function () {
+            $('#image').click()
+        })
+        $('#upload').click(function () {
+            if (addFace(manager.$data.stuId, manager.$data.image)) {
+                manager.$data.faceDataList = getFace(manager.$data.stuId)
+            }
+            layer.close(index)
+        })
+
+    })
+
+    var filechange = function (event) {
+        var files = event.target.files, file;
+        if (files && files.length > 0) {
+            // 获取目前上传的文件
+            file = files[0];// 文件大小校验的动作
+            if (file.size > 1024 * 65) {
+                layer.msg('<span style="font-size: 20px;">图片大小不能超过 65K!</span>', {offset: 't', area: 'auto'})
+                return false;
+            }
+            // 获取 window 的 URL 工具
+            var URL = window.URL || window.webkitURL;
+            // 通过 file 生成目标 url
+            var imgURL = URL.createObjectURL(file);
+            //用attr将img的src属性改成获得的url
+            $("#img-change").attr("src", imgURL);
+            // 使用下面这句可以在内存中释放对此 url 的伺服，跑了之后那个 URL 就无效了
+            // URL.revokeObjectURL(imgURL);
+            $('#img-change').css("display", 'block')
+            $('#centre').css("display", 'none')
+            $('#upload').removeClass('layui-btn-disabled')
+            layer.msg('<span style="font-size: 20px;">双击图片可更改</span>', {offset: 't', area: 'auto'})
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function (theFile) {
+                base64 = theFile.target.result
+                manager.$data.image = base64.substr(base64.indexOf("base64,") + "base64,".length)
+            }
+        }
+    };
+
+    var manager = new Vue({
+        el: '#manager',
+        data: {
+            name: $.cookie('name'),
+            academyList: null,
+            acaid: null,
+            professionalList: null,
+            proid: null,
+            classList: null,
+            classid: null,
+            studentList: null,
+            page: null,
+            size: null,
+            totalElements: 0,
+            totalPages: 0,
+            faceDataList: null,
+            stuId: null,
+            image: null,
+        },
+        methods: {
+            logout: function () {
+                layer.confirm('确认要退出登录？', {icon: 3, title: '退出登录'}, function () {
+                    logout();
+                })
+            },
+            getStudentList: function () {
+                result = getStudentList(this.acaid, this.proid, this.classid, null, null)
+                this.studentList = result.data
+                this.page = result.page
+                this.size = result.size
+                this.totalElements = result.totalElements
+                this.totalPages = result.totalPages
+                paged()
+            },
+            getFaceDataList: function (stuId) {
+                this.stuId = stuId
+                this.faceDataList = getFace(stuId)
+                layer.open({
+                    type: 1,
+                    title: '人脸信息',
+                    area: ['750px', '500px'],
+                    content: $('#layer-photos-demo'),
+                    offset: 'auto',
+                    anim: 5,
+                    resize: false,
+                });
+            },
+            addFace: function () {
+                index = layer.open({
+                    type: 1,
+                    title: '添加人脸',
+                    area: ['750px', '500px'],
+                    content: $('#uploadImage'),
+                    offset: 'auto',
+                    anim: 5,
+                    resize: false,
+                    scrollbar: false,
+                    end: function () {
+                        $('#img-change').css("display", 'none')
+                        $('#centre').css("display", 'block')
+                        $('#upload').addClass("layui-btn-disabled")
+                        $("#image").val('')
+                    }
+                });
+            }
+        },
+        mounted() {
+            if ($.cookie('userType') !== 'manager') {
+                window.location.href = $.cookie('userType') + '.html'
+            } else {
+                this.academyList = getSchoolInfo()
+                this.getStudentList()
+            }
+        }
+    });
+    layui.use(['form', 'table'], function () {
+        var form = layui.form;
+        form.on('select(academyList)', function (data) {
+            manager.$data.professionalList = null
+            manager.$data.acaid = data.value !== '--请选择--' ? data.value : null
+            $.each(manager.$data.academyList, function (index, value) {
+                if (data.value === value.acaid) {
+                    manager.$data.professionalList = value.professionals
+                    manager.$nextTick(function () {
+                        renderForm()
+                    })
+                    return false
+                }
+            })
+            manager.getStudentList()
+        })
+        form.on('select(professionalList)', function (data) {
+            manager.$data.classList = null
+            manager.$data.proid = data.value !== '--请选择--' ? data.value : null
+            $.each(manager.$data.professionalList, function (index, value) {
+                if (data.value === value.proid) {
+                    manager.$data.classList = value.classes
+                    manager.$nextTick(function () {
+                        renderForm()
+                    })
+                    return false
+                }
+            })
+            manager.getStudentList()
+        })
+        form.on('select(classList)', function (data) {
+            manager.$data.classid = data.value !== '--请选择--' ? data.value : null
+            manager.getStudentList()
+        })
+    })
+
+    function paged() {
+        layui.use(['laypage'], function () {
+            var laypage = layui.laypage
+            laypage.render({
+                elem: 'page'
+                , count: manager.$data.totalElements//数据总数
+                , pages: manager.$data.totalPages //总页数
+                , limit: manager.$data.size //单页大小
+                , curr: manager.$data.page
+                , jump: function (obj, first) {
+                    result = getStudentList(manager.$data.acaid, manager.$data.proid,
+                        manager.$data.classid, obj.curr, manager.$data.size)
+                    manager.$data.studentList = result.data
+                    manager.$data.page = result.page
+                    manager.$data.size = result.size
+                    manager.$data.totalElements = result.totalElements
+                    manager.$data.totalPages = result.totalPages
+                }
+            });
+        });
+    }
+
+    //重新渲染表单
+    function renderForm() {
+        layui.use('form', function () {
+            var form = layui.form
+            form.render();
+        });
+    }
+</script>
 </body>
 </html>

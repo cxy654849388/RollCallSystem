@@ -76,7 +76,7 @@ public class Application extends SpringBootServletInitializer {
 
         System.out.println(recordMapper.counting(20, "5"));
 
-        System.out.println(recordMapper.countSignedRecords(11));
+        //System.out.println(recordMapper.countSignedRecords(11));
 
     }
 }

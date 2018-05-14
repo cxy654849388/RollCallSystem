@@ -39,17 +39,17 @@ public class TestController {
     @GetMapping("test")
     public Result test() {
         Map map = Maps.newHashMap();
-        map.put("countSignedRecords", recordMapper.countSignedRecords(11));
+        //map.put("countSignedRecords", recordMapper.countSignedRecords(11));
         map.put("findSignedRecords", recordMapper.findSignedRecords("1407020401",
             11, null, null, "2016-2017-1"));
         map.put("countSignedRecord", recordMapper.countSignedRecord("1407020401", 11, "2016-2017-1"));
         map.put("getSelectCourse", selectCourseMapper.getSelectCourse("1407020401"));
         map.put("getSchoolInfo", academyMapper.getSchoolInfo());
-        map.put("getStudentList", studentMapper.getStudentList("07", "0702", "14070204"));
+        //map.put("getStudentList", studentMapper.getStudentList("07", "0702", "14070204"));
         map.put("getTeach", teacherMapper.getTeach("0001"));
         map.put("getRecords", teacherMapper.getRecords(11, "0001"));
         map.put("getSignedRecords", recordMapper.getSignedRecords(20, "4"));
-        map.put("getStudentSignedDetails", recordMapper.getStudentSignedDetails(11, "1407020401"));
+        map.put("getStudentSignedDetails", recordMapper.getStudentSignedDetails(11, "1407020401","0001"));
         return ResultUtils.success(map);
     }
 }

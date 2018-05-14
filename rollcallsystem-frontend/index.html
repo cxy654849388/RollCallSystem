@@ -194,38 +194,37 @@
 </div>
 <script type="text/javascript">
     var app = new Vue({
-            el: '#app',
-            data() {
-                return {
-                    user: {
-                        userId: 1407020401,
-                        password: 123456
-                    }
-                }
-            },
-            methods: {
-                login() {
-                    if (this.$options.methods.validateUsername(this.user.userId) && this.$options.methods.validatePass(this.user.password)) {
-                        login(this.user.userId, this.user.password)
-                    }
-                },
-                validateUsername(userId) {
-                    if (!isvalidUsername(userId)) {
-                        layer.msg('请输入合法的用户名(大小写字母数字)')
-                    } else {
-                        return true
-                    }
-                },
-                validatePass(password) {
-                    if (password.length < 6) {
-                        layer.msg('密码不能小于6位')
-                    } else {
-                        return true
-                    }
+        el: '#app',
+        data() {
+            return {
+                user: {
+                    userId: '0001',
+                    password: 123456
                 }
             }
-        });
-
+        },
+        methods: {
+            login() {
+                if (this.$options.methods.validateUsername(this.user.userId) && this.$options.methods.validatePass(this.user.password)) {
+                    login(this.user.userId, this.user.password)
+                }
+            },
+            validateUsername(userId) {
+                if (!isvalidUsername(userId)) {
+                    layer.msg('请输入合法的用户名(大小写字母数字)')
+                } else {
+                    return true
+                }
+            },
+            validatePass(password) {
+                if (password.length < 6) {
+                    layer.msg('密码不能小于6位')
+                } else {
+                    return true
+                }
+            }
+        }
+    });
 </script>
 </body>
 </html>

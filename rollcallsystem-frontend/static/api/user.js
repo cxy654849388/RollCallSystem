@@ -17,17 +17,6 @@ function login(account, password) {
             } else {
                 layer.msg(data.errorInfo)
             }
-        },
-        error: function (textStatus) {
-            console.error(textStatus);
-        },
-        complete: function (XMLHttpRequest, status) {
-            if (status == 'timeout') {
-                xhr.abort();    // 超时后中断请求
-                $.alert("网络超时，请刷新", function () {
-                    location.reload();
-                })
-            }
         }
     });
 }

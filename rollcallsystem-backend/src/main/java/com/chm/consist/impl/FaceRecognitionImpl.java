@@ -110,18 +110,29 @@ public class FaceRecognitionImpl implements FaceRecognition {
     }
 
     @Override
+    public void add(String image, String lable) {
+        //获取人脸组ID
+        String groupId = lable.split("/")[0];
+        //获取用户ID
+        String userId = lable.split("/")[1];
+        //新增人脸所在组
+        List<String> list = new ArrayList<>();
+        list.add(groupId);
+        //新增人脸图片
+        client.addUser(image, "BASE64", groupId, userId, null);
+    }
+
+    @Override
     public void save(String filePath) {
     }
 
     @Override
     public boolean faceDetect(String image) {
         JSONObject object = client.detect(image, "BASE64", null);
-        if (object.keySet().contains("face_num")) {
-            return object.getInt("face_num") == 1;
-        } else {
-            return false;
+        if (object.keySet().contains("result")) {
+            return object.getJSONObject("result").getInt("face_num") == 1;
         }
-
+        return false;
     }
 
     public static void main(String[] args) throws IOException {

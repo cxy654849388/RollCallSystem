@@ -1,6 +1,7 @@
 package com.chm.service;
 
 import com.chm.vo.Result;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -29,6 +30,13 @@ public interface TeacherService {
     Result getRecords(Map params, HttpServletRequest request);
 
     /**
+     * 获取学生列表
+     *
+     * @return
+     */
+    Result getStudentList(Map params, HttpServletRequest request);
+
+    /**
      * 查询课堂签到记录
      *
      * @param params
@@ -42,7 +50,7 @@ public interface TeacherService {
      * @param params
      * @return
      */
-    Result countSignedRecords(Map params);
+    Result countSignedRecords(Map params,HttpServletRequest request);
 
     /**
      * 获取学生签到详情
@@ -50,7 +58,7 @@ public interface TeacherService {
      * @param params
      * @return
      */
-    Result getStudentSignedDetails(Map params);
+    Result getStudentSignedDetails(Map params, HttpServletRequest request);
 
     /**
      * 签到状态修改

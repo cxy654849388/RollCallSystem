@@ -41,8 +41,8 @@ public interface RecordMapper {
      * @return
      */
     Map countSignedRecord(@Param("stuid") String stuId,
-                           @Param("teachid") Integer teachId,
-                           @Param("semester") String semester);
+                          @Param("teachid") Integer teachId,
+                          @Param("semester") String semester);
 
     /**
      * 根据学号和任课编码查询签到状态
@@ -83,7 +83,7 @@ public interface RecordMapper {
     /**
      * 获取课堂签到记录
      *
-     * @param schid          课表编号
+     * @param schid          任课编号
      * @param weekofsemester 周数
      * @return
      */
@@ -91,32 +91,40 @@ public interface RecordMapper {
                           @Param("week") String weekofsemester);
 
     /**
-     * 统计课堂学生签到记录
+     * 统计学生签到记录
      *
-     * @param teachid 选课编号
+     * @param stuId   学生学号
+     * @param teachid 任课编号
+     * @param teaid   教师编号
      * @return
      */
-    List countSignedRecords(@Param("teachid") Integer teachid);
+    Map countSignedRecords(@Param("stuid") String stuId,
+                           @Param("teachid") Integer teachid,
+                           @Param("teaid") String teaid);
 
     /**
-     * 获取某门课某学生签到详情
+     * 获取某学生签到详情
      *
      * @param teachid 任课编号
      * @param stuId   学生学号
+     * @param teaid   教师编号
      * @return
      */
     List getStudentSignedDetails(@Param("teachid") Integer teachid,
-                                 @Param("stuid") String stuId);
+                                 @Param("stuid") String stuId,
+                                 @Param("teaid") String teaid);
 
     /**
      * 改签方法
      *
      * @param stuId  学生学号
+     * @param schId  课表编号
      * @param week   周数
      * @param status 状态
      * @return
      */
     int signedStatusChange(@Param("stuid") String stuId,
+                           @Param("schid") String schId,
                            @Param("week") String week,
                            @Param("status") String status);
 }

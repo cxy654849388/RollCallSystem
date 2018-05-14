@@ -27,4 +27,17 @@ $.ajaxSetup({
     headers: {
         'token': $.cookie('token')
     },
+    timeout: 30000,
+    complete: function (XMLHttpRequest, status) {
+        if (status == 'timeout') {
+            xhr.abort();    // 超时后中断请求
+            layer.msg('网络超时，请刷新', {
+                icon: 2
+            })
+        } else if (status == 'error') {
+            layer.msg('服务器正在更新，请稍后重试', {
+                icon: 2
+            })
+        }
+    }
 });

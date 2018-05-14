@@ -45,19 +45,20 @@ public class Validate {
     }
 
     public static void countSignedRecords(Map params) {
-        if (!params.containsKey("teachid")) {
+        if (!params.containsKey("stuid")) {
             throw new ParamExecption("ERROR_PARAM_IS_NULL");
         }
     }
 
     public static void getStudentSignedDetails(Map params) {
-        if (!params.containsKey("teachid") || !params.containsKey("stuid")) {
+        if (!params.containsKey("stuid")) {
             throw new ParamExecption("ERROR_PARAM_IS_NULL");
         }
     }
 
     public static void signedStatusChange(Map params) {
-        if (!params.containsKey("schid") || !params.containsKey("weekofsemester") || !params.containsKey("status")) {
+        if (!params.containsKey("schid") || !params.containsKey("weekofsemester")
+            || !params.containsKey("status")|| !params.containsKey("stuid") ) {
             throw new ParamExecption("ERROR_PARAM_IS_NULL");
         }
     }

@@ -4,6 +4,7 @@ import com.chm.domain.Student;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface StudentMapper {
     int deleteByPrimaryKey(String stuid);
@@ -32,10 +33,9 @@ public interface StudentMapper {
      * @param acaid   学院编号
      * @param proid   专业编号
      * @param classid 班级编号
+     * @param teachid 任课编号
+     * @param teaid   教师编号
      * @return
      */
-    List getStudentList(@Param("acaid") String acaid,
-                        @Param("proid") String proid,
-                        @Param("classid") String classid);
-
+    List getStudentList(@Param("params") Map params);
 }

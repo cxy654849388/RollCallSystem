@@ -58,6 +58,10 @@ public class ManagerServiceImpl implements ManagerService {
         String faceData = String.valueOf(params.get("faceData"));
         //检测人脸
         if (faceRecognition.faceDetect(faceData)) {
+            //组装标签 lable:groupId/userId
+            StringBuilder stringBuffer = new StringBuilder().append(stuId.substring(0, 8)).append("/").append(stuId);
+            //添加人脸到百度人脸库
+            faceRecognition.add(faceData, stringBuffer.toString());
             //新建人脸实例
             FaceData face = new FaceData();
             face.setStuid(stuId);
@@ -108,18 +112,14 @@ public class ManagerServiceImpl implements ManagerService {
     public Result getStudentList(Map params) {
         //获取参数
         //页码
-        Integer page = Integer.parseInt(params.get("page") == null ? "1" : params.get("page").toString());
+        Integer page = Integer.parseInt(params.get("page") == null ? "1" :
+            params.get("page").toString());
         //单页大小
-        Integer size = Integer.parseInt(params.get("size") == null ? "20" : params.get("size").toString());
-        //学院编号
-        String acaid = params.get("acaid") != null ? String.valueOf(params.get("acaid")) : null;
-        //专业编号
-        String proid = params.get("proid") != null ? String.valueOf(params.get("proid")) : null;
-        //班级编号
-        String classid = params.get("classid") != null ? String.valueOf(params.get("classid")) : null;
+        Integer size = Integer.parseInt(params.get("size") == null ? "20" :
+            params.get("size").toString());
         Page<?> p = PageHelper.startPage(page, size);
         //查询学生集合
-        List list = studentMapper.getStudentList(acaid, proid, classid);
+        List list = studentMapper.getStudentList(params);
         //返回查询结果
         Map m = Maps.newHashMap();
         m.put("totalPages", p.getPages());
@@ -127,7 +127,6 @@ public class ManagerServiceImpl implements ManagerService {
         m.put("totalElements", p.getTotal());
         m.put("size", p.getPageSize());
         m.put("data", list);
-
         //返回结果
         return ResultUtils.success(m);
     }

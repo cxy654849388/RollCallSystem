@@ -28,6 +28,15 @@ public interface FaceRecognition {
     String recogntion(String image, List groups);
 
     /**
+     * 新增人脸方法
+     *
+     * @param image 人脸数据
+     * @param lable 人脸对应的标签
+     * @return
+     */
+    void add(String image, String lable);
+
+    /**
      * 人脸模型存储方法
      *
      * @param filePath 模型存储路径

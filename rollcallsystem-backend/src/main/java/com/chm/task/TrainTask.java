@@ -27,7 +27,6 @@ public class TrainTask implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         //获取最新可训练学生学号
         List<String> stuIdList = faceDataTrainStatusMapper.findStatusNo();
-
         //遍历训练
         for (String stuId : stuIdList) {
             //组装标签 lable:groupId/userId

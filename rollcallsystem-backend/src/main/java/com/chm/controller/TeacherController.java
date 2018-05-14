@@ -48,6 +48,18 @@ public class TeacherController {
     }
 
     /**
+     * 获取学生列表
+     *
+     * @return
+     */
+    @Authorization
+    @PostMapping("/getStudentList")
+    public Result getStudentList(@RequestBody Map params, HttpServletRequest request) {
+        //获取课堂列表
+        return teacherService.getStudentList(params, request);
+    }
+
+    /**
      * 查询课堂签到记录
      *
      * @return
@@ -65,10 +77,10 @@ public class TeacherController {
      * @return
      */
     @Authorization
-    @PostMapping("/countSignedRecords")
-    public Result countSignedRecords(@RequestBody Map params) {
+    @PostMapping("/getCountSignedRecords")
+    public Result getCountSignedRecords(@RequestBody Map params, HttpServletRequest request) {
         //统计学生签到情况
-        return teacherService.countSignedRecords(params);
+        return teacherService.countSignedRecords(params,request);
     }
 
     /**
@@ -78,9 +90,10 @@ public class TeacherController {
      */
     @Authorization
     @PostMapping("/getStudentSignedDetails")
-    public Result getStudentSignedDetails(@RequestBody Map params) {
+    public Result getStudentSignedDetails(@RequestBody Map params,
+                                          HttpServletRequest request) {
         //统计学生签到情况
-        return teacherService.getStudentSignedDetails(params);
+        return teacherService.getStudentSignedDetails(params, request);
     }
 
     /**

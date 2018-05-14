@@ -34,20 +34,22 @@
     <select id="getRecords" resultType="map">
         SELECT
         DISTINCT
+        t_r.SchID          AS schid,
         CouName            AS couname,
         t_r.WeekOfSemester AS week,
         t_s.DayOfWeek      AS day,
         StartTime          AS starttime,
         EndTime            AS endtime
-        FROM tbl_schedule t_s
-        LEFT JOIN tbl_teach t_t ON t_s.TeachID = t_t.TeachID
+        FROM tbl_teach t_t
         LEFT JOIN tbl_course t_c ON t_t.CouID = t_c.CouID
+        LEFT JOIN tbl_schedule t_s ON t_s.TeachID = t_t.TeachID
         LEFT JOIN tbl_record t_r ON t_r.SchID = t_s.SchID
         WHERE <![CDATA[ t_r.WeekOfSemester <> '' ]]>
         AND TeaID = #{teaid}
         <if test="teachid != null">
             AND t_t.TeachID = #{teachid}
         </if>
+        ORDER BY t_r.RecID DESC
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tbl_teacher

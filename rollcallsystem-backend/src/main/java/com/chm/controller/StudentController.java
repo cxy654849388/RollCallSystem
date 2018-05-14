@@ -52,8 +52,8 @@ public class StudentController {
      * @return
      */
     @Authorization
-    @PostMapping("/getCountSignedRecords")
-    public Result getCountSignedRecords(@RequestBody Map params, HttpServletRequest request) {
+    @PostMapping("/getCountSignedRecord")
+    public Result getCountSignedRecord(@RequestBody Map params, HttpServletRequest request) {
         //查询结果
         return studentService.countSignedRecord(params, request);
     }
