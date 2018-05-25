@@ -12,7 +12,6 @@ import com.chm.vo.Result;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Maps;
-import com.mchange.lang.IntegerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -185,8 +184,8 @@ public class TeacherServiceImpl implements TeacherService {
         Validate.signedStatusChange(params);
         //获取学生学号
         String stuId = String.valueOf(params.get("stuid"));
-        //获取课表编号
-        String schid = String.valueOf(params.get("schid"));
+        //获取课表id
+        Integer schid = Integer.parseInt(String.valueOf(params.get("schid")));
         //获取周数
         String week = String.valueOf(params.get("weekofsemester"));
         //获取状态

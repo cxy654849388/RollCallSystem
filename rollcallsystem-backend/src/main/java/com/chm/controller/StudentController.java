@@ -1,23 +1,12 @@
 package com.chm.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.chm.annotations.Authorization;
-import com.chm.consist.RedisRepository;
-import com.chm.domain.Student;
-import com.chm.interceptor.AuthorizationInterceptor;
 import com.chm.service.StudentService;
 import com.chm.vo.Result;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.google.common.collect.Maps;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

@@ -21,6 +21,15 @@ public interface RecordMapper {
     int updateByPrimaryKey(Record record);
 
     /**
+     * 更改学生签到状态为缺课方法
+     *
+     * @param schid 课表编号
+     * @param stuid 学生学号
+     * @return
+     */
+    int absence(Integer schid, String stuid);
+
+    /**
      * 查询学生签到记录
      *
      * @param stuId 学生学号
@@ -124,7 +133,7 @@ public interface RecordMapper {
      * @return
      */
     int signedStatusChange(@Param("stuid") String stuId,
-                           @Param("schid") String schId,
+                           @Param("schid") Integer schId,
                            @Param("week") String week,
                            @Param("status") String status);
 }

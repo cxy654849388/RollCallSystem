@@ -1,6 +1,5 @@
 package com.chm.domain;
 
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 public class Teach {
     private Integer teachid;

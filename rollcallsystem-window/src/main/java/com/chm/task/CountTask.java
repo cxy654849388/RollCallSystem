@@ -2,6 +2,7 @@ package com.chm.task;
 
 import com.chm.utils.HttpUtils;
 import com.chm.utils.QuartzUtils;
+import com.chm.windows.TableWindow;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;

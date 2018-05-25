@@ -56,11 +56,6 @@ public class SignedWindow {
      */
     private OpenCVFrameGrabber grabber;
 
-    /**
-     * 线程池
-     */
-    private ThreadPoolExecutor threadPoolExecutor;
-
     private SignedWindow() {
     }
 
@@ -83,7 +78,7 @@ public class SignedWindow {
         return roomid;
     }
 
-    public String getSchid() {
+    public static String getSchid() {
         return schid;
     }
 
@@ -121,7 +116,7 @@ public class SignedWindow {
         //开始获取摄像头数据
         grabber.start();
         //窗体
-        CanvasFrame frame = new CanvasFrame("Some Title", CanvasFrame.getDefaultGamma() / grabber.getGamma());
+        CanvasFrame frame = new CanvasFrame("Some Title", CanvasFrame.getDefaultGamma()/grabber.getGamma());
         //存储器
         CvMemStorage storage = opencv_core.CvMemStorage.create();
         // 转换器，用于Frame/Mat/IplImage相互转换
@@ -145,8 +140,8 @@ public class SignedWindow {
             for (int i = 0; i < total; i++) {
                 //获取人脸坐标
                 opencv_core.CvRect r = new opencv_core.CvRect(cvGetSeqElem(faces, i));
-                IplImage iplImage = grabbedImage.clone();
-                mat = converter.convertToMat(converter.convert(iplImage));
+                //IplImage iplImage = grabbedImage.clone();
+                mat = converter.convertToMat(converter.convert(grabbedImage));
                 //保存图片
                 Rect rect = new Rect(r);
                 //mat 转 byte[]
@@ -160,7 +155,8 @@ public class SignedWindow {
                 map.put("image", Base64.encodeBase64String(out.toByteArray()));
                 map.put("schid", schid);
                 map.put("signedTime", LocalTime.now().toString());
-                if (!StringUtils.isEmpty(schid)) {
+                if (!StringUtils.isEmpty(schid) && SignedThread.isFlg()) {
+                    SignedThread.setFlg(false);
                     HandlerThreadsPool.execute(new SignedThread(map));
                 }
                 Point point2 = new Point(rect.x(), rect.y() - 10);
@@ -181,10 +177,10 @@ public class SignedWindow {
                 rotatedFrame = converter.convert(mat);
             }
             frame.showImage(rotatedFrame);
-
         }
         frame.dispose();
         grabber.stop();
+        System.exit(1);
     }
 
 }

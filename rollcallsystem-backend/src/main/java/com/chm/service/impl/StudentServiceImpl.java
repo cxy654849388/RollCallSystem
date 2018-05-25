@@ -177,8 +177,9 @@ public class StudentServiceImpl implements StudentService {
     public synchronized Student signed(String image, Integer schid, LocalTime signedTime) {
         //获取课表实例
         Schedule schedule = scheduleMapper.selectByPrimaryKey(schid);
-        if (schedule.getStarttime().toSecondOfDay() - signedTime.toSecondOfDay() > NORMALSTART) {
-            //没到签到时间
+        if (schedule.getStarttime().toSecondOfDay() - signedTime.toSecondOfDay() > NORMALSTART
+            || signedTime.toSecondOfDay() > schedule.getEndtime().toSecondOfDay()) {
+            //没到签到时间||超过课堂时间
             return null;
         }
         //根据任课实例获取课堂所有学生相应的标签
@@ -213,6 +214,8 @@ public class StudentServiceImpl implements StudentService {
                 } else if (time < LATE && schedule.getEndtime().getSecond() > signedTime.getSecond()) {
                     //缺课
                     record.setStatus("缺课");
+                } else {
+                    return null;
                 }
                 //签到时间
                 record.setSignedtime(LocalTime.now());

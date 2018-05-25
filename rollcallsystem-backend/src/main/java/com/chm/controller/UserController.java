@@ -1,22 +1,11 @@
 package com.chm.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.chm.consist.RedisRepository;
-import com.chm.domain.Manager;
-import com.chm.domain.Student;
-import com.chm.domain.Teacher;
-import com.chm.service.ManagerService;
-import com.chm.service.StudentService;
-import com.chm.service.TeacherService;
 import com.chm.service.UserService;
-import com.chm.utils.RoleTypeUtils;
 import com.chm.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

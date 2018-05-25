@@ -1,7 +1,6 @@
 package com.chm.service.impl;
 
 import com.chm.domain.Record;
-import com.chm.mapper.ClassMapper;
 import com.chm.mapper.RecordMapper;
 import com.chm.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,6 @@ public class RecordServiceImpl implements RecordService {
     private RecordMapper recordMapper;
 
     @Autowired
-    private ClassMapper classMapper;
-
-    @Autowired
 
     /**
      * 学期开始周数
@@ -43,7 +39,7 @@ public class RecordServiceImpl implements RecordService {
     public Record getRecord(String stuId, Integer schId) {
         //计算本周为第几周
         String weekofsemester = String.valueOf(LocalDate.now().get(ChronoField.ALIGNED_WEEK_OF_YEAR) - STARTWEEK + 1);
-        return recordMapper.selectStatusByStuidAndSchidAndWeekofsemester(stuId, schId, weekofsemester,SEMESTER);
+        return recordMapper.selectStatusByStuidAndSchidAndWeekofsemester(stuId, schId, weekofsemester, SEMESTER);
     }
 
     @Override
@@ -54,6 +50,14 @@ public class RecordServiceImpl implements RecordService {
         List<String> stuIds = recordMapper.counting(schId, weekofsemester);
         //插入未签到学生记录
         recordMapper.insertNotSigned(stuIds, schId, weekofsemester, SEMESTER);
+    }
+
+    @Override
+    public void absence(String stuid, Integer schid) {
+        //计算本周为第几周
+        String week = String.valueOf(LocalDate.now().get(ChronoField.ALIGNED_WEEK_OF_YEAR) - STARTWEEK + 1);
+        //修改签到状态
+        recordMapper.signedStatusChange(stuid, schid, week, "缺课");
     }
 
 

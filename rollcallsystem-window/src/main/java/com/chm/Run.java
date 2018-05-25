@@ -17,9 +17,9 @@ import java.util.Map;
  */
 public class Run {
     public static void main(String[] args) {
-        SignedWindow window = SignedWindow.getInstance(9);
+        SignedWindow window = SignedWindow.getInstance(16);
         TableWindow tableWindow = TableWindow.getInstance();
-        window.setSchid("19");
+        //window.setSchid("18");
         Map map = new HashMap();
         map.put("window", window);
         //开始任务

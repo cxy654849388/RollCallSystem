@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.chm.utils.HttpUtils;
 import com.chm.utils.QuartzUtils;
 import com.chm.windows.SignedWindow;
+import com.chm.windows.TableWindow;
 import org.quartz.*;
 
 import java.io.IOException;
@@ -39,15 +40,17 @@ public class ScheduleTask implements Job {
             }
             return;
         }
+        window.setSchid(null);
+        TableWindow.clear();
         //根据返回结果设置课表id
-        if (json != null && json.get("schedule") != null) {
-            window.setSchid(String.valueOf(json.getJSONObject("schedule").getInteger("schid")));
+        if (json != null && json.getInteger("resultCode").intValue() == 0) {
+            window.setSchid(String.valueOf(json.getJSONObject("result").getInteger("schid")));
             //下课时间
-            LocalTime localTime = LocalTime.parse(json.getJSONObject("schedule").getString("endtime"));
+            LocalTime localTime = LocalTime.parse(json.getJSONObject("result").getString("endtime"));
             //添加任务
             QuartzUtils.addJob(localTime.toString(), ScheduleTask.class, QuartzUtils.getCron(localTime), (Map) dataMap.get("parameterList"));
             Map m = new HashMap();
-            m.put("schid", String.valueOf(json.getJSONObject("schedule").getInteger("schid")));
+            m.put("schid", String.valueOf(json.getJSONObject("result").getInteger("schid")));
             QuartzUtils.addJob("counting", CountTask.class, QuartzUtils.getCron(localTime), m);
         }
         //移除任务

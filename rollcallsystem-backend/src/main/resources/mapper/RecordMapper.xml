@@ -153,6 +153,7 @@
         <if test="teachid != null">
             AND t_t.TeachID = #{teachid}
         </if>
+        ORDER BY t_r.RecID DESC
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from tbl_record

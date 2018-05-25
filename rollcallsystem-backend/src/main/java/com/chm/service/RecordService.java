@@ -10,4 +10,6 @@ public interface RecordService {
     Record getRecord(String stuId, Integer schId);
 
     void counting(Integer schId);
+
+    void absence(String stuid, Integer schid);
 }

@@ -1,16 +1,16 @@
 package com.chm.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.chm.domain.Student;
 import com.chm.service.RecordService;
 import com.chm.service.StudentService;
+import com.chm.utils.ResultUtils;
+import com.chm.vo.Result;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -39,20 +39,32 @@ public class SignedController {
      * @return
      */
     @PostMapping(value = "/signed")
-    public JSONObject signed(String image, Integer schid, String signedTime) {
+    public Result signed(String image, Integer schid, String signedTime) {
         //检测人脸为哪位学生并进行签到
         Student student = studentService.signed(image, schid, LocalTime.parse(signedTime));
+        //组成返回参数
+        Map result = Maps.newHashMap();
 
-        JSONObject json = new JSONObject();
-
-        Map map = new HashMap();
         //组成返回格式
         if (student != null) {
-            json.put("student", student);
-            json.put("record", recordService.getRecord(student.getStuid(), schid));
+            result.put("student", student);
+            result.put("record", recordService.getRecord(student.getStuid(), schid));
         }
-        System.out.println("resu:" + json.toString());
+        System.out.println("result:" + result);
         //返回结果
-        return json;
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 更改学生签到状态为缺课方法
+     *
+     * @param schid 课表编号
+     * @param stuid 学生学号
+     * @return
+     */
+    @PostMapping(value = "/absence")
+    public Result absence(Integer schid, String stuid) {
+        recordService.absence(stuid, schid);
+        return ResultUtils.success();
     }
 }

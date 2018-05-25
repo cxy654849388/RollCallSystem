@@ -1,10 +1,7 @@
 package com.chm.interceptor;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.chm.annotations.Authorization;
 import com.chm.consist.RedisRepository;
-import com.chm.domain.Student;
 import com.chm.exception.ParamExecption;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +11,8 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Enumeration;
-import java.util.Map;
 
 /**
  * 自定义拦截器,拦截@Authorization注解的请求是否有权限

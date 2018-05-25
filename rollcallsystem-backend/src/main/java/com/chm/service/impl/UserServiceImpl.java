@@ -1,6 +1,5 @@
 package com.chm.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.chm.consist.RedisRepository;
 import com.chm.domain.Student;
 import com.chm.domain.Teacher;
@@ -35,6 +34,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RedisRepository redisRepository;
 
+    /**
+     * 用户登录
+     *
+     * @param params
+     * @return
+     */
     @Override
     public Result login(Map params) {
         Validate.login(params);
@@ -75,6 +80,12 @@ public class UserServiceImpl implements UserService {
         return ResultUtils.error("", "账号或密码错误");
     }
 
+    /**
+     * 用户退出
+     *
+     * @param request
+     * @return
+     */
     @Override
     public Result logout(HttpServletRequest request) {
         String token = request.getHeader("token");

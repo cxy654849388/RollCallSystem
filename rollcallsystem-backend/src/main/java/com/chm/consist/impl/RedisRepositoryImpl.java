@@ -1,7 +1,5 @@
 package com.chm.consist.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.chm.consist.RedisRepository;
 import com.chm.domain.Manager;
 import com.chm.domain.Student;

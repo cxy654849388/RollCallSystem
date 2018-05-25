@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.chm.task.JSONTask;
 import com.chm.utils.HttpUtils;
 import com.chm.utils.QuartzUtils;
+import com.chm.windows.TableWindow;
 
+import javax.swing.text.TabableView;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.Map;
@@ -18,10 +20,20 @@ public class SignedThread implements Runnable {
 
     private static JSONObject json = new JSONObject();
 
+    private static boolean flg = true;
+
     private Map map;
 
     public static JSONObject getJson() {
         return json;
+    }
+
+    public static boolean isFlg() {
+        return flg;
+    }
+
+    public static void setFlg(boolean flg) {
+        SignedThread.flg = flg;
     }
 
     public static void setJson(JSONObject json) {
@@ -42,9 +54,23 @@ public class SignedThread implements Runnable {
     @Override
     public synchronized void run() {
         try {
-            setJson(JSON.parseObject(HttpUtils.httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null)));
+            JSONObject result = JSON.parseObject(HttpUtils.
+                httpPost("http://127.0.0.1:8080/RollCallSystem/signed", map, null));
+            setJson(result.getJSONObject("result"));
+            if (SignedThread.getJson().containsKey("student")) {
+                String stuId = json.getJSONObject("student").getString("stuid");
+                String stuName = json.getJSONObject("student").getString("stuname");
+                String sex = json.getJSONObject("student").getString("stusex");
+                String signedTime = json.getJSONObject("record").getString("signedtime")
+                    .substring(0, 8);
+                String status = json.getJSONObject("record").getString("status");
+                TableWindow.addRow(stuId, stuName, sex, signedTime, status);
+            }
+
         } catch (IOException e) {
-            System.out.println(1)   ;
+            System.out.println(1);
+        } finally {
+            SignedThread.setFlg(true);
         }
     }
 }

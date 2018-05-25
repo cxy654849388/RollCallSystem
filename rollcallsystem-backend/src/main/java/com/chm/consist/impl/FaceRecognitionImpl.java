@@ -4,7 +4,6 @@ import com.baidu.aip.face.AipFace;
 import com.chm.consist.FaceRecognition;
 import com.google.common.collect.Maps;
 import org.apache.commons.codec.binary.Base64;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author: Hongming Cai
@@ -85,21 +83,21 @@ public class FaceRecognitionImpl implements FaceRecognition {
             e.printStackTrace();
         }
 
-        if (object.keySet().contains("result")) {
+        if ("SUCCESS".equals(object.getString("error_msg"))) {
 
-            String groupid = object.getJSONArray("result").getJSONObject(0).getString("group_id");
+            String groupid = object.getJSONObject("result").
+                getJSONArray("user_list").getJSONObject(0).
+                getString("group_id");
 
-            String uid = object.getJSONArray("result").getJSONObject(0).getString("uid");
+            String uid = object.getJSONObject("result").
+                getJSONArray("user_list").getJSONObject(0).
+                getString("user_id");
 
-            JSONArray scores = object.getJSONArray("result").getJSONObject(0).getJSONArray("scores");
+            Double score = object.getJSONObject("result").
+                getJSONArray("user_list").getJSONObject(0).
+                getDouble("score");
 
-        /*    System.out.println(groupid);
-
-            System.out.println(uid);
-
-            System.out.println(scores.getDouble(0));*/
-
-            if (scores.getDouble(0) > THRESHOLD) {
+            if (score > THRESHOLD) {
                 return new StringBuffer().append(groupid).append("/").append(uid).toString();
             } else {
                 return null;
@@ -143,15 +141,16 @@ public class FaceRecognitionImpl implements FaceRecognition {
         FaceRecognition faceRecognition = new FaceRecognitionImpl();
 
 
-        InputStream in = new FileInputStream("C:\\Users\\caihongming\\Desktop\\img\\s1\\1.jpg");
+        InputStream in = new FileInputStream("C:\\Users\\MTC\\Desktop\\10.jpg");
         byte[] data = new byte[in.available()];
         in.read(data);
         in.close();
         // 对字节数组Base64编码
         List<String> groups = new ArrayList<>();
-        groups.add("14070101");
-        groups.add("14070102");
-        groups.add("14070103");
+        groups.add("14070201");
+        groups.add("14070202");
+        groups.add("14070203");
+        groups.add("14070204");
 
         System.out.println(faceRecognition.recogntion(Base64.encodeBase64String(data), groups));
     }

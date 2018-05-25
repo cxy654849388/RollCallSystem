@@ -90,10 +90,10 @@ public class QuartzUtils {
             }
             // 触发器
             CronTrigger trigger = TriggerBuilder
-                    .newTrigger()
-                    .withIdentity(triggerName, triggerGroupName)
-                    .withSchedule(CronScheduleBuilder.cronSchedule(time))
-                    .build();
+                .newTrigger()
+                .withIdentity(triggerName, triggerGroupName)
+                .withSchedule(CronScheduleBuilder.cronSchedule(time))
+                .build();
             sched.scheduleJob(jobDetail, trigger);
             if (!sched.isShutdown()) {
                 // 启动
@@ -158,10 +158,10 @@ public class QuartzUtils {
             if (!oldTime.equalsIgnoreCase(time)) {
                 //重新构建trigger
                 trigger = trigger.getTriggerBuilder()
-                        .withIdentity(triggerKey)
-                        .withSchedule(scheduleBuilder)
-                        .withSchedule(CronScheduleBuilder.cronSchedule(time))
-                        .build();
+                    .withIdentity(triggerKey)
+                    .withSchedule(scheduleBuilder)
+                    .withSchedule(CronScheduleBuilder.cronSchedule(time))
+                    .build();
                 //按新的trigger重新设置job执行
                 sched.rescheduleJob(triggerKey, trigger);
             }
