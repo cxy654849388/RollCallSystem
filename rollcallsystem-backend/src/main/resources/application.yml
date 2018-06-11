@@ -86,7 +86,7 @@ LATE: 20 #迟到(上课后5分钟至上课后20分钟)
 STARTWEEK: 10 #今年的第几周
 
 #默生人阈值
-THRESHOLD: 75.0
+THRESHOLD: 90.0
 
 #当前学期
 SEMESTER: 2016-2017-1

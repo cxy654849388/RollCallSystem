@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="referrer" content="no-referrer-when-downgrade"/>
+    <title>点名签到系统</title>
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="../layui/css/modules/layer/default/layer.css" media="all"/>
+    <script type="text/javascript" src="../js/vue.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../js/jquery.cookie.js"></script>
+    <script src="../layui/layui.js" charset="utf-8" type="text/javascript"></script>
+    <script type="text/javascript" src="../utils/layui.js"></script>
+    <script type="text/javascript" src="../layui/lay/modules/layer.js"></script>
+    <script type="text/javascript" src="../layui/lay/modules/form.js"></script>
+    <script type="text/javascript" src="../layui/lay/modules/laypage.js"></script>
+    <script type="text/javascript" src="../layui/lay/modules/table.js"></script>
+    <script type="text/javascript" src="../global/global.js"></script>
+    <script type="text/javascript" src="../api/user.js"></script>
+    <script type="text/javascript" src="../api/teacher.js"></script>
+    <script type="text/javascript" src="../js/jquery.base64.js"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-container" id="teacher">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo">点名签到系统</div>
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+                    <a href="javascript:;">
+                        <img src="../imgs/teacher.jpg" class="layui-nav-img">
+                        {{name}}
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a @click="logout">退出</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+        <div class="layui-body layui-bg-gray">
+            <form class="layui-form">
+                <div class="layui-inline">
+                    <label class="layui-form-label">任课列表：</label>
+                    <div class="layui-input-block">
+                        <select lay-filter="teachList">
+                            <option>--请选择--</option>
+                            <option v-for="teach in teachList" v-bind:value="teach.teachid"
+                                    v-text="teach.couname"/>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">查询类别：</label>
+                    <div class="layui-input-block">
+                        <select lay-filter="findType">
+                            <option>--请选择--</option>
+                            <option>课堂记录</option>
+                            <option>学生列表</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <div>
+                <table class="layui-table" v-if="recordList != null">
+                    <thead>
+                    <tr>
+                        <th>课程名称</th>
+                        <th>周数</th>
+                        <th>星期</th>
+                        <th>周数</th>
+                        <th>开始时间</th>
+                        <th>结束时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="record in recordList">
+                        <td>{{record.couname}}</td>
+                        <td>{{record.week}}</td>
+                        <td>{{record.day}}</td>
+                        <td>{{record.starttime}}</td>
+                        <td>{{record.endtime}}</td>
+                        <td>
+                            <button class="layui-btn layui-btn-radius"
+                                    @click="getSignedRecordList(record.schid,record.couname,
+                                    record.week,record.day,record.starttime,record.endtime)">
+                                详情
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="layui-table" v-if="studentList != null">
+                    <thead>
+                    <tr>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="student in studentList">
+                        <td>{{student.StuID}}</td>
+                        <td>{{student.StuName}}</td>
+                        <td>{{student.StuSex}}</td>
+                        <td>
+                            <button class="layui-btn layui-btn-radius"
+                                    @click="getStudentSignedDetailList(student.StuID,
+                                    student.StuName)">
+                                详情
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="page" class="layui-elem-field layui-field-title"></div>
+        </div>
+        <div class="layui-footer layui-bg-black">
+            © 2018 CHM Email:<a href="mailto:654849388@qq.com"
+                                style="color: white">654849388@qq.com</a>
+        </div>
+    </div>
+    <div id="signedRecordList" style="display: none" class="layui-body layui-bg-gray">
+        <div class="layui-form-item">
+            <label style="line-height: 50px">
+                &nbsp; &nbsp; &nbsp;
+                课程名称：{{couname}} &nbsp; &nbsp; &nbsp;
+                周数：{{week}} &nbsp; &nbsp; &nbsp;
+                星期：{{day}} &nbsp; &nbsp; &nbsp;
+                开始时间：{{starttime}}&nbsp; &nbsp; &nbsp;
+                结束时间：{{endtime}}
+            </label>
+        </div>
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>签到时间</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="signedRecordStudent in signedRecordStudentList">
+                <td>{{signedRecordStudent.stuid}}</td>
+                <td>{{signedRecordStudent.stuname}}</td>
+                <td>{{signedRecordStudent.signedtime}}</td>
+                <td>{{signedRecordStudent.status}}</td>
+                <td>
+                    <button :class="signedRecordStudent.status !== '缺课'?
+                                'layui-btn layui-btn-radius layui-btn-disabled':
+                                'layui-btn layui-btn-radius'"
+                            @click="signedStatusChange($event,signedRecordStudent.stuid,1)">
+                        请假
+                    </button>
+                    <button :class="signedRecordStudent.status !== '缺课'?
+                                'layui-btn layui-btn-radius layui-btn-disabled':
+                                'layui-btn layui-btn-radius'"
+                            @click="signedStatusChange($event,signedRecordStudent.stuid,2)">
+                        补签
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="studentSignedDetailList" style="display: none" class="layui-body layui-bg-gray">
+        <div class="layui-form-item">
+            <label style="line-height: 50px">
+                &nbsp; &nbsp; &nbsp;
+                学号：{{stuId}} &nbsp; &nbsp; &nbsp;
+                姓名：{{stuName}} &nbsp; &nbsp; &nbsp;
+                正常：{{normal}} &nbsp; &nbsp; &nbsp;
+                迟到：{{absence}}&nbsp; &nbsp; &nbsp;
+                缺课：{{late}}&nbsp; &nbsp; &nbsp;
+                请假：{{leave}}&nbsp; &nbsp; &nbsp;
+                总计：{{count}}
+            </label>
+        </div>
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>课程名称</th>
+                <th>周数</th>
+                <th>星期</th>
+                <th>签到时间</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="studentSignedDetail in studentSignedDetailList">
+                <td>{{studentSignedDetail.couname}}</td>
+                <td>{{studentSignedDetail.week}}</td>
+                <td>{{studentSignedDetail.day}}</td>
+                <td>{{studentSignedDetail.signedtime}}</td>
+                <td>{{studentSignedDetail.status}}</td>
+                <td>
+                    <button :class="studentSignedDetail.status !== '缺课'?
+                                'layui-btn layui-btn-radius layui-btn-disabled':
+                                'layui-btn layui-btn-radius'"
+                            @click="schId = studentSignedDetail.schid,
+                             week = studentSignedDetail.week,
+                             signedStatusChange($event,stuId,1)">
+                        请假
+                    </button>
+                    <button :class="studentSignedDetail.status !== '缺课'?
+                                'layui-btn layui-btn-radius layui-btn-disabled':
+                                'layui-btn layui-btn-radius'"
+                            @click="schId = studentSignedDetail.schid,
+                             week = studentSignedDetail.week,
+                            signedStatusChange($event,stuId,2)">
+                        补签
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('.layui-body').height($(window).height() - $('.layui-header').height() - $('.layui-footer').height())
+        $('.layui-footer').width($('.layui-body').width() - 30)
+        $('.layui-footer').css('left', $('.layui-header').offset().left)
+    })
+
+    var teacher = new Vue({
+        el: '#teacher',
+        data: {
+            name: $.cookie('name'),
+            teachList: null,
+            teachid: null,
+            recordList: null,
+            recid: null,
+            findType: null,
+            studentList: null,
+            signedRecordList: null,
+            signedRecordStudentList: null,
+            studentSignedDetailList: null,
+            couname: null,
+            week: null,
+            day: null,
+            starttime: null,
+            endtime: null,
+            schId: null,
+            page: null,
+            size: null,
+            totalElements: 0,
+            totalPages: 0,
+            stuId: null,
+            stuName: null,
+            absence: 0,
+            count: 0,
+            late: 0,
+            leave: 0,
+            normal: 0,
+        },
+        methods: {
+            logout: function () {
+                layer.confirm('确认要退出登录？', {icon: 3, title: '退出登录'}, function () {
+                    logout();
+                })
+            },
+            getStudentList: function () {
+                this.recordList = null
+                result = getStudentList(this.teachid, null, null)
+                this.studentList = result.data
+                this.page = result.page
+                this.size = result.size
+                this.totalElements = result.totalElements
+                this.totalPages = result.totalPages
+                paged()
+            },
+            getRecords: function () {
+                this.studentList = null
+                result = getRecords(this.teachid, null, null)
+                this.recordList = result.data
+                this.page = result.page
+                this.size = result.size
+                this.totalElements = result.totalElements
+                this.totalPages = result.totalPages
+                paged()
+            },
+            getSignedRecordList: function (schId, couname, week, day, starttime, endtime) {
+                this.schId = schId
+                this.couname = couname
+                this.week = week
+                this.day = day
+                this.starttime = starttime
+                this.endtime = endtime
+                this.signedRecordStudentList = getSignedRecordList(schId, week)
+                layer.open({
+                    type: 1,
+                    title: '签到列表',
+                    area: ['750px', '600px'],
+                    content: $('#signedRecordList'),
+                    offset: 'auto',
+                    anim: 5,
+                    resize: false,
+                });
+            },
+            getCountSignedRecords: function () {
+                result = getCountSignedRecords(this.stuId, this.teachid)
+                this.absence = result.absence
+                this.count = result.count
+                this.late = result.late
+                this.leave = result.leave
+                this.normal = result.normal
+            },
+            getStudentSignedDetailList: function (StuID, StuName) {
+                this.stuId = StuID
+                this.stuName = StuName
+                this.studentSignedDetailList = getStudentSignedDetailList(StuID, this.teachid)
+                this.getCountSignedRecords()
+                layer.open({
+                    type: 1,
+                    title: '签到列表',
+                    area: ['750px', '600px'],
+                    content: $('#studentSignedDetailList'),
+                    offset: 'auto',
+                    anim: 5,
+                    resize: false,
+                });
+            },
+            signedStatusChange: function (event, stuid, status) {
+                if (event.target.className.indexOf("layui-btn-disabled") !== -1) {
+                    return false
+                }
+                if (signedStatusChange(stuid, this.schId, this.week, status)) {
+                    this.signedRecordStudentList = getSignedRecordList(this.schId, this.week)
+                    this.studentSignedDetailList = getStudentSignedDetailList(stuid, this.teachid)
+                    this.getCountSignedRecords()
+                }
+            }
+        },
+        mounted() {
+            if ($.cookie('userType') !== 'teacher') {
+                window.location.href = $.cookie('userType') + '.html'
+            } else {
+                this.teachList = getTeachList();
+            }
+        }
+    });
+    layui.use(['form', 'table'], function () {
+        var form = layui.form;
+        form.on('select(teachList)', function (data) {
+            teacher.$data.teachid = data.value !== '--请选择--' ? data.value : null
+            if (teacher.$data.findType === '课堂记录') {
+                teacher.getRecords()
+            } else if (teacher.$data.findType === '学生列表') {
+                teacher.getStudentList()
+            }
+        })
+        form.on('select(findType)', function (data) {
+            teacher.$data.findType = data.value
+            if (data.value === '课堂记录') {
+                teacher.getRecords()
+            } else if (data.value === '学生列表') {
+                teacher.getStudentList()
+            }
+        })
+
+    })
+
+    function paged() {
+        layui.use(['laypage'], function () {
+            var laypage = layui.laypage
+            laypage.render({
+                elem: 'page'
+                , count: teacher.$data.totalElements//数据总数
+                , pages: teacher.$data.totalPages //总页数
+                , limit: teacher.$data.size //单页大小
+                , curr: teacher.$data.page
+                , jump: function (obj, first) {
+                    if (first) {
+                        return false
+                    }
+                    var result
+                    if (teacher.$data.findType === '课堂记录') {
+                        result = getRecords(teacher.$data.teachid, obj.curr, teacher.$data.size)
+                        teacher.$data.recordList = result.data
+                    } else if (teacher.$data.findType === '学生列表') {
+                        result = getStudentList(teacher.$data.teachid, obj.curr, teacher.$data.size)
+                        teacher.$data.studentList = result.data
+                    }
+                    /* */
+                    teacher.$data.page = result.page
+                    teacher.$data.size = result.size
+                    teacher.$data.totalElements = result.totalElements
+                    teacher.$data.totalPages = result.totalPages
+                }
+            });
+        });
+    }
+
+    //重新渲染表单
+    function renderForm() {
+        layui.use('form', function () {
+            var form = layui.form
+            form.render();
+        });
+    }
+</script>
+</body>
+</html>

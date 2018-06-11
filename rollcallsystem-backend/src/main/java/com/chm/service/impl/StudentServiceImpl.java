@@ -211,7 +211,7 @@ public class StudentServiceImpl implements StudentService {
                 } else if (time > LATE) {
                     //迟到
                     record.setStatus("迟到");
-                } else if (time < LATE && schedule.getEndtime().getSecond() > signedTime.getSecond()) {
+                } else if (time < LATE && schedule.getEndtime().toSecondOfDay() > signedTime.toSecondOfDay()) {
                     //缺课
                     record.setStatus("缺课");
                 } else {
